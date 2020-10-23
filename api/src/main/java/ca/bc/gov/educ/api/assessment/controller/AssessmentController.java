@@ -16,7 +16,7 @@ import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 
 @CrossOrigin
 @RestController
-@RequestMapping(EducAssessmentApiConstants.GRAD_COURSE_API_ROOT_MAPPING)
+@RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
 public class AssessmentController {
 
     private static Logger logger = LoggerFactory.getLogger(AssessmentController.class);

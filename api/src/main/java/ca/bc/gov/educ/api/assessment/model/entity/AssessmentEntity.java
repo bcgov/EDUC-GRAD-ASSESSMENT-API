@@ -27,9 +27,9 @@ public class AssessmentEntity {
     @Column(name = "LANGUAGE", nullable = true)
     private String language;
     
-    @Column(name = "START_DATE", nullable = true)
+    @Column(name = "ASSMT_START_DATE", nullable = true)
     private Date startDate;
 
-    @Column(name = "END_DATE", nullable = true)
+    @Column(name = "ASSMT_END_DATE", nullable = true)
     private Date endDate;
 }
