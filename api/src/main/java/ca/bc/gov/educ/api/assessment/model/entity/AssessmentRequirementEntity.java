@@ -19,6 +19,7 @@ import lombok.Data;
 public class AssessmentRequirementEntity {
    
 	@Id
+	@Column(name = "ID", nullable = false)
     private UUID assessmentRequirementId;
 
     @Column(name = "ASSM_CODE", nullable = false)
