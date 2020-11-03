@@ -41,15 +41,15 @@ public class AssessmentController {
     		@RequestParam(value = "pageNo", required = false,defaultValue = "0") Integer pageNo, 
             @RequestParam(value = "pageSize", required = false,defaultValue = "150") Integer pageSize) { 
     	logger.debug("getAllAssessmentRequirement : ");
-        return assessmentRequirementService.getAllCourseRequirementList(pageNo,pageSize);
+        return assessmentRequirementService.getAllAssessmentRequirementList(pageNo,pageSize);
     }
     
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_BY_RULE_MAPPING)
     public List<AssessmentRequirement> getAllAssessmentRequirementByRule(
-    		@RequestParam(value = "rule", required = false) String rule,
+    		@RequestParam(value = "rule", required = true) String rule,
     		@RequestParam(value = "pageNo", required = false,defaultValue = "0") Integer pageNo, 
             @RequestParam(value = "pageSize", required = false,defaultValue = "150") Integer pageSize) { 
     	logger.debug("getAllAssessmentRequirementByRule : ");
-        return assessmentRequirementService.getAllCourseRequirementListByRule(rule, pageNo, pageSize);
+        return assessmentRequirementService.getAllAssessmentRequirementListByRule(rule, pageNo, pageSize);
     }
 }
