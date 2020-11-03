@@ -23,8 +23,6 @@ public class AssessmentRequirementService {
     @Autowired
     private AssessmentRequirementRepository assessmentRequirementRepository;
 
-    Iterable<AssessmentRequirementEntity> assessmentRequirementEntityList;
-
     @Autowired
     private AssessmentRequirementTransformer assessmentRequirementTransformer;
 
@@ -38,7 +36,7 @@ public class AssessmentRequirementService {
      * @return Course 
      * @throws java.lang.Exception
      */
-    public List<AssessmentRequirement> getAllCourseRequirementList(Integer pageNo, Integer pageSize) {
+    public List<AssessmentRequirement> getAllAssessmentRequirementList(Integer pageNo, Integer pageSize) {
         List<AssessmentRequirement> courseReqList  = new ArrayList<AssessmentRequirement>();
 
         try {  
@@ -60,7 +58,7 @@ public class AssessmentRequirementService {
      * @return Course 
      * @throws java.lang.Exception
      */
-    public List<AssessmentRequirement> getAllCourseRequirementListByRule(String rule,Integer pageNo, Integer pageSize) {
+    public List<AssessmentRequirement> getAllAssessmentRequirementListByRule(String rule,Integer pageNo, Integer pageSize) {
         List<AssessmentRequirement> assessmentReqList  = new ArrayList<AssessmentRequirement>();
 
         try {  
