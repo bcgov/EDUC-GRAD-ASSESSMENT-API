@@ -9,6 +9,8 @@ public class EducAssessmentApiConstants {
     public static final String API_VERSION = "v1";
     public static final String GRAD_ASSESSMENT_API_ROOT_MAPPING = "/api/" + API_VERSION + "/assessment";
     public static final String GET_ASSESSMENT_BY_CODE_MAPPING = "/{assmtCode}";
+    public static final String GET_ASSESSMENT_REQUIREMENT_MAPPING = "/requirement";
+    public static final String GET_ASSESSMENT_REQUIREMENT_BY_RULE_MAPPING = "requirement/rule/{ruleCode}";
 
     //Attribute Constants
     public static final String STUDENT_COURSE_ID_ATTRIBUTE = "courseID";
