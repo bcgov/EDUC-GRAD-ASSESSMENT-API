@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,12 @@ public class AssessmentController {
     public List<Assessment> getAllAssessments() { 
     	logger.debug("getAllAssessments : ");
         return assessmentService.getAssessmentList();
+    }
+    
+    @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_BY_CODE_MAPPING)
+    public Assessment getAssessmentDetails(@PathVariable String assmtCode) { 
+    	logger.debug("getAssessmentDetails : ");
+        return assessmentService.getAssessmentDetails(assmtCode);
     }
     
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)

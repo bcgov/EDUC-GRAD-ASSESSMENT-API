@@ -41,4 +41,8 @@ public class AssessmentService {
 
         return assessment;
     }
+
+	public Assessment getAssessmentDetails(String assmtCode) {
+		return assessmentTransformer.transformToDTO(assessmentRepo.findByAssessmentCode(assmtCode));
+	}
 }
