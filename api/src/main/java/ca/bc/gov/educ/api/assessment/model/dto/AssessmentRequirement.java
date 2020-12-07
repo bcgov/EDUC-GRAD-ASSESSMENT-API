@@ -12,8 +12,7 @@ import lombok.Data;
 public class AssessmentRequirement {
 
 	private UUID assessmentRequirementId;
-	private String assmCode;
-    private String courseLevel;
+	private String assessmentCode;
     private String ruleCode;
     private String createdBy;
 	private Date createdTimestamp;
@@ -22,9 +21,10 @@ public class AssessmentRequirement {
 	
 	@Override
 	public String toString() {
-		return "AssessmentRequirement [assessmentRequirementId=" + assessmentRequirementId + ", assmCode=" + assmCode
-				+ ", courseLevel=" + courseLevel + ", ruleCode=" + ruleCode + ", createdBy=" + createdBy
-				+ ", createdTimestamp=" + createdTimestamp + ", updatedBy=" + updatedBy + ", updatedTimestamp="
-				+ updatedTimestamp + "]";
-	}	
+		return "AssessmentRequirement [assessmentRequirementId=" + assessmentRequirementId + ", assessmentCode="
+				+ assessmentCode + ", ruleCode=" + ruleCode + ", createdBy=" + createdBy + ", createdTimestamp="
+				+ createdTimestamp + ", updatedBy=" + updatedBy + ", updatedTimestamp=" + updatedTimestamp + "]";
+	}
+	
+	
 }
