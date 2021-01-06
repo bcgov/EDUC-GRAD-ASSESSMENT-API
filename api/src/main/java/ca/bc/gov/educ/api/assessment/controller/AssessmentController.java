@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +20,9 @@ import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirement;
 import ca.bc.gov.educ.api.assessment.service.AssessmentRequirementService;
 import ca.bc.gov.educ.api.assessment.service.AssessmentService;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
+import ca.bc.gov.educ.api.assessment.util.GradValidation;
+import ca.bc.gov.educ.api.assessment.util.PermissionsContants;
+import ca.bc.gov.educ.api.assessment.util.ResponseHelper;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -38,36 +42,42 @@ public class AssessmentController {
     @Autowired
     AssessmentRequirementService assessmentRequirementService;
     
+    @Autowired
+	GradValidation validation;
+    
+    @Autowired
+	ResponseHelper response;
+    
     @GetMapping
-    @PreAuthorize("#oauth2.hasScope('READ_GRAD_ASSESSMENT_DATA')")
-    public List<Assessment> getAllAssessments() { 
+    @PreAuthorize(PermissionsContants.READ_GRAD_ASSESSMENT)
+    public ResponseEntity<List<Assessment>> getAllAssessments() { 
     	logger.debug("getAllAssessments : ");
-        return assessmentService.getAssessmentList();
+        return response.GET(assessmentService.getAssessmentList());
     }
     
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_BY_CODE_MAPPING)
-    @PreAuthorize("#oauth2.hasScope('READ_GRAD_ASSESSMENT_DATA')")
-    public Assessment getAssessmentDetails(@PathVariable String assmtCode) { 
+    @PreAuthorize(PermissionsContants.READ_GRAD_ASSESSMENT)
+    public ResponseEntity<Assessment> getAssessmentDetails(@PathVariable String assmtCode) { 
     	logger.debug("getAssessmentDetails : ");
-        return assessmentService.getAssessmentDetails(assmtCode);
+        return response.GET(assessmentService.getAssessmentDetails(assmtCode));
     }
     
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)
-    @PreAuthorize("#oauth2.hasScope('READ_GRAD_ASSESSMENT_REQUIREMENT_DATA')")
-    public List<AssessmentRequirement> getAllAssessmentRequirement(
+    @PreAuthorize(PermissionsContants.READ_GRAD_ASSESSMENT_REQUIREMENT)
+    public ResponseEntity<List<AssessmentRequirement>> getAllAssessmentRequirement(
     		@RequestParam(value = "pageNo", required = false,defaultValue = "0") Integer pageNo, 
             @RequestParam(value = "pageSize", required = false,defaultValue = "150") Integer pageSize) { 
     	logger.debug("getAllAssessmentRequirement : ");
-        return assessmentRequirementService.getAllAssessmentRequirementList(pageNo,pageSize);
+        return response.GET(assessmentRequirementService.getAllAssessmentRequirementList(pageNo,pageSize));
     }
     
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_BY_RULE_MAPPING)
-    @PreAuthorize("#oauth2.hasScope('READ_GRAD_ASSESSMENT_REQUIREMENT_DATA')")
-    public List<AssessmentRequirement> getAllAssessmentRequirementByRule(
+    @PreAuthorize(PermissionsContants.READ_GRAD_ASSESSMENT_REQUIREMENT)
+    public ResponseEntity<List<AssessmentRequirement>> getAllAssessmentRequirementByRule(
     		@RequestParam(value = "rule", required = true) String rule,
     		@RequestParam(value = "pageNo", required = false,defaultValue = "0") Integer pageNo, 
             @RequestParam(value = "pageSize", required = false,defaultValue = "150") Integer pageSize) { 
     	logger.debug("getAllAssessmentRequirementByRule : ");
-        return assessmentRequirementService.getAllAssessmentRequirementListByRule(rule, pageNo, pageSize);
+        return response.GET(assessmentRequirementService.getAllAssessmentRequirementListByRule(rule, pageNo, pageSize));
     }
 }
