@@ -7,29 +7,26 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Immutable;
-
 import lombok.Data;
 
 @Data
-@Immutable
 @Entity
-@Table(name = "TAB_GRAD_ASSMT")
+@Table(name = "GRAD_ASSESSMENT")
 public class AssessmentEntity {
    
 	@Id
-	@Column(name = "ASSMT_CODE", nullable = true)
+	@Column(name = "ASSM_CODE", nullable = true)
     private String assessmentCode;   
 
-    @Column(name = "ASSMT_NAME", nullable = true)
+    @Column(name = "ASSM_NAME", nullable = true)
     private String assessmentName;   
 
     @Column(name = "LANGUAGE", nullable = true)
     private String language;
     
-    @Column(name = "ASSMT_START_DATE", nullable = true)
+    @Column(name = "START_DT", nullable = true)
     private Date startDate;
 
-    @Column(name = "ASSMT_END_DATE", nullable = true)
+    @Column(name = "END_DT", nullable = true)
     private Date endDate;
 }
