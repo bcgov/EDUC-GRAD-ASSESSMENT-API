@@ -12,7 +12,7 @@ objects:
       labels:
         build: educ-grad-assessment-api-pipeline
       name: educ-grad-assessment-api-pipeline
-      namespace: wbmfsf-tools
+      namespace: 77c02f-tools
     spec:
       source:
         git:
