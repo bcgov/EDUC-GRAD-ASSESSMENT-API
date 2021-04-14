@@ -38,7 +38,7 @@ pipeline{
       TEST = '77c02f-test'
       PROD = '77c02f-prod'
 
-      REPO_NAME = 'educ-grad-assessment-api'
+      REPO_NAME = 'grad-assessment-api'
       OWNER = 'bcgov'
       JOB_NAME = 'main'
       TAG = 'dev'
@@ -46,7 +46,7 @@ pipeline{
       APP_NAME = 'grad-assessment-api'
       APP_DOMAIN = 'apps.silver.devops.gov.bc.ca'
 
-      SOURCE_REPO_RAW = 'https://github.com/${OWNER}/${REPO_NAME}/master'
+      SOURCE_REPO_RAW = 'https://github.com/${OWNER}/${REPO_NAME}/main'
       SOURCE_REPO_REF = 'main'
       SOURCE_REPO_URL = 'https://github.com/${OWNER}/${REPO_NAME}.git'
 
@@ -56,7 +56,6 @@ pipeline{
       PROD_HOST_ROUTE = "${APP_NAME}-${PROD}.${APP_DOMAIN}"
   }
   stages{
-    /*
     stage('Unit Tests') {
       steps {
         script {
@@ -72,15 +71,9 @@ pipeline{
         }
       }
     }
-    */
     stage('Build App') {
       steps {
-        script {
-          def pom = readMavenPom file: 'api/pom.xml'
-          VERSION = pom.version
-
-          sh '/bin/bash -c "mvn -f ./api/pom.xml -Dmaven.test.skip=true package"'
-        }
+        sh '/bin/bash -c "mvn -f ./api/pom.xml -Dmaven.test.skip=true package"'
       }
     }
     stage('Create Image Builder') {
@@ -146,7 +139,7 @@ pipeline{
 
 def deployStage(String stageEnv, String projectEnv, String hostRouteEnv, String tag) {
 
-  if (!stageEnv.equalsIgnoreCase('Dev')) {
+  if (!stageEnv.equalsIgnoreCase('Tools')) {
     input("Deploy to ${projectEnv}?")
   }
 
