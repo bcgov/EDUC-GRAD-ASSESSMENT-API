@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentEntity;
@@ -38,6 +39,11 @@ public class EducAssessmentApiApplication {
 		modelMapper.typeMap(AssessmentEntity.class, Assessment.class);
 		modelMapper.typeMap(Assessment.class, AssessmentEntity.class);
 		return modelMapper;
+	}
+	
+	@Bean
+	public WebClient webClient() {
+		return WebClient.create();
 	}
 	
 	@Bean
