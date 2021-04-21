@@ -13,20 +13,18 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import ca.bc.gov.educ.api.assessment.model.dto.AllAssessmentRequirements;
+import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
 import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirement;
 import ca.bc.gov.educ.api.assessment.model.dto.GradRuleDetails;
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementEntity;
 import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
-import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiUtils;
 
 @Service
 public class AssessmentRequirementService {
@@ -41,7 +39,10 @@ public class AssessmentRequirementService {
     private String getRuleDetails;
     
     @Autowired
-    private RestTemplate restTemplate;
+    WebClient webClient;
+    
+    @Autowired
+    private AssessmentService assessmentService;
 
     private static Logger logger = LoggerFactory.getLogger(AssessmentRequirementService.class);
 
@@ -56,7 +57,6 @@ public class AssessmentRequirementService {
     public List<AllAssessmentRequirements> getAllAssessmentRequirementList(Integer pageNo, Integer pageSize,String accessToken) {
         List<AssessmentRequirement> AssessmentReqList  = new ArrayList<AssessmentRequirement>();
         List<AllAssessmentRequirements> allAssessmentRequiremntList = new ArrayList<AllAssessmentRequirements>();
-        HttpHeaders httpHeaders = EducAssessmentApiUtils.getHeaders(accessToken);
         try {  
         	Pageable paging = PageRequest.of(pageNo, pageSize);        	 
             Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findAll(paging);        	
@@ -64,8 +64,9 @@ public class AssessmentRequirementService {
             AssessmentReqList.forEach((cR) -> {
             	AllAssessmentRequirements obj = new AllAssessmentRequirements();
             	BeanUtils.copyProperties(cR, obj);
-            	List<GradRuleDetails> ruleList = restTemplate.exchange(String.format(getRuleDetails,cR.getRuleCode()), HttpMethod.GET,
-    					new HttpEntity<>(httpHeaders), new ParameterizedTypeReference<List<GradRuleDetails>>() {}).getBody();
+            	Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
+            	obj.setAssessmentName(assmt.getAssessmentName());
+            	List<GradRuleDetails> ruleList = webClient.get().uri(String.format(getRuleDetails,cR.getRuleCode())).headers(h -> h.setBearerAuth(accessToken)).retrieve().bodyToMono(new ParameterizedTypeReference<List<GradRuleDetails>>() {}).block();
             	String requirementProgram = "";
             	for(GradRuleDetails rL: ruleList) {
             		obj.setRequirementName(rL.getRequirementName());
@@ -109,7 +110,11 @@ public class AssessmentRequirementService {
         try {  
         	Pageable paging = PageRequest.of(pageNo, pageSize);        	 
             Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(rule,paging);        	
-            assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent()); 
+            assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
+            assessmentReqList.forEach(aR -> {
+            	Assessment assmt = assessmentService.getAssessmentDetails(aR.getAssessmentCode());
+            	aR.setAssessmentName(assmt.getAssessmentName());
+            });
         } catch (Exception e) {
             logger.debug("Exception:" + e);
         }
