@@ -11,6 +11,7 @@ public class EducAssessmentApiConstants {
     public static final String GET_ASSESSMENT_BY_CODE_MAPPING = "/{assmtCode}";
     public static final String GET_ASSESSMENT_REQUIREMENT_MAPPING = "/requirement";
     public static final String GET_ASSESSMENT_REQUIREMENT_BY_RULE_MAPPING = "/requirement/rule";
+    public static final String GET_ASSESSMENT_REQUIREMENT_BY_ASSESSMENT_LIST_MAPPING="/assessment-requirement/assessment-list";
 
     public static final String ENDPOINT_RULE_DETAIL_URL="${endpoint.programmanagement-api.rule-detail.url}";
     //Attribute Constants

@@ -17,4 +17,6 @@ public interface AssessmentRequirementRepository extends JpaRepository<Assessmen
 
 	Page<AssessmentRequirementEntity> findByRuleCode(String rule, Pageable paging);
 
+	List<AssessmentRequirementEntity> findByAssessmentCodeIn(List<String> assessmentCodes);
+
 }
