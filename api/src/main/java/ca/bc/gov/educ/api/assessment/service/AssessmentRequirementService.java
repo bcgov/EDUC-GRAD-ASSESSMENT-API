@@ -36,6 +36,7 @@ public class AssessmentRequirementService {
     @Autowired
     private AssessmentRequirementTransformer assessmentRequirementTransformer;
     
+    @Autowired
     private AssessmentRequirements assessmentRequirements;
     
     @Value(EducAssessmentApiConstants.ENDPOINT_RULE_DETAIL_URL)
