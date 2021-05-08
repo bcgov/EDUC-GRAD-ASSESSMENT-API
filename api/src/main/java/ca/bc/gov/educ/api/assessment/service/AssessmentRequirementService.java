@@ -14,12 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import ca.bc.gov.educ.api.assessment.model.dto.AllAssessmentRequirements;
 import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
+import ca.bc.gov.educ.api.assessment.model.dto.AssessmentList;
 import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirement;
+import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirements;
 import ca.bc.gov.educ.api.assessment.model.dto.GradRuleDetails;
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementEntity;
 import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
@@ -34,6 +35,9 @@ public class AssessmentRequirementService {
 
     @Autowired
     private AssessmentRequirementTransformer assessmentRequirementTransformer;
+    
+    @Autowired
+    private AssessmentRequirements assessmentRequirements;
     
     @Value(EducAssessmentApiConstants.ENDPOINT_RULE_DETAIL_URL)
     private String getRuleDetails;
@@ -121,4 +125,11 @@ public class AssessmentRequirementService {
 
         return assessmentReqList;
     }
+
+	public AssessmentRequirements getAssessmentRequirementListByAssessments(AssessmentList assessmentList) {
+		assessmentRequirements.setAssessmentRequirementList(
+				assessmentRequirementTransformer.transformToDTO(
+						assessmentRequirementRepository.findByAssessmentCodeIn(assessmentList.getAssessmentCodes())));
+        return assessmentRequirements;
+	}
 }
