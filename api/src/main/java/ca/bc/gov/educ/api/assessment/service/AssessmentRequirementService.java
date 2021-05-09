@@ -1,9 +1,11 @@
 package ca.bc.gov.educ.api.assessment.service;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
+import ca.bc.gov.educ.api.assessment.model.dto.*;
+import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementEntity;
+import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
+import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
+import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -16,16 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import ca.bc.gov.educ.api.assessment.model.dto.AllAssessmentRequirements;
-import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
-import ca.bc.gov.educ.api.assessment.model.dto.AssessmentList;
-import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirement;
-import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirements;
-import ca.bc.gov.educ.api.assessment.model.dto.GradRuleDetails;
-import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementEntity;
-import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
-import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
-import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AssessmentRequirementService {
@@ -35,63 +29,68 @@ public class AssessmentRequirementService {
 
     @Autowired
     private AssessmentRequirementTransformer assessmentRequirementTransformer;
-    
+
     @Autowired
     private AssessmentRequirements assessmentRequirements;
-    
+
     @Value(EducAssessmentApiConstants.ENDPOINT_RULE_DETAIL_URL)
     private String getRuleDetails;
-    
+
     @Autowired
     WebClient webClient;
-    
+
     @Autowired
     private AssessmentService assessmentService;
 
     private static Logger logger = LoggerFactory.getLogger(AssessmentRequirementService.class);
 
-     /**
+    /**
      * Get all course requirements in Course Requirement DTO
-     * @param pageSize 
-     * @param pageNo 
      *
-     * @return Course 
+     * @param pageSize
+     * @param pageNo
+     * @return Course
      * @throws java.lang.Exception
      */
-    public List<AllAssessmentRequirements> getAllAssessmentRequirementList(Integer pageNo, Integer pageSize,String accessToken) {
-        List<AssessmentRequirement> AssessmentReqList  = new ArrayList<AssessmentRequirement>();
+    public List<AllAssessmentRequirements> getAllAssessmentRequirementList(Integer pageNo, Integer pageSize, String accessToken) {
+        List<AssessmentRequirement> AssessmentReqList = new ArrayList<AssessmentRequirement>();
         List<AllAssessmentRequirements> allAssessmentRequiremntList = new ArrayList<AllAssessmentRequirements>();
-        try {  
-        	Pageable paging = PageRequest.of(pageNo, pageSize);        	 
-            Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findAll(paging);        	
-            AssessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent()); 
+        try {
+            Pageable paging = PageRequest.of(pageNo, pageSize);
+            Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findAll(paging);
+            AssessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
             AssessmentReqList.forEach((cR) -> {
-            	AllAssessmentRequirements obj = new AllAssessmentRequirements();
-            	BeanUtils.copyProperties(cR, obj);
-            	Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
-            	obj.setAssessmentName(assmt.getAssessmentName());
-            	List<GradRuleDetails> ruleList = webClient.get().uri(String.format(getRuleDetails,cR.getRuleCode())).headers(h -> h.setBearerAuth(accessToken)).retrieve().bodyToMono(new ParameterizedTypeReference<List<GradRuleDetails>>() {}).block();
-            	String requirementProgram = "";
-            	for(GradRuleDetails rL: ruleList) {
-            		obj.setRequirementName(rL.getRequirementName());
-            		if(rL.getProgramCode() != null) {
-            			if("".equalsIgnoreCase(requirementProgram)) {
-            				requirementProgram = rL.getProgramCode();
-            			}else {
-            				requirementProgram = requirementProgram + "|" + rL.getProgramCode();
-            			}
-            		}
-            		if(rL.getSpecialProgramCode() != null) {
-            			if("".equalsIgnoreCase(requirementProgram)) {
-            				requirementProgram = requirementProgram + rL.getSpecialProgramCode();
-            			}else {
-            				requirementProgram = requirementProgram + "|" + rL.getSpecialProgramCode();
-            			}
-            			
-            		}
-            	}
-            	obj.setRequirementProgram(requirementProgram);
-            	allAssessmentRequiremntList.add(obj);
+                AllAssessmentRequirements obj = new AllAssessmentRequirements();
+                BeanUtils.copyProperties(cR, obj);
+                Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
+                obj.setAssessmentName(assmt.getAssessmentName());
+                List<GradRuleDetails> ruleList = webClient.get()
+                        .uri(String.format(getRuleDetails, cR.getRuleCode()))
+                        .headers(h -> h.setBearerAuth(accessToken))
+                        .retrieve()
+                        .bodyToMono(new ParameterizedTypeReference<List<GradRuleDetails>>() {
+                        })
+                        .block();
+                String requirementProgram = "";
+                for (GradRuleDetails rL : ruleList) {
+                    obj.setRequirementName(rL.getRequirementName());
+                    if (rL.getProgramCode() != null) {
+                        if ("".equalsIgnoreCase(requirementProgram)) {
+                            requirementProgram = rL.getProgramCode();
+                        } else {
+                            requirementProgram = requirementProgram + "|" + rL.getProgramCode();
+                        }
+                    }
+                    if (rL.getSpecialProgramCode() != null) {
+                        if ("".equalsIgnoreCase(requirementProgram)) {
+                            requirementProgram = requirementProgram + rL.getSpecialProgramCode();
+                        } else {
+                            requirementProgram = requirementProgram + "|" + rL.getSpecialProgramCode();
+                        }
+                    }
+                }
+                obj.setRequirementProgram(requirementProgram);
+                allAssessmentRequiremntList.add(obj);
             });
         } catch (Exception e) {
             logger.debug("Exception:" + e);
@@ -99,25 +98,25 @@ public class AssessmentRequirementService {
 
         return allAssessmentRequiremntList;
     }
-    
+
     /**
      * Get all course requirements in Course Requirement DTO by Rule
-     * @param pageSize 
-     * @param pageNo 
      *
-     * @return Course 
+     * @param pageSize
+     * @param pageNo
+     * @return Course
      * @throws java.lang.Exception
      */
-    public List<AssessmentRequirement> getAllAssessmentRequirementListByRule(String rule,Integer pageNo, Integer pageSize) {
-        List<AssessmentRequirement> assessmentReqList  = new ArrayList<AssessmentRequirement>();
+    public List<AssessmentRequirement> getAllAssessmentRequirementListByRule(String rule, Integer pageNo, Integer pageSize) {
+        List<AssessmentRequirement> assessmentReqList = new ArrayList<AssessmentRequirement>();
 
-        try {  
-        	Pageable paging = PageRequest.of(pageNo, pageSize);        	 
-            Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(rule,paging);        	
+        try {
+            Pageable paging = PageRequest.of(pageNo, pageSize);
+            Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(rule, paging);
             assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
             assessmentReqList.forEach(aR -> {
-            	Assessment assmt = assessmentService.getAssessmentDetails(aR.getAssessmentCode());
-            	aR.setAssessmentName(assmt.getAssessmentName());
+                Assessment assmt = assessmentService.getAssessmentDetails(aR.getAssessmentCode());
+                aR.setAssessmentName(assmt.getAssessmentName());
             });
         } catch (Exception e) {
             logger.debug("Exception:" + e);
@@ -126,10 +125,10 @@ public class AssessmentRequirementService {
         return assessmentReqList;
     }
 
-	public AssessmentRequirements getAssessmentRequirementListByAssessments(AssessmentList assessmentList) {
-		assessmentRequirements.setAssessmentRequirementList(
-				assessmentRequirementTransformer.transformToDTO(
-						assessmentRequirementRepository.findByAssessmentCodeIn(assessmentList.getAssessmentCodes())));
+    public AssessmentRequirements getAssessmentRequirementListByAssessments(AssessmentList assessmentList) {
+        assessmentRequirements.setAssessmentRequirementList(
+                assessmentRequirementTransformer.transformToDTO(
+                        assessmentRequirementRepository.findByAssessmentCodeIn(assessmentList.getAssessmentCodes())));
         return assessmentRequirements;
-	}
+    }
 }
