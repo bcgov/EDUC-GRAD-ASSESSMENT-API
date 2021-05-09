@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ca.bc.gov.educ.api.assessment.util.MessageHelper;
 
 @Configuration
-@PropertySource("classpath:messages.properties")
+@PropertySource(value = "classpath:messages.yaml", factory = YamlPropertySourceFactory.class)
 public class GradAssessmentConfig implements WebMvcConfigurer {
 
 	@Autowired
@@ -25,5 +25,4 @@ public class GradAssessmentConfig implements WebMvcConfigurer {
 		return new MessageHelper();
 	}
 
-	
 }

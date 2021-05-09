@@ -1,5 +1,9 @@
 package ca.bc.gov.educ.api.assessment.config;
 
+import ca.bc.gov.educ.api.assessment.util.ApiResponseMessage.MessageTypeEnum;
+import ca.bc.gov.educ.api.assessment.util.ApiResponseModel;
+import ca.bc.gov.educ.api.assessment.util.GradBusinessRuleException;
+import ca.bc.gov.educ.api.assessment.util.GradValidation;
 import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.logging.Logger;
@@ -15,107 +19,102 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import ca.bc.gov.educ.api.assessment.util.ApiResponseMessage.MessageTypeEnum;
-import ca.bc.gov.educ.api.assessment.util.ApiResponseModel;
-import ca.bc.gov.educ.api.assessment.util.GradBusinessRuleException;
-import ca.bc.gov.educ.api.assessment.util.GradValidation;
-
 @ControllerAdvice
 public class RestErrorHandler extends ResponseEntityExceptionHandler {
 
-	private static final Logger LOGGER = Logger.getLogger(RestErrorHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(RestErrorHandler.class);
 
-	@Autowired
-	GradValidation validation;
+    @Autowired
+    GradValidation validation;
 
-	@ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class })
-	protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-		LOGGER.error("Illegal argument ERROR IS: " + ex.getClass().getName(), ex);
-		ApiResponseModel<?> reponse = ApiResponseModel.ERROR(null, ex.getLocalizedMessage());
-		validation.ifErrors(errorList -> reponse.addErrorMessages(errorList));
-		validation.ifWarnings(warningList -> reponse.addWarningMessages(warningList));
-		validation.clear();
-		return new ResponseEntity<>(reponse, HttpStatus.UNPROCESSABLE_ENTITY);
-	}
+    @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
+    protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
+        LOGGER.error("Illegal argument ERROR IS: " + ex.getClass().getName(), ex);
+        ApiResponseModel<?> reponse = ApiResponseModel.ERROR(null, ex.getLocalizedMessage());
+        validation.ifErrors(errorList -> reponse.addErrorMessages(errorList));
+        validation.ifWarnings(warningList -> reponse.addWarningMessages(warningList));
+        validation.clear();
+        return new ResponseEntity<>(reponse, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 
-	@ExceptionHandler(value = { JpaObjectRetrievalFailureException.class, DataRetrievalFailureException.class })
-	protected ResponseEntity<Object> handleEntityNotFound(RuntimeException ex, WebRequest request) {
-		LOGGER.error("JPA ERROR IS: " + ex.getClass().getName(), ex);
-		validation.clear();
-		return new ResponseEntity<>(ApiResponseModel.ERROR(null, ex.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-	}
+    @ExceptionHandler(value = {JpaObjectRetrievalFailureException.class, DataRetrievalFailureException.class})
+    protected ResponseEntity<Object> handleEntityNotFound(RuntimeException ex, WebRequest request) {
+        LOGGER.error("JPA ERROR IS: " + ex.getClass().getName(), ex);
+        validation.clear();
+        return new ResponseEntity<>(ApiResponseModel.ERROR(null, ex.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+    }
 
-	@ExceptionHandler(value = { AccessDeniedException.class })
-	protected ResponseEntity<Object> handleAuthorizationErrors(Exception ex, WebRequest request) {
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    protected ResponseEntity<Object> handleAuthorizationErrors(Exception ex, WebRequest request) {
 
-		LOGGER.error("Authorization error EXCETPION IS: " + ex.getClass().getName());
-		String message = "You are not authorized to access this resource.";
-		validation.clear();
-		return new ResponseEntity<>(ApiResponseModel.ERROR(null, message), HttpStatus.FORBIDDEN);
-	}
+        LOGGER.error("Authorization error EXCETPION IS: " + ex.getClass().getName());
+        String message = "You are not authorized to access this resource.";
+        validation.clear();
+        return new ResponseEntity<>(ApiResponseModel.ERROR(null, message), HttpStatus.FORBIDDEN);
+    }
 
-	@ExceptionHandler(value = { GradBusinessRuleException.class })
-	protected ResponseEntity<Object> handleIrisBusinessException(Exception ex, WebRequest request) {
-		ApiResponseModel<?> response = ApiResponseModel.ERROR(null);
-		validation.ifErrors(errorList -> response.addErrorMessages(errorList));
-		validation.ifWarnings(warningList -> response.addWarningMessages(warningList));
-		if (response.getMessages().isEmpty()) {
-			response.addMessageItem(ex.getLocalizedMessage(), MessageTypeEnum.ERROR);
-		}
-		validation.clear();
-		return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
-	}
+    @ExceptionHandler(value = {GradBusinessRuleException.class})
+    protected ResponseEntity<Object> handleIrisBusinessException(Exception ex, WebRequest request) {
+        ApiResponseModel<?> response = ApiResponseModel.ERROR(null);
+        validation.ifErrors(errorList -> response.addErrorMessages(errorList));
+        validation.ifWarnings(warningList -> response.addWarningMessages(warningList));
+        if (response.getMessages().isEmpty()) {
+            response.addMessageItem(ex.getLocalizedMessage(), MessageTypeEnum.ERROR);
+        }
+        validation.clear();
+        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 
-	@ExceptionHandler(value = { OptimisticEntityLockException.class })
-	protected ResponseEntity<Object> handleOptimisticEntityLockException(OptimisticEntityLockException ex, WebRequest request) {
+    @ExceptionHandler(value = {OptimisticEntityLockException.class})
+    protected ResponseEntity<Object> handleOptimisticEntityLockException(OptimisticEntityLockException ex, WebRequest request) {
 
-		LOGGER.error("EXCEPTION IS: " + ex.getClass().getName(), ex);
-		LOGGER.error("Illegal argument ERROR IS: " + ex.getClass().getName(), ex);
-		ApiResponseModel<?> response = ApiResponseModel.ERROR(null);
-		validation.ifErrors(errorList -> response.addErrorMessages(errorList));
-		validation.ifWarnings(warningList -> response.addWarningMessages(warningList));
-		if (!validation.hasErrors()) {
-			response.addMessageItem(ex.getLocalizedMessage(), MessageTypeEnum.ERROR);
-		}
-		validation.clear();
-		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-	}
-	
-	@ExceptionHandler(value = { DataIntegrityViolationException.class })
-	protected ResponseEntity<Object> handleSQLException(DataIntegrityViolationException ex, WebRequest request) {
+        LOGGER.error("EXCEPTION IS: " + ex.getClass().getName(), ex);
+        LOGGER.error("Illegal argument ERROR IS: " + ex.getClass().getName(), ex);
+        ApiResponseModel<?> response = ApiResponseModel.ERROR(null);
+        validation.ifErrors(errorList -> response.addErrorMessages(errorList));
+        validation.ifWarnings(warningList -> response.addWarningMessages(warningList));
+        if (!validation.hasErrors()) {
+            response.addMessageItem(ex.getLocalizedMessage(), MessageTypeEnum.ERROR);
+        }
+        validation.clear();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
-		LOGGER.error("DATA INTEGRITY VIOLATION IS: " + ex.getClass().getName(), ex);
-		String msg = ex.getLocalizedMessage();
+    @ExceptionHandler(value = {DataIntegrityViolationException.class})
+    protected ResponseEntity<Object> handleSQLException(DataIntegrityViolationException ex, WebRequest request) {
 
-		Throwable cause = ex.getCause();
-		if (cause instanceof ConstraintViolationException) {
-			ConstraintViolationException contraintViolation = (ConstraintViolationException) cause;
-			if ("23000".equals(contraintViolation.getSQLState())) {
-				// primary key violation - probably inserting a duplicate record
-				msg = ex.getRootCause().getMessage();
-			}
-		}
+        LOGGER.error("DATA INTEGRITY VIOLATION IS: " + ex.getClass().getName(), ex);
+        String msg = ex.getLocalizedMessage();
 
-		ApiResponseModel<?> reponse = ApiResponseModel.ERROR(null, msg);
-		validation.ifErrors(errorList -> reponse.addErrorMessages(errorList));
-		validation.ifWarnings(warningList -> reponse.addWarningMessages(warningList));
-		validation.clear();
-		return new ResponseEntity<>(reponse, HttpStatus.UNPROCESSABLE_ENTITY);
-	}
+        Throwable cause = ex.getCause();
+        if (cause instanceof ConstraintViolationException) {
+            ConstraintViolationException contraintViolation = (ConstraintViolationException) cause;
+            if ("23000".equals(contraintViolation.getSQLState())) {
+                // primary key violation - probably inserting a duplicate record
+                msg = ex.getRootCause().getMessage();
+            }
+        }
 
-	@ExceptionHandler(value = { Exception.class })
-	protected ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
+        ApiResponseModel<?> reponse = ApiResponseModel.ERROR(null, msg);
+        validation.ifErrors(errorList -> reponse.addErrorMessages(errorList));
+        validation.ifWarnings(warningList -> reponse.addWarningMessages(warningList));
+        validation.clear();
+        return new ResponseEntity<>(reponse, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
 
-		LOGGER.error("EXCEPTION IS: " + ex.getClass().getName(), ex);
-		LOGGER.error("Illegal argument ERROR IS: " + ex.getClass().getName(), ex);
-		ApiResponseModel<?> response = ApiResponseModel.ERROR(null);
-		validation.ifErrors(errorList -> response.addErrorMessages(errorList));
-		validation.ifWarnings(warningList -> response.addWarningMessages(warningList));
-		if (!validation.hasErrors()) {
-			response.addMessageItem(ex.getLocalizedMessage(), MessageTypeEnum.ERROR);
-		}
-		validation.clear();
-		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-	}
-	
+    @ExceptionHandler(value = {Exception.class})
+    protected ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
+
+        LOGGER.error("EXCEPTION IS: " + ex.getClass().getName(), ex);
+        LOGGER.error("Illegal argument ERROR IS: " + ex.getClass().getName(), ex);
+        ApiResponseModel<?> response = ApiResponseModel.ERROR(null);
+        validation.ifErrors(errorList -> response.addErrorMessages(errorList));
+        validation.ifWarnings(warningList -> response.addWarningMessages(warningList));
+        if (!validation.hasErrors()) {
+            response.addMessageItem(ex.getLocalizedMessage(), MessageTypeEnum.ERROR);
+        }
+        validation.clear();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }
