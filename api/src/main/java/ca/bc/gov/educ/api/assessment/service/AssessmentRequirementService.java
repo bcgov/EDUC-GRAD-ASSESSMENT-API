@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,8 +32,8 @@ public class AssessmentRequirementService {
     @Autowired
     private AssessmentRequirements assessmentRequirements;
 
-    @Value(EducAssessmentApiConstants.ENDPOINT_RULE_DETAIL_URL)
-    private String getRuleDetails;
+    @Autowired
+    private EducAssessmentApiConstants contants;
 
     @Autowired
     WebClient webClient;
@@ -65,7 +64,7 @@ public class AssessmentRequirementService {
                 Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
                 obj.setAssessmentName(assmt.getAssessmentName());
                 List<GradRuleDetails> ruleList = webClient.get()
-                        .uri(String.format(getRuleDetails, cR.getRuleCode()))
+                        .uri(String.format(contants.getRuleDetailOfProgramManagementApiUrl(), cR.getRuleCode()))
                         .headers(h -> h.setBearerAuth(accessToken))
                         .retrieve()
                         .bodyToMono(new ParameterizedTypeReference<List<GradRuleDetails>>() {
