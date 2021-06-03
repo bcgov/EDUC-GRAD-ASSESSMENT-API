@@ -2,7 +2,6 @@ package ca.bc.gov.educ.api.assessment.service;
 
 import ca.bc.gov.educ.api.assessment.model.dto.*;
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementEntity;
-import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 import org.junit.After;
@@ -52,9 +51,6 @@ public class AssessmentRequirementServiceTest {
     private AssessmentRequirementRepository assessmentRequirementRepository;
 
     @MockBean
-    private AssessmentRequirementTransformer assessmentRequirementTransformer;
-
-    @MockBean
     private WebClient webClient;
 
     @Mock
@@ -88,15 +84,6 @@ public class AssessmentRequirementServiceTest {
         final String requirementName = "ReqName";
         final String requirementProgram = "ReqProg";
 
-        // Assessment Requirements
-        final List<AssessmentRequirement> assessmentReqList = new ArrayList<>();
-        final AssessmentRequirement assmtReq = new AssessmentRequirement();
-        assmtReq.setAssessmentRequirementId(assessmentRequirementID);
-        assmtReq.setAssessmentCode(assessmentCode);
-        assmtReq.setAssessmentName(assessmentName);
-        assmtReq.setRuleCode(ruleCode);
-        assessmentReqList.add(assmtReq);
-
         // Assessment Requirements Entity
         final List<AssessmentRequirementEntity> assessmentReqEntityList = new ArrayList<>();
         final AssessmentRequirementEntity assmtReqEntity = new AssessmentRequirementEntity();
@@ -125,7 +112,6 @@ public class AssessmentRequirementServiceTest {
         };
 
         when(assessmentRequirementRepository.findAll(paging)).thenReturn(pageResult);
-        when(assessmentRequirementTransformer.transformToDTO(pageResult.getContent())).thenReturn(assessmentReqList);
         when(assessmentService.getAssessmentDetails(assessmentCode)).thenReturn(assmt);
 
         when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
@@ -154,14 +140,6 @@ public class AssessmentRequirementServiceTest {
         final String assessmentName = "TEST Name description";
         final String ruleCode = "RULE";
 
-        // Assessment Requirements
-        final List<AssessmentRequirement> assessmentReqList = new ArrayList<>();
-        final AssessmentRequirement assmtReq = new AssessmentRequirement();
-        assmtReq.setAssessmentRequirementId(assessmentRequirementID);
-        assmtReq.setAssessmentCode(assessmentCode);
-        assmtReq.setRuleCode(ruleCode);
-        assessmentReqList.add(assmtReq);
-
         // Assessment Requirements Entity
         final List<AssessmentRequirementEntity> assessmentReqEntityList = new ArrayList<>();
         final AssessmentRequirementEntity assmtReqEntity = new AssessmentRequirementEntity();
@@ -179,7 +157,6 @@ public class AssessmentRequirementServiceTest {
         assmt.setAssessmentName(assessmentName);
 
         when(assessmentRequirementRepository.findByRuleCode(ruleCode, paging)).thenReturn(pageResult);
-        when(assessmentRequirementTransformer.transformToDTO(pageResult.getContent())).thenReturn(assessmentReqList);
         when(assessmentService.getAssessmentDetails(assessmentCode)).thenReturn(assmt);
 
         var result = assessmentRequirementService.getAllAssessmentRequirementListByRule(ruleCode, 1, 5);
@@ -196,11 +173,9 @@ public class AssessmentRequirementServiceTest {
         // IDs
         final UUID assessmentRequirementID1 = UUID.randomUUID();
         final String assessmentCode1 = "Test1";
-        final String assessmentName1 = "Test1 Name description";
         final String ruleCode1 = "ruleCode1";
         final UUID assessmentRequirementID2 = UUID.randomUUID();
         final String assessmentCode2 = "Test2";
-        final String assessmentName2 = "Test2 Name description";
         final String ruleCode2 = "ruleCode2";
 
         // Input
@@ -208,22 +183,20 @@ public class AssessmentRequirementServiceTest {
         assessmentList.setAssessmentCodes(Arrays.asList(assessmentCode1, assessmentCode2));
 
         // Output
-        final List<AssessmentRequirement> assessmentReqList = new ArrayList<>();
-        final AssessmentRequirement assmtReq1 = new AssessmentRequirement();
+        final List<AssessmentRequirementEntity> assessmentReqList = new ArrayList<>();
+        final AssessmentRequirementEntity assmtReq1 = new AssessmentRequirementEntity();
         assmtReq1.setAssessmentRequirementId(assessmentRequirementID1);
         assmtReq1.setAssessmentCode(assessmentCode1);
-        assmtReq1.setAssessmentName(assessmentName1);
         assmtReq1.setRuleCode(ruleCode1);
         assessmentReqList.add(assmtReq1);
 
-        final AssessmentRequirement assmtReq2 = new AssessmentRequirement();
+        final AssessmentRequirementEntity assmtReq2 = new AssessmentRequirementEntity();
         assmtReq2.setAssessmentRequirementId(assessmentRequirementID2);
         assmtReq2.setAssessmentCode(assessmentCode2);
-        assmtReq2.setAssessmentName(assessmentName2);
         assmtReq2.setRuleCode(ruleCode2);
         assessmentReqList.add(assmtReq2);
 
-        when(assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.findByAssessmentCodeIn(assessmentList.getAssessmentCodes()))).thenReturn(assessmentReqList);
+        when(assessmentRequirementRepository.findByAssessmentCodeIn(assessmentList.getAssessmentCodes())).thenReturn(assessmentReqList);
 
         var result = assessmentRequirementService.getAssessmentRequirementListByAssessments(assessmentList);
 
