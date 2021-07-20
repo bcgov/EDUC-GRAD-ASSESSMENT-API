@@ -3,10 +3,13 @@ package ca.bc.gov.educ.api.assessment.service;
 import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
 import ca.bc.gov.educ.api.assessment.model.dto.School;
 import ca.bc.gov.educ.api.assessment.model.dto.StudentAssessment;
+import ca.bc.gov.educ.api.assessment.model.entity.AssessmentEntity;
 import ca.bc.gov.educ.api.assessment.model.entity.StudentAssessmentEntity;
 import ca.bc.gov.educ.api.assessment.model.entity.StudentAssessmentId;
+import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentTransformer;
+import ca.bc.gov.educ.api.assessment.repository.AssessmentRepository;
 import ca.bc.gov.educ.api.assessment.repository.StudentAssessmentRepository;
-import ca.bc.gov.educ.api.assessment.util.StudentAssessmentApiConstants;
+import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,10 +37,19 @@ public class StudentAssessmentServiceTest {
     StudentAssessmentService studentAssessmentService;
 
     @Autowired
-    private StudentAssessmentApiConstants constants;
+    AssessmentService assessmentService;
+
+    @Autowired
+    private EducAssessmentApiConstants constants;
 
     @MockBean
     private StudentAssessmentRepository studentAssessmentRepo;
+
+    @MockBean
+    private AssessmentRepository assessmentRepo;
+
+    @Autowired
+    AssessmentTransformer assessmentTransformer;
 
     @MockBean
     WebClient webClient;
@@ -58,7 +70,7 @@ public class StudentAssessmentServiceTest {
         // ID
         StudentAssessmentId studentAssessmentId = new StudentAssessmentId();
         studentAssessmentId.setPen("123456789");
-        studentAssessmentId.setAssessmentCode("assmt");
+        studentAssessmentId.setAssessmentCode("LTE10");
         studentAssessmentId.setSessionDate("2020-05");
 
         StudentAssessmentEntity studentAssessmentEntity = new StudentAssessmentEntity();
@@ -66,22 +78,13 @@ public class StudentAssessmentServiceTest {
         studentAssessmentEntity.setSpecialCase("special");
         studentAssessmentEntity.setMincodeAssessment("12345678");
 
-        Assessment assessment = new Assessment();
-        assessment.setAssessmentCode("assmt");
-        assessment.setAssessmentName("assmt test");
-        assessment.setLanguage("en");
+        Assessment assessment = assessmentService.getAssessmentDetails("LTE10");
 
         School school = new School();
         school.setMinCode("12345678");
         school.setSchoolName("Test School");
 
         when(studentAssessmentRepo.findByPen(studentAssessmentId.getPen())).thenReturn(Arrays.asList(studentAssessmentEntity));
-
-        when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
-        when(this.requestHeadersUriMock.uri(String.format(constants.getAssessmentByAssessmentCodeUrl(), assessment.getAssessmentCode()))).thenReturn(this.requestHeadersMock);
-        when(this.requestHeadersMock.headers(any(Consumer.class))).thenReturn(this.requestHeadersMock);
-        when(this.requestHeadersMock.retrieve()).thenReturn(this.responseMock);
-        when(this.responseMock.bodyToMono(Assessment.class)).thenReturn(Mono.just(assessment));
 
         when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
         when(this.requestHeadersUriMock.uri(String.format(constants.getSchoolNameByMincodeUrl(), studentAssessmentEntity.getMincodeAssessment()))).thenReturn(this.requestHeadersMock);

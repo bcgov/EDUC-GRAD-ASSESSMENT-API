@@ -2,9 +2,9 @@ package ca.bc.gov.educ.api.assessment.controller;
 
 import ca.bc.gov.educ.api.assessment.model.dto.StudentAssessment;
 import ca.bc.gov.educ.api.assessment.service.StudentAssessmentService;
+import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 import ca.bc.gov.educ.api.assessment.util.GradValidation;
 import ca.bc.gov.educ.api.assessment.util.ResponseHelper;
-import ca.bc.gov.educ.api.assessment.util.StudentAssessmentApiConstants;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -26,7 +26,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(StudentAssessmentApiConstants.STUDENT_ASSESSMENT_API_ROOT_MAPPING)
+@RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
 @EnableResourceServer
 @OpenAPIDefinition(info = @Info(
         title = "API for Student Assessments.", description = "This API is for Reading Student Assessments data.", version = "1"),
@@ -44,7 +44,7 @@ public class StudentAssessmentController {
     @Autowired
 	ResponseHelper response;
 
-    @GetMapping(StudentAssessmentApiConstants.GET_STUDENT_ASSESSMENT_BY_PEN_MAPPING)
+    @GetMapping(EducAssessmentApiConstants.GET_STUDENT_ASSESSMENT_BY_PEN_MAPPING)
     @PreAuthorize("#oauth2.hasScope('READ_GRAD_STUDENT_ASSESSMENT_DATA')")
     @Operation(summary = "Find All Student Assessments by PEN", description = "Get All Student Assessments by PEN", tags = { "Student Assessments" })
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "204", description = "NO CONTENT")})

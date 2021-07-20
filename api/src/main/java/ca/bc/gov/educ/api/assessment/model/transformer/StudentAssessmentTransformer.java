@@ -2,7 +2,7 @@ package ca.bc.gov.educ.api.assessment.model.transformer;
 
 import ca.bc.gov.educ.api.assessment.model.dto.StudentAssessment;
 import ca.bc.gov.educ.api.assessment.model.entity.StudentAssessmentEntity;
-import ca.bc.gov.educ.api.assessment.util.StudentAssessmentApiUtils;
+import ca.bc.gov.educ.api.assessment.util.GradAssessmentApiUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ public class StudentAssessmentTransformer {
             studentAssessment = modelMapper.map(studentAssessmentEntity, StudentAssessment.class);
             studentAssessment.setPen(studentAssessmentEntity.getAssessmentKey().getPen());
             studentAssessment.setAssessmentCode(studentAssessmentEntity.getAssessmentKey().getAssessmentCode());
-            studentAssessment.setSessionDate(StudentAssessmentApiUtils.parseTraxDate(studentAssessmentEntity.getAssessmentKey().getSessionDate()));
+            studentAssessment.setSessionDate(GradAssessmentApiUtils.parseTraxDate(studentAssessmentEntity.getAssessmentKey().getSessionDate()));
             studentAssessmentList.add(studentAssessment);
         }
 
