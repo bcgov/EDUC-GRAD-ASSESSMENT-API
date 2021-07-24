@@ -56,7 +56,7 @@ springdoc:
   
 #Ebdpoints
 endpoint:
-  school-api:
+  grad-trax-api:
     school-name-by-mincode:
       url: https://educ-grad-school-api-77c02f-dev.apps.silver.devops.gov.bc.ca/api/v1/school/%s
   programmanagement-api: 

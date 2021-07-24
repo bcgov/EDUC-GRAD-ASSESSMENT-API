@@ -58,7 +58,6 @@ public class StudentAssessmentService {
             studentAssessment.forEach(sA -> {
                 Assessment assessment = assessmentTransformer.transformToDTO(assessmentRepo.findByAssessmentCode(sA.getAssessmentCode()));
                 if (assessment != null) {
-                    sA.setAssessmentCode(assessment.getAssessmentCode());
                     sA.setAssessmentName(assessment.getAssessmentName());
                     sA.setAssessmentDetails(assessment);
                 }

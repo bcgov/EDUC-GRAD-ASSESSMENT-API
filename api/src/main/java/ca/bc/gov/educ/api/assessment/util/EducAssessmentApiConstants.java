@@ -22,6 +22,7 @@ public class EducAssessmentApiConstants {
     public static final String GET_ASSESSMENT_REQUIREMENT_BY_ASSESSMENT_LIST_MAPPING="/requirement/assessment-list";
     public static final String GET_STUDENT_ASSESSMENT_BY_ID_MAPPING = "/{studentAssessmentId}";
     public static final String GET_STUDENT_ASSESSMENT_BY_PEN_MAPPING = "/pen/{pen}";
+    public static final String GET_ASSESSMENT_ALGORITHM_DATA_BY_PEN_MAPPING = "/assessment-algorithm/pen/{pen}";
 
 
     //Attribute Constants
@@ -40,10 +41,10 @@ public class EducAssessmentApiConstants {
     public static final String TRAX_DATE_FORMAT = "yyyyMM";
 
     //Endpoints
-    @Value("${endpoint.programmanagement-api.rule-detail.url}")
+    @Value("${endpoint.grad-program-api.rule-detail.url}")
     private String ruleDetailOfProgramManagementApiUrl;
 
-    @Value("${endpoint.school-api.school-name-by-mincode.url}")
+    @Value("${endpoint.grad-trax-api.school-name-by-mincode.url}")
     private String schoolNameByMincodeUrl;
 
 }

@@ -13,7 +13,6 @@ import lombok.EqualsAndHashCode;
 public class AssessmentRequirement extends BaseModel {
 
 	private UUID assessmentRequirementId;
-	private String assessmentCode;
-    private String ruleCode;
-    private String assessmentName;
+	private String assessmentCode;   
+	private AssessmentRequirementCode ruleCode;
 }

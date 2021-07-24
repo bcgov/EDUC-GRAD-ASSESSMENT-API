@@ -22,6 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,13 +79,16 @@ public class StudentAssessmentServiceTest {
         studentAssessmentEntity.setSpecialCase("special");
         studentAssessmentEntity.setMincodeAssessment("12345678");
 
-        Assessment assessment = assessmentService.getAssessmentDetails("LTE10");
+        AssessmentEntity assessment = new AssessmentEntity();
+        assessment.setAssessmentCode("LTE10");
+        assessment.setAssessmentName("asdas");
 
         School school = new School();
         school.setMinCode("12345678");
         school.setSchoolName("Test School");
 
         when(studentAssessmentRepo.findByPen(studentAssessmentId.getPen())).thenReturn(Arrays.asList(studentAssessmentEntity));
+        when(assessmentRepo.findByAssessmentCode("LTE10")).thenReturn(Optional.of(assessment));
 
         when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
         when(this.requestHeadersUriMock.uri(String.format(constants.getSchoolNameByMincodeUrl(), studentAssessmentEntity.getMincodeAssessment()))).thenReturn(this.requestHeadersMock);

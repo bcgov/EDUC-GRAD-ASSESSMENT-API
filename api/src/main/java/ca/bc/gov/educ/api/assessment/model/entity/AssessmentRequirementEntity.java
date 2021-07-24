@@ -1,11 +1,13 @@
 package ca.bc.gov.educ.api.assessment.model.entity;
 
-import java.sql.Date;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Immutable;
@@ -25,7 +27,8 @@ public class AssessmentRequirementEntity extends BaseEntity {
     @Column(name = "ASSESSMENT_CODE", nullable = false)
     private String assessmentCode;   
 
-    @Column(name = "ASSM_REQUIREMENT_RULE_CODE", nullable = true)
-    private String ruleCode;   
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "ASSESSMENT_REQUIREMENT_CODE", referencedColumnName = "ASSESSMENT_REQUIREMENT_CODE")
+    private AssessmentRequirementCodeEntity ruleCode;   
 
 }
