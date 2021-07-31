@@ -118,8 +118,9 @@ public class AssessmentControllerTest {
         final AssessmentRequirement assmtReq = new AssessmentRequirement();
         assmtReq.setAssessmentRequirementId(assessmentRequirementID);
         assmtReq.setAssessmentCode(assessmentCode);
-        assmtReq.setAssessmentName(assessmentName);
-        assmtReq.setRuleCode(ruleCode);
+        AssessmentRequirementCode code = new AssessmentRequirementCode();
+        code.setAssmtRequirementCode("116");
+        assmtReq.setRuleCode(code);
         assessmentReqList.add(assmtReq);
 
         Mockito.when(assessmentRequirementService.getAllAssessmentRequirementListByRule(ruleCode, 1,5)).thenReturn(assessmentReqList);
@@ -149,15 +150,17 @@ public class AssessmentControllerTest {
         final AssessmentRequirement assmtReq1 = new AssessmentRequirement();
         assmtReq1.setAssessmentRequirementId(assessmentRequirementID1);
         assmtReq1.setAssessmentCode(assessmentCode1);
-        assmtReq1.setAssessmentName(assessmentName1);
-        assmtReq1.setRuleCode(ruleCode1);
+        AssessmentRequirementCode code = new AssessmentRequirementCode();
+        code.setAssmtRequirementCode("116");
+        assmtReq1.setRuleCode(code);
         assessmentReqList.add(assmtReq1);
 
         final AssessmentRequirement assmtReq2 = new AssessmentRequirement();
         assmtReq2.setAssessmentRequirementId(assessmentRequirementID2);
         assmtReq2.setAssessmentCode(assessmentCode2);
-        assmtReq2.setAssessmentName(assessmentName2);
-        assmtReq2.setRuleCode(ruleCode2);
+        AssessmentRequirementCode code2 = new AssessmentRequirementCode();
+        code2.setAssmtRequirementCode("116");
+        assmtReq2.setRuleCode(code2);
         assessmentReqList.add(assmtReq2);
 
         assessmentRequirements.setAssessmentRequirementList(assessmentReqList);

@@ -15,9 +15,9 @@ spring:
       maximum-pool-size: ${MAXIMUM_POOL_SIZE}
       connection-timeout: ${CONNECTION_TIMEOUT}
       max-lifetime: ${MAX_LIFETIME}
-    url: ${JDBC_URL}
-    username: ${ORACLE_USERNAME}
-    password: ${ORACLE_PASSWORD}
+    url: ${CONNECTION_STRING}
+    username: ${USERNAME}
+    password: ${PASSWORD}
     driver-class: oracle.jdbc.driver.OracleDriver
   jpa:
     show-sql: true
@@ -72,7 +72,10 @@ springdoc:
     operationsSorter: alpha
   
 #Ebdpoints
-endpoint: 
-  programmanagement-api: 
+endpoint:
+  grad-trax-api:
+    school-name-by-mincode:
+      url: https://educ-grad-trax-api-77c02f-dev.apps.silver.devops.gov.bc.ca/api/v1/school/%s
+  grad-program-api: 
     rule-detail: 
-      url : https://educ-grad-program-management-api-77c02f-dev.apps.silver.devops.gov.bc.ca/api/v1/programmanagement/programrules/%s
+      url : https://educ-grad-program-api-77c02f-dev.apps.silver.devops.gov.bc.ca/api/v1/program/programrules/%s
