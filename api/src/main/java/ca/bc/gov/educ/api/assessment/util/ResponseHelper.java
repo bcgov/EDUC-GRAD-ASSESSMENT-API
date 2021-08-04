@@ -33,6 +33,10 @@ public class ResponseHelper {
 		return new ResponseEntity<T>(HttpStatus.NOT_FOUND);
 	}
 
+	public <T> ResponseEntity<T> NO_CONTENT() {
+		return new ResponseEntity<T>(HttpStatus.NO_CONTENT);
+	}
+
 	//************   GET methods
 
 	/**

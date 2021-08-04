@@ -1,18 +1,7 @@
 package ca.bc.gov.educ.api.assessment.controller;
 
-import ca.bc.gov.educ.api.assessment.model.dto.*;
-import ca.bc.gov.educ.api.assessment.service.AssessmentRequirementService;
-import ca.bc.gov.educ.api.assessment.service.AssessmentService;
-import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
-import ca.bc.gov.educ.api.assessment.util.GradValidation;
-import ca.bc.gov.educ.api.assessment.util.PermissionsContants;
-import ca.bc.gov.educ.api.assessment.util.ResponseHelper;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +10,33 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import ca.bc.gov.educ.api.assessment.model.dto.AllAssessmentRequirements;
+import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
+import ca.bc.gov.educ.api.assessment.model.dto.AssessmentAlgorithmData;
+import ca.bc.gov.educ.api.assessment.model.dto.AssessmentList;
+import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirement;
+import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirements;
+import ca.bc.gov.educ.api.assessment.service.AssessmentRequirementService;
+import ca.bc.gov.educ.api.assessment.service.AssessmentService;
+import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
+import ca.bc.gov.educ.api.assessment.util.GradValidation;
+import ca.bc.gov.educ.api.assessment.util.PermissionsConstants;
+import ca.bc.gov.educ.api.assessment.util.ResponseHelper;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @CrossOrigin
 @RestController
@@ -47,7 +60,7 @@ public class AssessmentController {
     ResponseHelper response;
 
     @GetMapping
-    @PreAuthorize(PermissionsContants.READ_GRAD_ASSESSMENT)
+    @PreAuthorize(PermissionsConstants.READ_GRAD_ASSESSMENT)
     @Operation(summary = "Find All Assessment", description = "Get all Assessment", tags = {"Assessment"})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<List<Assessment>> getAllAssessments() {
@@ -56,7 +69,7 @@ public class AssessmentController {
     }
 
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_BY_CODE_MAPPING)
-    @PreAuthorize(PermissionsContants.READ_GRAD_ASSESSMENT)
+    @PreAuthorize(PermissionsConstants.READ_GRAD_ASSESSMENT)
     @Operation(summary = "Find an Assessment Detail by Code", description = "Get an Assessment Detail by Code",
             tags = {"Assessment"})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
@@ -66,7 +79,7 @@ public class AssessmentController {
     }
 
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)
-    @PreAuthorize(PermissionsContants.READ_GRAD_ASSESSMENT_REQUIREMENT)
+    @PreAuthorize(PermissionsConstants.READ_GRAD_ASSESSMENT_REQUIREMENT)
     @Operation(summary = "Find All Assessment Requirements", description = "Get All Assessment Requirements",
             tags = {"Assessment Requirements"})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
@@ -81,7 +94,7 @@ public class AssessmentController {
     }
 
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_BY_RULE_MAPPING)
-    @PreAuthorize(PermissionsContants.READ_GRAD_ASSESSMENT_REQUIREMENT)
+    @PreAuthorize(PermissionsConstants.READ_GRAD_ASSESSMENT_REQUIREMENT)
     @Operation(summary = "Find All Assessment Requirements by Rule", description = "Get All Assessment Requirements by Rule",
             tags = {"Assessment Requirements"})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
@@ -94,12 +107,25 @@ public class AssessmentController {
     }
 
     @PostMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_BY_ASSESSMENT_LIST_MAPPING)
-    @PreAuthorize(PermissionsContants.READ_GRAD_ASSESSMENT_REQUIREMENT)
+    @PreAuthorize(PermissionsConstants.READ_GRAD_ASSESSMENT_REQUIREMENT)
     @Operation(summary = "Find all Assessment Requirements by Assessment Code list",
             description = "Get all Assessment Requirements by Assessment Code list", tags = {"Assessment Requirements"})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<AssessmentRequirements> getAssessmentRequirementByAssessments(@RequestBody AssessmentList assessmentList) {
         logger.debug("getAssessmentRequirementByAssessments : ");
         return response.GET(assessmentRequirementService.getAssessmentRequirementListByAssessments(assessmentList));
+    }
+    
+    @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_ALGORITHM_DATA_BY_PEN_MAPPING)
+    @PreAuthorize(PermissionsConstants.READ_ALGORITHM_DATA)
+    @Operation(summary = "Find Assessment Algorithm Data by pen", description = "Get Assessment Algorithm Data by pen", tags = { "Courses" })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public ResponseEntity<AssessmentAlgorithmData> getAssessmentAlgorithmData(
+            @PathVariable String pen) {
+        logger.debug("getAssessmentAlgorithmData : ");
+        OAuth2AuthenticationDetails auth = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getDetails();
+        String accessToken = auth.getTokenValue();
+        return response.GET(assessmentService.getAssessmentAlgorithmData(pen,accessToken, false));
     }
 }

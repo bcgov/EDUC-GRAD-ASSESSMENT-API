@@ -1,16 +1,13 @@
 package ca.bc.gov.educ.api.assessment.service;
 
 
-import ca.bc.gov.educ.api.assessment.model.dto.*;
-import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementEntity;
-import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
-import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
-import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,14 +15,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
-import java.util.List;
+import ca.bc.gov.educ.api.assessment.model.dto.AllAssessmentRequirements;
+import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
+import ca.bc.gov.educ.api.assessment.model.dto.AssessmentList;
+import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirement;
+import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirements;
+import ca.bc.gov.educ.api.assessment.model.dto.GradRuleDetails;
+import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementEntity;
+import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
+import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementCodeRepository;
+import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
+import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 
 @Service
 public class AssessmentRequirementService {
 
     @Autowired
     private AssessmentRequirementRepository assessmentRequirementRepository;
+    
+    @Autowired
+    private AssessmentRequirementCodeRepository assessmentRequirementCodeRepository;
 
     @Autowired
     private AssessmentRequirementTransformer assessmentRequirementTransformer;
@@ -33,8 +42,8 @@ public class AssessmentRequirementService {
     @Autowired
     private AssessmentRequirements assessmentRequirements;
 
-    @Value(EducAssessmentApiConstants.ENDPOINT_RULE_DETAIL_URL)
-    private String getRuleDetails;
+    @Autowired
+    private EducAssessmentApiConstants contants;
 
     @Autowired
     WebClient webClient;
@@ -53,19 +62,20 @@ public class AssessmentRequirementService {
      * @throws java.lang.Exception
      */
     public List<AllAssessmentRequirements> getAllAssessmentRequirementList(Integer pageNo, Integer pageSize, String accessToken) {
-        List<AssessmentRequirement> AssessmentReqList = new ArrayList<AssessmentRequirement>();
+        List<AssessmentRequirement> assessmentReqList = new ArrayList<AssessmentRequirement>();
         List<AllAssessmentRequirements> allAssessmentRequiremntList = new ArrayList<AllAssessmentRequirements>();
         try {
             Pageable paging = PageRequest.of(pageNo, pageSize);
             Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findAll(paging);
-            AssessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
-            AssessmentReqList.forEach((cR) -> {
+            assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
+            assessmentReqList.forEach((cR) -> {
                 AllAssessmentRequirements obj = new AllAssessmentRequirements();
                 BeanUtils.copyProperties(cR, obj);
                 Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
                 obj.setAssessmentName(assmt.getAssessmentName());
+                obj.setRuleCode(cR.getRuleCode().getAssmtRequirementCode());
                 List<GradRuleDetails> ruleList = webClient.get()
-                        .uri(String.format(getRuleDetails, cR.getRuleCode()))
+                        .uri(String.format(contants.getRuleDetailOfProgramManagementApiUrl(), cR.getRuleCode().getAssmtRequirementCode()))
                         .headers(h -> h.setBearerAuth(accessToken))
                         .retrieve()
                         .bodyToMono(new ParameterizedTypeReference<List<GradRuleDetails>>() {
@@ -112,12 +122,8 @@ public class AssessmentRequirementService {
 
         try {
             Pageable paging = PageRequest.of(pageNo, pageSize);
-            Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(rule, paging);
+            Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(assessmentRequirementCodeRepository.getOne(rule), paging);
             assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
-            assessmentReqList.forEach(aR -> {
-                Assessment assmt = assessmentService.getAssessmentDetails(aR.getAssessmentCode());
-                aR.setAssessmentName(assmt.getAssessmentName());
-            });
         } catch (Exception e) {
             logger.debug("Exception:" + e);
         }

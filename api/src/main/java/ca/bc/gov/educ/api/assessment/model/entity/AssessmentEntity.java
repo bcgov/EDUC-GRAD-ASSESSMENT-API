@@ -11,22 +11,25 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "GRAD_ASSESSMENT")
-public class AssessmentEntity {
+@Table(name = "ASSESSMENT_CODE")
+public class AssessmentEntity extends BaseEntity {
    
 	@Id
-	@Column(name = "ASSM_CODE", nullable = true)
+	@Column(name = "ASSESSMENT_CODE", nullable = true)
     private String assessmentCode;   
 
-    @Column(name = "ASSM_NAME", nullable = true)
-    private String assessmentName;   
+    @Column(name = "LABEL", nullable = true)
+    private String assessmentName;
 
-    @Column(name = "LANGUAGE", nullable = true)
+    @Column(name = "DESCRIPTION", nullable = true)
+    private String assessmentDescription;
+
+    @Column(name = "ASSESSMENT_LANGUAGE", nullable = true)
     private String language;
     
-    @Column(name = "START_DT", nullable = true)
+    @Column(name = "EFFECTIVE_DATE", nullable = true)
     private Date startDate;
 
-    @Column(name = "END_DT", nullable = true)
+    @Column(name = "EXPIRY_DATE", nullable = true)
     private Date endDate;
 }
