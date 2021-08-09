@@ -80,7 +80,7 @@ springdoc:
     path: /api/v1/api-docs-ui.html
     operationsSorter: alpha
 
-#Ebdpoints
+#Endpoints
 endpoint:
   grad-trax-api:
     school-name-by-mincode:
