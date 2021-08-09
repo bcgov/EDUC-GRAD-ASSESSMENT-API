@@ -20,6 +20,8 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: false
+  flyway:
+    enabled: false
 
 #Logging properties
 logging:
