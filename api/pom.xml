@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ca.bc.gov.educ</groupId>
-	<artifactId>grad-assessment-api</artifactId>
+	<artifactId>educ-grad-assessment-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>grad-assessment-api</name>
+	<name>educ-grad-assessment-api</name>
 	<description>Ministry of Education GRAD Assessment API</description>
    
 

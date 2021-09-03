@@ -10,15 +10,17 @@ objects:
     kind: BuildConfig
     metadata:
       labels:
-        build: educ-grad-assessment-api-pipeline
-      name: educ-grad-assessment-api-pipeline
+        build: educ-grad-assessment-api
+      name: educ-grad-assessment-api
       namespace: 77c02f-tools
     spec:
       source:
         git:
-          ref: master
+          ref: main
           uri: 'https://github.com/bcgov/EDUC-GRAD-ASSESSMENT-API'
         type: Git
       strategy:
-        jenkinsPipelineStrategy:
-          jenkinsfilePath: tools/jenkins/Jenkinsfile-api
+        dockerStrategy:
+          type: Docker
+          pullSecret:
+            name: artifactory-creds
