@@ -6,26 +6,18 @@ labels:
 metadata:
   name: 'educ-grad-assessment-api-template'
 objects:
-  - apiVersion: v1
-    kind: BuildConfig
+  - kind: BuildConfig
+    apiVersion: build.openshift.io/v1
     metadata:
-      labels:
-        build: educ-grad-assessment-api
       name: educ-grad-assessment-api-bc
       namespace: 77c02f-tools
+      labels:
+        app: educ-grad-assessment-api
+        app.kubernetes.io/component: educ-grad-assessment-api
+        app.kubernetes.io/instance: educ-grad-assessment-api
+        app.kubernetes.io/part-of: GRAD-Backend
     spec:
-      source:
-        git:
-          ref: develop/km
-          uri: 'https://github.com/bcgov/EDUC-GRAD-ASSESSMENT-API'
-        type: Git
-        contextDir: /
-      strategy:
-        dockerStrategy:
-          type: Docker
-          pullSecret:
-            name: artifactory-creds
-          dockerfilePath: Dockerfile
+      nodeSelector: null
       output:
         to:
           kind: ImageStreamTag
@@ -39,3 +31,19 @@ objects:
           memory: 1Gi
       successfulBuildsHistoryLimit: 3
       failedBuildsHistoryLimit: 3
+      strategy:
+        type: Docker
+        dockerStrategy:
+          pullSecret:
+            name: artifactory-creds
+          env:
+            - name: BUILD_LOGLEVEL
+              value: '2'
+          dockerfilePath: Dockerfile
+      postCommit: {}
+      source:
+        type: Git
+        git:
+          uri: 'https://github.com/bcgov/EDUC-GRAD-ASSESSMENT-API.git'
+          ref: develop/km
+        contextDir: /
