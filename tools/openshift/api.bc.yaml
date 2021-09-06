@@ -19,8 +19,22 @@ objects:
           ref: develop/km
           uri: 'https://github.com/bcgov/EDUC-GRAD-ASSESSMENT-API'
         type: Git
+        contextDir: /
       strategy:
         dockerStrategy:
           type: Docker
           pullSecret:
             name: artifactory-creds
+      output:
+        to:
+          kind: ImageStreamTag
+          name: 'educ-grad-assessment-api:latest'
+      resources:
+        limits:
+          cpu: 1500m
+          memory: 3Gi
+        requests:
+          cpu: 500m
+          memory: 1Gi
+      successfulBuildsHistoryLimit: 3
+      failedBuildsHistoryLimit: 3
