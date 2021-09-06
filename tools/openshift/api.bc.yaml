@@ -46,4 +46,3 @@ objects:
         git:
           uri: 'https://github.com/bcgov/EDUC-GRAD-ASSESSMENT-API.git'
           ref: develop/km
-        contextDir: /
