@@ -31,3 +31,7 @@ objects:
           type: Docker
           pullSecret:
             name: artifactory-creds
+      output:
+        to:
+          kind: ImageStreamTag
+          name: 'educ-grad-assessment-api-main:latest'
