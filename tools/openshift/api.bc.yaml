@@ -34,4 +34,4 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: 'educ-grad-assessment-api:latest'
+          name: 'educ-grad-assessment-api-main:latest'
