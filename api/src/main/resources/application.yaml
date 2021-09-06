@@ -11,7 +11,7 @@ spring:
     enabled: false
   datasource:
     hikari:
-      pool-name: assessment-api-cp
+      pool-name: educ-grad-assessment-api-cp
       maximum-pool-size: ${MAXIMUM_POOL_SIZE}
       connection-timeout: ${CONNECTION_TIMEOUT}
       max-lifetime: ${MAX_LIFETIME}
@@ -80,7 +80,7 @@ springdoc:
     path: /api/v1/api-docs-ui.html
     operationsSorter: alpha
 
-#Endpoints
+#Ebdpoints
 endpoint:
   grad-trax-api:
     school-name-by-mincode:
