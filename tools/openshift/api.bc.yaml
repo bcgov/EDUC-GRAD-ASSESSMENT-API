@@ -16,7 +16,7 @@ objects:
     spec:
       source:
         git:
-          ref: main
+          ref: develop/km
           uri: 'https://github.com/bcgov/EDUC-GRAD-ASSESSMENT-API'
         type: Git
       strategy:
