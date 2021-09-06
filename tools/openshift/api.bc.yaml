@@ -25,6 +25,7 @@ objects:
           type: Docker
           pullSecret:
             name: artifactory-creds
+          dockerfilePath: Dockerfile
       output:
         to:
           kind: ImageStreamTag
