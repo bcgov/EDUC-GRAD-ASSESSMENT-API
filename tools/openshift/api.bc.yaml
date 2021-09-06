@@ -14,13 +14,6 @@ objects:
       name: educ-grad-assessment-api-bc
       namespace: 77c02f-tools
     spec:
-      resources: 
-        requests: 
-          cpu: 500m
-          memory: 1Gi
-        limits:
-          cpu: 1500m
-          memory: 3Gi
       source:
         git:
           ref: main
