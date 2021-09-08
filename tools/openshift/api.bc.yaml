@@ -19,12 +19,12 @@ objects:
           cpu: 500m
           memory: 1Gi
         limits:
-          cpu: 1500m
-          memory: 3Gi
+          cpu: 1000m
+          memory: 2Gi
       source:
         git:
           ref: develop/km
-          uri: 'https://github.com/bcgov/EDUC-GRAD-ASSESSMENT-API'
+          uri: 'https://github.com/bcgov/${REPO_NAME}'
         type: Git
       strategy:
         dockerStrategy:
@@ -45,3 +45,8 @@ objects:
     spec:
       lookupPolicy:
         local: false
+parameters:
+  - description: Name of the Git Repository
+    displayName: REPO_NAME
+    name: REPO_NAME
+    required: true
