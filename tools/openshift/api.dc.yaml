@@ -114,9 +114,9 @@ parameters:
     description: The host the route will use to expose service outside cluster
     required: true
   - name: CONTAINER_PORT
-      description: The port on which the application will be accessible
-      required: false
-      value: "8080"
+    description: The port on which the application will be accessible
+    required: false
+    value: "8080"
   - name: HOST_PATH
     description: The path appended to the HOST_ROUTE where the root of this project will be served
     required: false
