@@ -20,7 +20,7 @@ objects:
           memory: 1Gi
         limits:
           cpu: 2
-          memory: 2Gi
+          memory: 3Gi
       source:
         git:
           ref: develop/km
