@@ -34,7 +34,7 @@ pipeline{
                             "REPO_NAME=${REPO_NAME}")
                         def bc = openshift.apply(bcTemplate)
                         bc = openshift.selector("bc", "${REPO_NAME}-bc").startBuild()
-                        sleep 10000
+                        sleep 10
                         bc.logs('-f')
                     }
                 }
