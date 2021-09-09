@@ -25,7 +25,7 @@ pipeline{
         PROD_HOST_ROUTE = "${APP_NAME}-${PROD_NAMESPACE}.${APP_DOMAIN}"
     }
     stages {
-        stage('Build Image') {
+        stage('Build') {
             steps {
                 script {
                     openshift.withCluster() {
@@ -70,29 +70,17 @@ pipeline{
             post {
                 success {
                     echo "${REPO_NAME} successfully deployed to DEV"
-                }
-                failure {
-                    echo "${REPO_NAME} deployment to DEV Failed!"
-                }
-            }
-        }
-        stage('Tag Image') {
-            steps {
-                script {
-                    openshift.withCluster() {
-                        openshift.withProject(DEV_NAMESPACE) {
-                            echo "Tagging image"
-                            openshift.tag("${DEV_NAMESPACE}/${REPO_NAME}:latest", "${REPO_NAME}:${TAG}")
+                    script {
+                        openshift.withCluster() {
+                            openshift.withProject(DEV_NAMESPACE) {
+                                echo "Tagging image"
+                                openshift.tag("${DEV_NAMESPACE}/${REPO_NAME}:latest", "${REPO_NAME}:${TAG}")
+                            }
                         }
                     }
                 }
-            }
-            post {
-                success {
-                    echo "Tagging Complete"
-                }
                 failure {
-                    echo "Tagging Failed!"
+                    echo "${REPO_NAME} deployment to DEV Failed!"
                 }
             }
         }
