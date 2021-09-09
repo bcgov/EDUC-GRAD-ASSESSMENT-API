@@ -2,16 +2,16 @@
 apiVersion: v1
 kind: Template
 labels:
-  template: 'educ-grad-assessment-api-template'
+  template: '${REPO_NAME}-template'
 metadata:
-  name: 'educ-grad-assessment-api-template'
+  name: '${REPO_NAME}-template'
 objects:
   - kind: BuildConfig
     apiVersion: build.openshift.io/v1
     metadata:
       labels:
-        build: educ-grad-assessment-api
-      name: educ-grad-assessment-api-bc
+        build: ${REPO_NAME}
+      name: ${REPO_NAME}-bc
       namespace: 77c02f-tools
     spec:
       resources: 
@@ -34,14 +34,16 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: 'educ-grad-assessment-api:latest'
+          name: '${REPO_NAME}:latest'
+      successfulBuildsHistoryLimit: 3
+      failedBuildsHistoryLimit: 3
   - kind: ImageStream
     apiVersion: image.openshift.io/v1
     metadata:
-      name: educ-grad-assessment-api
+      name: ${REPO_NAME}
       namespace: 77c02f-tools
       labels:
-        build: educ-grad-assessment-api
+        build: ${REPO_NAME}
     spec:
       lookupPolicy:
         local: false
