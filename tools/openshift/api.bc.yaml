@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Template
 labels:
-  template: '${REPO_NAME}-template'
+  template: '${REPO_NAME}-build-template'
 metadata:
-  name: '${REPO_NAME}-template'
+  name: '${REPO_NAME}-build-template'
 objects:
   - kind: BuildConfig
     apiVersion: build.openshift.io/v1
