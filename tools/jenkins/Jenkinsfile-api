@@ -33,7 +33,9 @@ pipeline{
                             "${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.bc.yaml",
                             "REPO_NAME=${REPO_NAME}")
                         def bc = openshift.apply(bcTemplate)
-                        openshift.selector("bc", "${REPO_NAME}-bc").startBuild().logs('-f')
+                        bc = openshift.selector("bc", "${REPO_NAME}-bc").startBuild()
+                        sleep 10000
+                        bc.logs('-f')
                     }
                 }
             }
