@@ -59,17 +59,6 @@ objects:
                     name: grad-keycloak-pk-secret
               resources: {}
       test: false
-      triggers:
-        - type: ConfigChange
-        - imageChangeParams:
-            automatic: true
-            containerNames:
-              - "${REPO_NAME}"
-            from:
-              kind: ImageStreamTag
-              name: "${REPO_NAME}:latest"
-              namespace: "${NAMESPACE}"
-          type: ImageChange
   - apiVersion: v1
     kind: Service
     metadata:
