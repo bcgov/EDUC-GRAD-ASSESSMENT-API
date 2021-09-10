@@ -8,7 +8,6 @@ pipeline{
         IMAGE_TAG = 'latest'
         APP_SUBDOMAIN_SUFFIX = '77c02f-test'
         REPO_NAME = 'educ-grad-assessment-api'
-        JOB_NAME = 'main'
         APP_NAME = 'educ-grad-assessment-api'
         APP_DOMAIN = 'apps.silver.devops.gov.bc.ca'
         TAG = 'test'
