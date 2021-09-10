@@ -43,9 +43,9 @@ pipeline{
                     echo "${REPO_NAME} successfully deployed to TEST"
                     script {
                         openshift.withCluster() {
-                            openshift.withProject(TOOLS_NAMESPACE) {
+                            openshift.withProject(IMAGE_PROJECT) {
                                 echo "Tagging image"
-                                openshift.tag("${TOOLS_NAMESPACE}/${REPO_NAME}:latest", "${REPO_NAME}:${TAG}")
+                                openshift.tag("${IMAGE_PROJECT}/${REPO_NAME}:latest", "${REPO_NAME}:${TAG}")
                             }
                         }
                     }
