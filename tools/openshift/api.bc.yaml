@@ -45,6 +45,7 @@ objects:
       namespace: 77c02f-tools
       labels:
         build: ${REPO_NAME}
+        app: "${REPO_NAME}"
     spec:
       lookupPolicy:
         local: false

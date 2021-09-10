@@ -27,7 +27,7 @@ objects:
             deploymentConfig: "${REPO_NAME}-dc"
         spec:
           containers:
-            - image: docker-registry.default.svc:5000/${NAMESPACE}/${REPO_NAME}:latest
+            - image: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${REPO_NAME}:latest
               imagePullPolicy: IfNotPresent
               readinessProbe:
                 tcpSocket:
