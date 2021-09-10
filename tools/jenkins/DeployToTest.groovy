@@ -1,33 +1,7 @@
 pipeline{
     agent {
-        kubernetes {
-            label 'maven'
-            cloud 'openshift'
-            defaultContainer 'jnlp'
-            serviceAccount 'jenkins'
-            yaml """
-        kind: Pod
-        metadata:
-          name: jenkins-slave
-        spec:
-          containers:
-          - name: jnlp
-            image: registry.access.redhat.com/openshift3/jenkins-agent-maven-35-rhel7
-            privileged: false
-            alwaysPullImage: false
-            workingDir: /tmp
-            ttyEnabled: false
-            volumeMounts:
-            - mountPath: '/home/jenkins/.m2'
-              name: pvc
-          volumes:
-          - name: pvc
-            persistentVolumeClaim:
-              claimName: 'maven-slave-pvc'
-      """
-        }
+        label 'maven'
     }
-
     environment{
         OCP_PROJECT = '77c02f-dev'
         IMAGE_PROJECT = '77c02f-tools'
@@ -38,7 +12,6 @@ pipeline{
         APP_NAME = 'educ-grad-assessment-api'
         APP_DOMAIN = 'apps.silver.devops.gov.bc.ca'
     }
-
     stages{
         stage('Promote to TEST') {
             steps{

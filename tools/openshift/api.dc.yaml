@@ -72,7 +72,7 @@ objects:
           protocol: TCP
       selector:
         app: "${REPO_NAME}"
-        deploymentconfig: "${REPO_NAME}"
+        deploymentconfig: "${REPO_NAME}-dc"
   - apiVersion: v1
     kind: Route
     metadata:

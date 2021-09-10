@@ -3,9 +3,10 @@ pipeline{
         label 'maven'
     }
     environment{
-        DEV_NAMESPACE = '77c02f-tools'
-        TEST_NAMESPACE = '77c02f-dev'
-        UAT_NAMESPACE = '77c02f-test'
+        TOOLS_NAMESPACE = '77c02f-tools'
+        DEV_NAMESPACE = '77c02f-dev'
+        TEST_NAMESPACE = '77c02f-test'
+        UAT_NAMESPACE = '77c02f-uat'
         PROD_NAMESPACE = '77c02f-prod'
 
         REPO_NAME = 'educ-grad-assessment-api'
@@ -52,10 +53,10 @@ pipeline{
             steps {
                 script {
                     openshift.withCluster() {
-                        openshift.withProject(DEV_NAMESPACE) {
+                        openshift.withProject(TOOLS_NAMESPACE) {
                             def dcTemplate = openshift.process('-f',
                                 '${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.dc.yaml',
-                                "REPO_NAME=${REPO_NAME}", "NAMESPACE=${DEV_NAMESPACE}", "HOST_ROUTE=${DEV_HOST_ROUTE}")
+                                "REPO_NAME=${REPO_NAME}", "NAMESPACE=${TOOLS_NAMESPACE}", "HOST_ROUTE=${DEV_HOST_ROUTE}")
 
                             echo "Applying Deployment ${REPO_NAME}"
                             def dc = openshift.apply(dcTemplate).narrow('dc')
@@ -74,9 +75,9 @@ pipeline{
                     echo "${REPO_NAME} successfully deployed to DEV"
                     script {
                         openshift.withCluster() {
-                            openshift.withProject(DEV_NAMESPACE) {
+                            openshift.withProject(TOOLS_NAMESPACE) {
                                 echo "Tagging image"
-                                openshift.tag("${DEV_NAMESPACE}/${REPO_NAME}:latest", "${REPO_NAME}:${TAG}")
+                                openshift.tag("${TOOLS_NAMESPACE}/${REPO_NAME}:latest", "${REPO_NAME}:${TAG}")
                             }
                         }
                     }
