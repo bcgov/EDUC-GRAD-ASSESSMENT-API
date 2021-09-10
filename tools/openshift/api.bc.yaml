@@ -24,7 +24,7 @@ objects:
           memory: 3Gi
       source:
         git:
-          ref: develop/km
+          ref: main
           uri: 'https://github.com/bcgov/${REPO_NAME}'
         type: Git
       strategy:
