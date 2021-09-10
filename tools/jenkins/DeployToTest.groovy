@@ -11,6 +11,11 @@ pipeline{
         APP_NAME = 'educ-grad-assessment-api'
         APP_DOMAIN = 'apps.silver.devops.gov.bc.ca'
         TAG = 'test'
+        REPO_NAME = 'educ-grad-assessment-api'
+        ORG = 'bcgov'
+        BRANCH = 'develop/km'
+        SOURCE_REPO_URL = 'https://github.com/${ORG}/${REPO_NAME}'
+        SOURCE_REPO_URL_RAW = 'https://raw.githubusercontent.com/${ORG}/${REPO_NAME}'
     }
     stages{
         stage('Deploy to TEST') {
@@ -20,7 +25,7 @@ pipeline{
                         openshift.withProject(OCP_PROJECT) {
                             def dcTemplate = openshift.process('-f',
                                     '${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.dc.yaml',
-                                    "REPO_NAME=${REPO_NAME}", "NAMESPACE=${IMAGE_PROJECT}",
+                                    "REPO_NAME=${REPO_NAME}", "NAMESPACE=${OCP_PROJECT}",
                                     "HOST_ROUTE=${REPO_NAME}-${APP_SUBDOMAIN_SUFFIX}.${APP_DOMAIN}")
 
                             echo "Applying Deployment ${REPO_NAME}"
