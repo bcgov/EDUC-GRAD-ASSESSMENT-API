@@ -11,7 +11,7 @@ pipeline{
         TAG = 'test'
         REPO_NAME = 'educ-grad-assessment-api'
         ORG = 'bcgov'
-        BRANCH = 'develop/km'
+        BRANCH = 'main'
         SOURCE_REPO_URL = 'https://github.com/${ORG}/${REPO_NAME}'
         SOURCE_REPO_URL_RAW = 'https://raw.githubusercontent.com/${ORG}/${REPO_NAME}'
     }

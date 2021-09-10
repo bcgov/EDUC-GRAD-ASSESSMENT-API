@@ -11,7 +11,7 @@ pipeline{
 
         REPO_NAME = 'educ-grad-assessment-api'
         ORG = 'bcgov'
-        BRANCH = 'develop/km'
+        BRANCH = 'main'
         TAG = 'dev'
 
         APP_NAME = 'educ-grad-assessment-api'
