@@ -29,7 +29,7 @@ objects:
             deploymentConfig: "${REPO_NAME}-dc"
         spec:
           containers:
-            - image: image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${REPO_NAME}:latest
+            - image: image-registry.openshift-image-registry.svc:5000/77c02f-tools/${REPO_NAME}:latest
               imagePullPolicy: IfNotPresent
               readinessProbe:
                 tcpSocket:
