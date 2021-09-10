@@ -11,6 +11,7 @@ objects:
     metadata:
       labels:
         build: ${REPO_NAME}
+        app: "${REPO_NAME}"
       name: ${REPO_NAME}-bc
       namespace: 77c02f-tools
     spec:
