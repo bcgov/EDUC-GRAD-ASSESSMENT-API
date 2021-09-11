@@ -30,13 +30,12 @@ pipeline{
             steps {
                 script {
                     openshift.withCluster() {
-                        def bcTemplate = openshift.process("-f",
-                            "${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.bc.yaml",
-                            "REPO_NAME=${REPO_NAME}")
-                        def bc = openshift.apply(bcTemplate)
-                        bc = openshift.selector("bc", "${REPO_NAME}-bc").startBuild()
-                        sleep 20
-                        bc.logs('-f')
+                        def bcTemplate =
+                        openshift.apply(
+                                openshift.process("-f", "${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.bc.yaml",
+                                        "REPO_NAME=${REPO_NAME}")
+                        )
+                        openshift.selector("bc", "${REPO_NAME}-bc").startBuild('--follow')
                     }
                 }
             }
@@ -54,17 +53,17 @@ pipeline{
                 script {
                     openshift.withCluster() {
                         openshift.withProject(TOOLS_NAMESPACE) {
-                            def dcTemplate = openshift.process('-f',
-                                '${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.dc.yaml',
-                                "REPO_NAME=${REPO_NAME}", "NAMESPACE=${TOOLS_NAMESPACE}", "HOST_ROUTE=${DEV_HOST_ROUTE}")
-
-                            echo "Applying Deployment ${REPO_NAME}"
-                            def dc = openshift.apply(dcTemplate).narrow('dc')
-
+                            echo "Applying Deployment ${REPO_NAME}-dc"
+                            openshift.apply(
+                                openshift.process("-f", "${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.dc.yaml",
+                                                  "REPO_NAME=${REPO_NAME}", "HOST_ROUTE=${DEV_HOST_ROUTE}")
+                            )
+                            def rollout = openshift.selector("dc", "${REPO_NAME}-dc").rollout()
                             echo "Waiting for deployment to roll out"
                             // Wait for deployments to roll out
                             timeout(10) {
-                                dc.rollout().status('--watch=true')
+                                rollout.latest()
+                                rollout.status('--watch')
                             }
                         }
                     }
