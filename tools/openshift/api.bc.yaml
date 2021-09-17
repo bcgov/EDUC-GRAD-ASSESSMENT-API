@@ -48,7 +48,7 @@ objects:
         app: "${REPO_NAME}"
     spec:
       lookupPolicy:
-        local: false
+        local: true
 parameters:
   - description: Name of the Git Repository
     displayName: REPO_NAME
