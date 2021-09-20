@@ -27,6 +27,7 @@ pipeline{
                                             "REPO_NAME=${REPO_NAME}", "HOST_ROUTE=${DEV_HOST_ROUTE}")
                             ).narrow('dc')
                             timeout(10) {
+                                dc.rollout().latest()
                                 dc.rollout().status('--watch')
                             }
                         }
