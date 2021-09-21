@@ -58,8 +58,8 @@ pipeline{
                                         "REPO_NAME=${REPO_NAME}", "HOST_ROUTE=${DEV_HOST_ROUTE}")
                                     )
                             openshift.selector("dc", "${REPO_NAME}-dc").rollout().latest()
-                            def latestDeploymentVersion = openshift.selector('dc',"simple-python").object().status.latestVersion
-                            def rc = openshift.selector('rc', "simple-python-${latestDeploymentVersion}")
+                            def latestDeploymentVersion = openshift.selector('dc',"${REPO_NAME}-dc").object().status.latestVersion
+                            def rc = openshift.selector('rc', "${REPO_NAME}-dc-${latestDeploymentVersion}")
                             timeout (time: 10, unit: 'MINUTES') {
                                 rc.untilEach(1){
                                     def rcMap = it.object()
