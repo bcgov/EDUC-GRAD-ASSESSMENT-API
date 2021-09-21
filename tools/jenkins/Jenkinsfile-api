@@ -53,14 +53,18 @@ pipeline{
                 script {
                     openshift.withCluster() {
                         openshift.withProject(TOOLS_NAMESPACE) {
-                            echo "Applying Deployment ${REPO_NAME}-dc"
-                            def dc = openshift.apply(
-                                    openshift.process("-f", "${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.dc.yaml",
-                                                  "REPO_NAME=${REPO_NAME}", "HOST_ROUTE=${DEV_HOST_ROUTE}")
-                                ).narrow('dc')
-                            timeout(10) {
-                                dc.rollout().latest()
-                                dc.rollout().status('--watch')
+                            openshift.apply(
+                                        openshift.process("-f", "${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.dc.yaml",
+                                        "REPO_NAME=${REPO_NAME}", "HOST_ROUTE=${DEV_HOST_ROUTE}")
+                                    )
+                            openshift.selector("dc", "${REPO_NAME}-dc").rollout().latest()
+                            def latestDeploymentVersion = openshift.selector('dc',"simple-python").object().status.latestVersion
+                            def rc = openshift.selector('rc', "simple-python-${latestDeploymentVersion}")
+                            timeout (time: 10, unit: 'MINUTES') {
+                                rc.untilEach(1){
+                                    def rcMap = it.object()
+                                    return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
+                                }
                             }
                         }
                     }
