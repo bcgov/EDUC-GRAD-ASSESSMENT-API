@@ -60,8 +60,6 @@ pipeline{
                                         "REPO_NAME=${REPO_NAME}", "HOST_ROUTE=${DEV_HOST_ROUTE}")
                                     )
                             openshift.selector("dc", "${REPO_NAME}-dc").rollout().latest()
-                            def latestDeploymentVersion = openshift.selector('dc',"${REPO_NAME}-dc").object().status.latestVersion
-                            def rc = openshift.selector('rc', "${REPO_NAME}-dc-${latestDeploymentVersion}")
                             timeout (time: 10, unit: 'MINUTES') {
                                 openshift.selector("dc", "${REPO_NAME}-dc").rollout().status()
                             }
