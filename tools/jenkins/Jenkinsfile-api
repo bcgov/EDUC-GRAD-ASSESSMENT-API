@@ -35,9 +35,9 @@ pipeline{
                                 openshift.process("-f", "${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.bc.yaml",
                                         "REPO_NAME=${REPO_NAME}")
                         )
-                        def bc = openshift.selector("bc", "${REPO_NAME}-bc").startBuild()
+                        def buildSelector = openshift.selector("bc", "${REPO_NAME}-bc").startBuild()
                         sleep(20)
-                        bc.logs('-f')
+                        buildSelector.logs('-f')
                     }
                 }
             }
@@ -63,10 +63,7 @@ pipeline{
                             def latestDeploymentVersion = openshift.selector('dc',"${REPO_NAME}-dc").object().status.latestVersion
                             def rc = openshift.selector('rc', "${REPO_NAME}-dc-${latestDeploymentVersion}")
                             timeout (time: 10, unit: 'MINUTES') {
-                                rc.untilEach(1){
-                                    def rcMap = it.object()
-                                    return (rcMap.status.replicas.equals(rcMap.status.readyReplicas))
-                                }
+                                openshift.selector("dc", "${REPO_NAME}-dc").rollout().status()
                             }
                         }
                     }
