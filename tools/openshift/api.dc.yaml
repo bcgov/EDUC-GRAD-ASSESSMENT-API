@@ -16,7 +16,7 @@ objects:
       name: "${REPO_NAME}-dc"
     spec:
       replicas: 2
-      revisionHistoryLimit: 2
+      revisionHistoryLimit: 1
       selector:
         app: "${REPO_NAME}"
         deploymentConfig: "${REPO_NAME}-dc"
