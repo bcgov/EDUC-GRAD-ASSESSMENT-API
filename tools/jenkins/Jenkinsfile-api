@@ -35,7 +35,9 @@ pipeline{
                                 openshift.process("-f", "${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.bc.yaml",
                                         "REPO_NAME=${REPO_NAME}")
                         )
-                        openshift.selector("bc", "${REPO_NAME}-bc").startBuild('--follow')
+                        def bc = openshift.selector("bc", "${REPO_NAME}-bc").startBuild()
+                        sleep(20)
+                        bc.logs()
                     }
                 }
             }
