@@ -13,7 +13,7 @@ public class GradRuleDetails {
 	private String ruleCode; 
 	private String requirementName;
 	private String programCode;	
-	private String specialProgramCode;
+	private String optionalProgramCode;
 	
 	@Override
 	public String toString() {
