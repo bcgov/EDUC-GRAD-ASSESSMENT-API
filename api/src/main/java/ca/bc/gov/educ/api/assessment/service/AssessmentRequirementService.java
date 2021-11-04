@@ -62,13 +62,13 @@ public class AssessmentRequirementService {
      * @throws java.lang.Exception
      */
     public List<AllAssessmentRequirements> getAllAssessmentRequirementList(Integer pageNo, Integer pageSize, String accessToken) {
-        List<AssessmentRequirement> assessmentReqList = new ArrayList<AssessmentRequirement>();
-        List<AllAssessmentRequirements> allAssessmentRequiremntList = new ArrayList<AllAssessmentRequirements>();
+        List<AssessmentRequirement> assessmentReqList = new ArrayList<>();
+        List<AllAssessmentRequirements> allAssessmentRequiremntList = new ArrayList<>();
         try {
             Pageable paging = PageRequest.of(pageNo, pageSize);
             Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findAll(paging);
             assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
-            assessmentReqList.forEach((cR) -> {
+            assessmentReqList.forEach(cR -> {
                 AllAssessmentRequirements obj = new AllAssessmentRequirements();
                 BeanUtils.copyProperties(cR, obj);
                 Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
@@ -81,25 +81,10 @@ public class AssessmentRequirementService {
                         .bodyToMono(new ParameterizedTypeReference<List<GradRuleDetails>>() {
                         })
                         .block();
-                String requirementProgram = "";
-                for (GradRuleDetails rL : ruleList) {
-                    obj.setRequirementName(rL.getRequirementName());
-                    if (rL.getProgramCode() != null) {
-                        if ("".equalsIgnoreCase(requirementProgram)) {
-                            requirementProgram = rL.getProgramCode();
-                        } else {
-                            requirementProgram = requirementProgram + "|" + rL.getProgramCode();
-                        }
-                    }
-                    if (rL.getSpecialProgramCode() != null) {
-                        if ("".equalsIgnoreCase(requirementProgram)) {
-                            requirementProgram = requirementProgram + rL.getSpecialProgramCode();
-                        } else {
-                            requirementProgram = requirementProgram + "|" + rL.getSpecialProgramCode();
-                        }
-                    }
-                }
-                obj.setRequirementProgram(requirementProgram);
+                StringBuilder requirementProgram = new StringBuilder();
+                requirementProgram = processRuleList(ruleList,requirementProgram,obj);
+                
+                obj.setRequirementProgram(requirementProgram.toString());
                 allAssessmentRequiremntList.add(obj);
             });
         } catch (Exception e) {
@@ -118,12 +103,18 @@ public class AssessmentRequirementService {
      * @throws java.lang.Exception
      */
     public List<AssessmentRequirement> getAllAssessmentRequirementListByRule(String rule, Integer pageNo, Integer pageSize) {
-        List<AssessmentRequirement> assessmentReqList = new ArrayList<AssessmentRequirement>();
+        List<AssessmentRequirement> assessmentReqList = new ArrayList<>();
 
         try {
             Pageable paging = PageRequest.of(pageNo, pageSize);
             Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(assessmentRequirementCodeRepository.getOne(rule), paging);
             assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
+            assessmentReqList.forEach(cR -> {
+                Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
+                if (assmt != null) {
+                    cR.setAssessmentName(assmt.getAssessmentName());
+                }
+            });
         } catch (Exception e) {
             logger.debug("Exception:" + e);
         }
@@ -136,5 +127,26 @@ public class AssessmentRequirementService {
                 assessmentRequirementTransformer.transformToDTO(
                         assessmentRequirementRepository.findByAssessmentCodeIn(assessmentList.getAssessmentCodes())));
         return assessmentRequirements;
+    }
+    
+    private StringBuilder processRuleList(List<GradRuleDetails> ruleList, StringBuilder requirementProgram, AllAssessmentRequirements obj) {
+    	for (GradRuleDetails rL : ruleList) {
+            obj.setRequirementName(rL.getRequirementName());
+            if (rL.getProgramCode() != null) {
+                if ("".equalsIgnoreCase(requirementProgram.toString())) {
+                    requirementProgram.append(rL.getProgramCode());
+                } else {
+                    requirementProgram.append("|").append(rL.getProgramCode());
+                }
+            }
+            if (rL.getOptionalProgramCode() != null) {
+                if ("".equalsIgnoreCase(requirementProgram.toString())) {
+                    requirementProgram.append(rL.getOptionalProgramCode());
+                } else {
+                	requirementProgram.append("|").append(rL.getOptionalProgramCode());
+                }
+            }
+        }
+    	return requirementProgram;
     }
 }

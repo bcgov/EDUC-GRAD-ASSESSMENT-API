@@ -15,4 +15,5 @@ public class AssessmentRequirement extends BaseModel {
 	private UUID assessmentRequirementId;
 	private String assessmentCode;   
 	private AssessmentRequirementCode ruleCode;
+	private String assessmentName;
 }
