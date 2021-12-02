@@ -42,12 +42,12 @@ public class AssessmentService {
      * @throws java.lang.Exception
      */
     public List<Assessment> getAssessmentList() {
-        List<Assessment> assessment  = new ArrayList<Assessment>();
+        List<Assessment> assessment  = new ArrayList<>();
 
         try {
         	assessment = assessmentTransformer.transformToDTO(assessmentRepo.findAll());            
         } catch (Exception e) {
-            logger.debug("Exception:" + e);
+            logger.debug(String.format("Exception: %s",e));
         }
 
         return assessment;
