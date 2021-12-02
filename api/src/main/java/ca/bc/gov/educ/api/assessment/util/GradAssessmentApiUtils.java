@@ -10,6 +10,8 @@ import java.util.Date;
 
 public class GradAssessmentApiUtils {
 
+    private GradAssessmentApiUtils() {}
+
     public static String formatDate (Date date) {
         if (date == null)
             return null;

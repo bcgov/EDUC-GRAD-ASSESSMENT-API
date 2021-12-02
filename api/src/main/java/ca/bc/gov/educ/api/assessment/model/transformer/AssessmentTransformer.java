@@ -17,9 +17,8 @@ public class AssessmentTransformer {
     @Autowired
     ModelMapper modelMapper;
 
-    public Assessment transformToDTO (AssessmentEntity studentCourseEntity) {
-        Assessment studentCourse = modelMapper.map(studentCourseEntity, Assessment.class);
-        return studentCourse;
+    public Assessment transformToDTO (AssessmentEntity assmtEntity) {
+        return modelMapper.map(assmtEntity, Assessment.class);
     }
 
     public Assessment transformToDTO ( Optional<AssessmentEntity> assessmentEntity ) {
@@ -27,26 +26,22 @@ public class AssessmentTransformer {
 
         if (assessmentEntity.isPresent())
             cae = assessmentEntity.get();
-
-        Assessment assessment = modelMapper.map(cae, Assessment.class);
-        return assessment;
+        return modelMapper.map(cae, Assessment.class);
     }
 
-	public List<Assessment> transformToDTO (Iterable<AssessmentEntity> courseEntities ) {
+	public List<Assessment> transformToDTO (Iterable<AssessmentEntity> assmtEntities ) {
 
-        List<Assessment> courseList = new ArrayList<Assessment>();
+        List<Assessment> assmtList = new ArrayList<>();
 
-        for (AssessmentEntity courseEntity : courseEntities) {
-            Assessment course = new Assessment();
-            course = modelMapper.map(courseEntity, Assessment.class);            
-            courseList.add(course);
+        for (AssessmentEntity assmtEntity : assmtEntities) {
+            Assessment assessment = modelMapper.map(assmtEntity, Assessment.class);
+            assmtList.add(assessment);
         }
 
-        return courseList;
+        return assmtList;
     }
 
-    public AssessmentEntity transformToEntity(Assessment studentCourse) {
-        AssessmentEntity courseAchievementEntity = modelMapper.map(studentCourse, AssessmentEntity.class);
-        return courseAchievementEntity;
+    public AssessmentEntity transformToEntity(Assessment assessment) {
+        return modelMapper.map(assessment, AssessmentEntity.class);
     }
 }

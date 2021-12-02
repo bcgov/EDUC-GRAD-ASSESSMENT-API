@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -73,9 +74,8 @@ public class StudentAssessmentService {
                         sA.setMincodeAssessmentName(schObj.getSchoolName());
                 }
             });
-            logger.debug(studentAssessment.toString());
         } catch (Exception e) {
-            logger.debug("Exception:" + e);
+            logger.debug(MessageFormat.format("Exception: {0}",e));
         }
         if (sortForUI) {
             Collections.sort(studentAssessment, Comparator.comparing(StudentAssessment::getPen)

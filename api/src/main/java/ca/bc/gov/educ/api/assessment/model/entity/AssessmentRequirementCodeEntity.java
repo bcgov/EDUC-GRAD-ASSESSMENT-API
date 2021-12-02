@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
-import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
