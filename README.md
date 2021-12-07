@@ -1,6 +1,6 @@
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bcgov/educ-grad-assessment-api/Build)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=educ-grad-assessment-api&metric=bugs)](https://sonarcloud.io/summary/new_code?id=educ-grad-assessment-api)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=educ-grad-assessment-api&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=educ-grad-assessment-api)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bcgov/educ-grad-assessment-api/Build) &nbsp; 
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=educ-grad-assessment-api&metric=bugs)](https://sonarcloud.io/summary/new_code?id=educ-grad-assessment-api) &nbsp; 
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=educ-grad-assessment-api&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=educ-grad-assessment-api) &nbsp; 
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=educ-grad-assessment-api&metric=coverage)](https://sonarcloud.io/summary/new_code?id=educ-grad-assessment-api)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=educ-grad-assessment-api&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=educ-grad-assessment-api)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=educ-grad-assessment-api&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=educ-grad-assessment-api)
