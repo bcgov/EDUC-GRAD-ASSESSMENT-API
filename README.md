@@ -1,5 +1,4 @@
-[![img](https://img.shields.io/badge/Lifecycle-Stable-97ca00)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
-[![Quality Gate Status](http://sonarqube-77c02f-tools.apps.silver.devops.gov.bc.ca/api/project_badges/measure?project=educ-grad-assessment-api&metric=alert_status)](http://sonarqube-77c02f-tools.apps.silver.devops.gov.bc.ca/dashboard?id=educ-grad-assessment-api)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bcgov/educ-grad-assessment-api/Build)
 
 
 # EDUC-GRAD-ASSESSMENT-API
