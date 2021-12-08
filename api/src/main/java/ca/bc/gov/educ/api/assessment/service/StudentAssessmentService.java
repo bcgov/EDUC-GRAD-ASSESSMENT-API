@@ -72,6 +72,7 @@ public class StudentAssessmentService {
                             .block();
                     if (schObj != null)
                         sA.setMincodeAssessmentName(schObj.getSchoolName());
+                    sA.setHasMoreInfo(true);
                 }
             });
         } catch (Exception e) {
