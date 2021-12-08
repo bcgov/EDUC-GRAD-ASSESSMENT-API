@@ -21,17 +21,15 @@ public class ApiResponseModel<T> {
 	}
 
 	public static <T> ApiResponseModel<T> SUCCESS(T value) {
-		ApiResponseModel<T> response = new ApiResponseModel<T>(CodeEnum.SUCCESS, value);
-		return response;
+		return new ApiResponseModel<T>(CodeEnum.SUCCESS, value);
 	}
 
 	public static <T> ApiResponseModel<T> ERROR(T value) {
-		ApiResponseModel<T> response = new ApiResponseModel<T>(CodeEnum.ERROR, value);
-		return response;
+		return new ApiResponseModel<>(CodeEnum.ERROR, value);
 	}
 
 	public static <T> ApiResponseModel<T> ERROR(T value, List<String> errorMessages) {
-		ApiResponseModel<T> response = new ApiResponseModel<T>(CodeEnum.ERROR, value);
+		ApiResponseModel<T> response = new ApiResponseModel<>(CodeEnum.ERROR, value);
 		for (String s : errorMessages) {
 			response.addMessageItem(s, MessageTypeEnum.ERROR);
 		}
@@ -39,7 +37,7 @@ public class ApiResponseModel<T> {
 	}
 
 	public static <T> ApiResponseModel<T> ERROR(T value, String... errorMessages) {
-		ApiResponseModel<T> response = new ApiResponseModel<T>(CodeEnum.ERROR, value);
+		ApiResponseModel<T> response = new ApiResponseModel<>(CodeEnum.ERROR, value);
 		for (String s : errorMessages) {
 			response.addMessageItem(s, MessageTypeEnum.ERROR);
 		}
@@ -65,12 +63,11 @@ public class ApiResponseModel<T> {
 
 	
 	public static <T> ApiResponseModel<T> WARNING(T value) {
-		ApiResponseModel<T> response = new ApiResponseModel<T>(CodeEnum.WARNING, value);
-		return response;
+		return new ApiResponseModel<>(CodeEnum.WARNING, value);
 	}
 
 	public static <T> ApiResponseModel<T> WARNING(T value, List<String> warningMessages) {
-		ApiResponseModel<T> response = new ApiResponseModel<T>(CodeEnum.WARNING, value);
+		ApiResponseModel<T> response = new ApiResponseModel<>(CodeEnum.WARNING, value);
 		for (String s : warningMessages) {
 			response.addMessageItem(s, MessageTypeEnum.WARNING);
 		}
@@ -115,7 +112,7 @@ public class ApiResponseModel<T> {
 
 	@JsonProperty("messages")
 	@Valid
-	private List<ApiResponseMessage> messages = new ArrayList<ApiResponseMessage>();;
+	private List<ApiResponseMessage> messages = new ArrayList<>();
 
 	public CodeEnum getCode() {
 		return code;
