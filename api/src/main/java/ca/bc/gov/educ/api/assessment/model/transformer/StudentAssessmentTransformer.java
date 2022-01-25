@@ -18,8 +18,7 @@ public class StudentAssessmentTransformer {
     ModelMapper modelMapper;
 
     public StudentAssessment transformToDTO (StudentAssessmentEntity studentAssessmentEntity) {
-        StudentAssessment studentAssessment = modelMapper.map(studentAssessmentEntity, StudentAssessment.class);
-        return studentAssessment;
+        return modelMapper.map(studentAssessmentEntity, StudentAssessment.class);
     }
 
     public StudentAssessment transformToDTO ( Optional<StudentAssessmentEntity> studentAssessmentEntity ) {
@@ -27,18 +26,15 @@ public class StudentAssessmentTransformer {
 
         if (studentAssessmentEntity.isPresent())
             cae = studentAssessmentEntity.get();
-
-        StudentAssessment studentAssessment = modelMapper.map(cae, StudentAssessment.class);
-        return studentAssessment;
+        return modelMapper.map(cae, StudentAssessment.class);
     }
 
     public List<StudentAssessment> transformToDTO (Iterable<StudentAssessmentEntity> studentAssessmentEntities ) {
 
-        List<StudentAssessment> studentAssessmentList = new ArrayList<StudentAssessment>();
+        List<StudentAssessment> studentAssessmentList = new ArrayList<>();
 
         for (StudentAssessmentEntity studentAssessmentEntity : studentAssessmentEntities) {
-            StudentAssessment studentAssessment = new StudentAssessment();
-            studentAssessment = modelMapper.map(studentAssessmentEntity, StudentAssessment.class);
+            StudentAssessment studentAssessment = modelMapper.map(studentAssessmentEntity, StudentAssessment.class);
             studentAssessment.setPen(studentAssessmentEntity.getAssessmentKey().getPen());
             studentAssessment.setAssessmentCode(studentAssessmentEntity.getAssessmentKey().getAssessmentCode());
             studentAssessment.setSessionDate(GradAssessmentApiUtils.parseTraxDate(studentAssessmentEntity.getAssessmentKey().getSessionDate()));
@@ -49,7 +45,6 @@ public class StudentAssessmentTransformer {
     }
 
     public StudentAssessmentEntity transformToEntity(StudentAssessment studentAssessment) {
-        StudentAssessmentEntity studentAssessmentEntity = modelMapper.map(studentAssessment, StudentAssessmentEntity.class);
-        return studentAssessmentEntity;
+        return modelMapper.map(studentAssessment, StudentAssessmentEntity.class);
     }
 }

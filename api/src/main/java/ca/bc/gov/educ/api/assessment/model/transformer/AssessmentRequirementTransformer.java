@@ -18,27 +18,22 @@ public class AssessmentRequirementTransformer {
     ModelMapper modelMapper;
 
     public AssessmentRequirement transformToDTO (AssessmentRequirementEntity courseRequirementEntity) {
-        AssessmentRequirement courseRequirement = modelMapper.map(courseRequirementEntity, AssessmentRequirement.class);
-        return courseRequirement;
+        return modelMapper.map(courseRequirementEntity, AssessmentRequirement.class);
     }
 
     public AssessmentRequirement transformToDTO ( Optional<AssessmentRequirementEntity> courseRequirementEntity ) {
         AssessmentRequirementEntity cae = new AssessmentRequirementEntity();
-
         if (courseRequirementEntity.isPresent())
             cae = courseRequirementEntity.get();
-
-        AssessmentRequirement courseRequirement = modelMapper.map(cae, AssessmentRequirement.class);
-        return courseRequirement;
+        return modelMapper.map(cae, AssessmentRequirement.class);
     }
 
 	public List<AssessmentRequirement> transformToDTO (Iterable<AssessmentRequirementEntity> courseReqEntities ) {
 
-        List<AssessmentRequirement> courseReqList = new ArrayList<AssessmentRequirement>();
+        List<AssessmentRequirement> courseReqList = new ArrayList<>();
 
         for (AssessmentRequirementEntity courseReqEntity : courseReqEntities) {
-            AssessmentRequirement courseRequirement = new AssessmentRequirement();
-            courseRequirement = modelMapper.map(courseReqEntity, AssessmentRequirement.class); 
+            AssessmentRequirement courseRequirement = modelMapper.map(courseReqEntity, AssessmentRequirement.class);
             courseReqList.add(courseRequirement);
         }
 
@@ -46,7 +41,6 @@ public class AssessmentRequirementTransformer {
     }
 
     public AssessmentRequirementEntity transformToEntity(AssessmentRequirement courseRequirement) {
-        AssessmentRequirementEntity courseRequirementEntity = modelMapper.map(courseRequirement, AssessmentRequirementEntity.class);
-        return courseRequirementEntity;
+        return modelMapper.map(courseRequirement, AssessmentRequirementEntity.class);
     }
 }

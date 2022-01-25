@@ -1,10 +1,13 @@
 package ca.bc.gov.educ.api.assessment.util;
 
-public interface PermissionsConstants {
-	String _PREFIX = "#oauth2.hasAnyScope('";
-	String _SUFFIX = "')";
+public class PermissionsConstants {
 
-	String READ_GRAD_ASSESSMENT = _PREFIX + "READ_GRAD_ASSESSMENT_DATA" + _SUFFIX;
-	String READ_GRAD_ASSESSMENT_REQUIREMENT = _PREFIX + "READ_GRAD_ASSESSMENT_REQUIREMENT_DATA" + _SUFFIX;
-	String READ_ALGORITHM_DATA = _PREFIX + "READ_GRAD_ASSESSMENT_DATA', 'READ_GRAD_ASSESSMENT_REQUIREMENT_DATA" + _SUFFIX;
+	private PermissionsConstants() {}
+
+	public static final String _PREFIX = "#oauth2.hasAnyScope('";
+	public static final String _SUFFIX = "')";
+
+	public static final String READ_GRAD_ASSESSMENT = _PREFIX + "READ_GRAD_ASSESSMENT_DATA" + _SUFFIX;
+	public static final String READ_GRAD_ASSESSMENT_REQUIREMENT = _PREFIX + "READ_GRAD_ASSESSMENT_REQUIREMENT_DATA" + _SUFFIX;
+	public static final String READ_ALGORITHM_DATA = _PREFIX + "READ_GRAD_ASSESSMENT_DATA', 'READ_GRAD_ASSESSMENT_REQUIREMENT_DATA" + _SUFFIX;
 }

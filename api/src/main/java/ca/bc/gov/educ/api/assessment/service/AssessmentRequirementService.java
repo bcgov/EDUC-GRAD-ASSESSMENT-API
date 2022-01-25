@@ -88,7 +88,7 @@ public class AssessmentRequirementService {
                 allAssessmentRequiremntList.add(obj);
             });
         } catch (Exception e) {
-            logger.debug("Exception:" + e);
+            logger.debug(String.format("Exception: %s",e));
         }
 
         return allAssessmentRequiremntList;
@@ -116,7 +116,7 @@ public class AssessmentRequirementService {
                 }
             });
         } catch (Exception e) {
-            logger.debug("Exception:" + e);
+            logger.debug(String.format("Exception: %s",e));
         }
 
         return assessmentReqList;

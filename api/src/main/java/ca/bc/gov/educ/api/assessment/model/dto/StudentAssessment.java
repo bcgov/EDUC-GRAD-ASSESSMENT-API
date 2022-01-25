@@ -18,6 +18,7 @@ public class StudentAssessment {
     private Assessment assessmentDetails;
     private String mincodeAssessment;
     private String mincodeAssessmentName;
+    private boolean hasMoreInfo;
     
     public String getPen() {
     	return pen != null ? pen.trim():null;
