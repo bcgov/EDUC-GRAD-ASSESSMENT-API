@@ -34,7 +34,7 @@ pipeline{
           listSize: '10',
           name: 'BRANCH_PARAM',
           quickFilterEnabled: false,
-          selectedValue: '',
+          selectedValue: 'DEFAULT',
           sortMode: 'ASCENDING_SMART',
           tagFilter: "BRANCH",
           type: 'PT_BRANCH_TAG')
