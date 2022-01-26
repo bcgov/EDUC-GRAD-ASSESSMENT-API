@@ -104,7 +104,8 @@ parameters:
   required: true
 - name: TAG_NAME
   description: Imagestream tag name
-  required: true
+  required: false
+  value: latest
 - name: HOST_ROUTE
   description: The host the route will use to expose service outside cluster
   required: true
