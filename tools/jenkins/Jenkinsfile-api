@@ -38,7 +38,7 @@ pipeline{
           sortMode: 'ASCENDING_SMART',
           tagFilter: "*",
           type: 'PT_BRANCH_TAG')
-        }
+        
     }
     stages {
         stage('Build') {
