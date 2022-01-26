@@ -2,6 +2,9 @@ pipeline{
     agent {
         label 'maven'
     }
+    options {
+        buildDiscarder(logRotator(daysToKeepStr: '', numToKeepStr: '5'))
+    }
     environment{
         TOOLS_NAMESPACE = '77c02f-tools'
         DEV_NAMESPACE = '77c02f-dev'
