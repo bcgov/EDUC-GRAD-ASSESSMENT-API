@@ -50,7 +50,7 @@ pipeline{
                         def bcTemplate =
                         openshift.apply(
                                 openshift.process("-f", "${SOURCE_REPO_URL_RAW}/${BRANCH}/tools/openshift/api.bc.yaml",
-                                        "REPO_NAME=${REPO_NAME}", "BRANCH=${BRANCH}")
+                                        "REPO_NAME=${REPO_NAME}", "BRANCH_NAME=${BRANCH}")
                         )
                         def buildSelector = openshift.selector("bc", "${REPO_NAME}-bc").startBuild()
                         sleep(20)
