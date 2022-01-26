@@ -91,7 +91,7 @@ pipeline{
                         openshift.withCluster() {
                             openshift.withProject(TOOLS_NAMESPACE) {
                                 echo "Tagging image"
-                                openshift.tag("${TOOLS_NAMESPACE}/${REPO_NAME}:latest", "${REPO_NAME}:${TAG}")
+                                openshift.tag("${TOOLS_NAMESPACE}/${REPO_NAME}:latest", "${REPO_NAME}:${TAG}", "${REPO_NAME}:${BRANCH}")
                             }
                         }
                     }
