@@ -29,14 +29,14 @@ pipeline{
         gitParameter(
           branch: '',
           branchFilter: ".*",
-          defaultValue: "",
+          defaultValue: "origin/main",
           description: '',
           listSize: '10',
           name: 'BRANCH_PARAM',
           quickFilterEnabled: false,
-          selectedValue: 'NONE',
+          selectedValue: 'origin/main',
           sortMode: 'ASCENDING_SMART',
-          tagFilter: "*",
+          tagFilter: "BRANCH",
           type: 'PT_BRANCH_TAG')
         
     }
@@ -44,7 +44,7 @@ pipeline{
         stage('Build') {
             steps {
                 script {
-                    BRANCH = params.BRANCH_PARAM
+                    BRANCH = params.BRANCH_PARAM.substring(7)
                     
                     openshift.withCluster() {
                         def bcTemplate =
