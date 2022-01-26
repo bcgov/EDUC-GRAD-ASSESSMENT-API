@@ -67,7 +67,7 @@ pipeline{
                 }
             }
         }
-        /*stage('Deploy to DEV') {
+        stage('Deploy to DEV') {
             steps {
                 script {
                     openshift.withCluster() {
@@ -100,6 +100,6 @@ pipeline{
                     echo "${REPO_NAME} deployment to DEV Failed!"
                 }
             }
-        }*/
+        }
     }
 }
