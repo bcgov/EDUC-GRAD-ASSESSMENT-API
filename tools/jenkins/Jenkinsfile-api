@@ -41,14 +41,14 @@ pipeline{
           sortMode: 'ASCENDING_SMART',
           tagFilter: "BRANCH",
           type: 'PT_BRANCH_TAG')
-        
+
     }
     stages {
         stage('Build') {
             steps {
                 script {
                     BRANCH = params.BRANCH_PARAM.substring(7)
-                    
+
                     openshift.withCluster() {
                         def bcTemplate =
                         openshift.apply(
