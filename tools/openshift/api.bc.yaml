@@ -15,8 +15,8 @@ objects:
       name: ${REPO_NAME}-bc
       namespace: 77c02f-tools
     spec:
-      resources: 
-        requests: 
+      resources:
+        requests:
           cpu: 1
           memory: 1Gi
         limits:
