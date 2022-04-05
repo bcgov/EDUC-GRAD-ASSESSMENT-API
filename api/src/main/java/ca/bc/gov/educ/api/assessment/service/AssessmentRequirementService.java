@@ -3,7 +3,10 @@ package ca.bc.gov.educ.api.assessment.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementCodeEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -148,5 +151,39 @@ public class AssessmentRequirementService {
             }
         }
     	return requirementProgram;
+    }
+
+    /**
+     *
+     * @param assessmentCode
+     * @param ruleCode
+     * @return
+     */
+    public AssessmentRequirement createAssessmentRequirement(final String assessmentCode, final String ruleCode) {
+        AssessmentRequirementEntity assessmentRequirementEntity = populate(assessmentCode, ruleCode);
+
+        AssessmentRequirementEntity currentEntity = assessmentRequirementRepository.findByAssessmentCodeAndRuleCode(
+                assessmentRequirementEntity.getAssessmentCode(), assessmentRequirementEntity.getRuleCode());
+        logger.info("Create AssessmentRequirement: assessment [{}], rule [{}]", assessmentCode, ruleCode);
+        if (currentEntity == null) {
+            // Add
+            return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(assessmentRequirementEntity));
+        } else {
+            // Update
+            currentEntity.setUpdatedBy(null);
+            return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(currentEntity));
+        }
+    }
+
+    private AssessmentRequirementEntity populate(String assessmentCode, String assessmentRequirementCode) {
+        AssessmentRequirementEntity assessmentRequirement = new AssessmentRequirementEntity();
+        assessmentRequirement.setAssessmentCode(assessmentCode);
+
+        Optional<AssessmentRequirementCodeEntity> assessmentCodeRequirementCodeOptional = assessmentRequirementCodeRepository.findById(assessmentRequirementCode);
+        if (assessmentCodeRequirementCodeOptional.isPresent()) {
+            assessmentRequirement.setRuleCode(assessmentCodeRequirementCodeOptional.get());
+        }
+        assessmentRequirement.setAssessmentRequirementId(UUID.randomUUID());
+        return assessmentRequirement;
     }
 }
