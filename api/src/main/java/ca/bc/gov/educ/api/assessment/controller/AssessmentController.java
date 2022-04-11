@@ -13,19 +13,11 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.bc.gov.educ.api.assessment.model.dto.AllAssessmentRequirements;
 import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
 import ca.bc.gov.educ.api.assessment.model.dto.AssessmentAlgorithmData;
-import ca.bc.gov.educ.api.assessment.model.dto.AssessmentList;
-import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirement;
-import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirements;
-import ca.bc.gov.educ.api.assessment.service.AssessmentRequirementService;
 import ca.bc.gov.educ.api.assessment.service.AssessmentService;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 import ca.bc.gov.educ.api.assessment.util.GradValidation;
@@ -42,16 +34,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RestController
 @RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
 @EnableResourceServer
-@OpenAPIDefinition(info = @Info(title = "API for Assessment Management.", description = "This API is for Assessment Management.", version = "1"), security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_ASSESSMENT_DATA", "READ_GRAD_ASSESSMENT_REQUIREMENT_DATA"})})
+@OpenAPIDefinition(info = @Info(title = "API for Assessment Management.", description = "This API is for Assessment Management.", version = "1"), security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_ASSESSMENT_DATA"})})
 public class AssessmentController {
 
     private static Logger logger = LoggerFactory.getLogger(AssessmentController.class);
 
     @Autowired
     AssessmentService assessmentService;
-
-    @Autowired
-    AssessmentRequirementService assessmentRequirementService;
 
     @Autowired
     GradValidation validation;
@@ -76,44 +65,6 @@ public class AssessmentController {
     public ResponseEntity<Assessment> getAssessmentDetails(@PathVariable String assmtCode) {
         logger.debug("getAssessmentDetails : ");
         return response.GET(assessmentService.getAssessmentDetails(assmtCode));
-    }
-
-    @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)
-    @PreAuthorize(PermissionsConstants.READ_GRAD_ASSESSMENT_REQUIREMENT)
-    @Operation(summary = "Find All Assessment Requirements", description = "Get All Assessment Requirements",
-            tags = {"Assessment Requirements"})
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<List<AllAssessmentRequirements>> getAllAssessmentRequirement(
-            @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "150") Integer pageSize) {
-        logger.debug("getAllAssessmentRequirement : ");
-        OAuth2AuthenticationDetails auth = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getDetails();
-        String accessToken = auth.getTokenValue();
-        return response.GET(assessmentRequirementService.getAllAssessmentRequirementList(pageNo, pageSize, accessToken));
-    }
-
-    @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_BY_RULE_MAPPING)
-    @PreAuthorize(PermissionsConstants.READ_GRAD_ASSESSMENT_REQUIREMENT)
-    @Operation(summary = "Find All Assessment Requirements by Rule", description = "Get All Assessment Requirements by Rule",
-            tags = {"Assessment Requirements"})
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<List<AssessmentRequirement>> getAllAssessmentRequirementByRule(
-            @RequestParam(value = "rule", required = true) String rule,
-            @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "150") Integer pageSize) {
-        logger.debug("getAllAssessmentRequirementByRule : ");
-        return response.GET(assessmentRequirementService.getAllAssessmentRequirementListByRule(rule, pageNo, pageSize));
-    }
-
-    @PostMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_BY_ASSESSMENT_LIST_MAPPING)
-    @PreAuthorize(PermissionsConstants.READ_GRAD_ASSESSMENT_REQUIREMENT)
-    @Operation(summary = "Find all Assessment Requirements by Assessment Code list",
-            description = "Get all Assessment Requirements by Assessment Code list", tags = {"Assessment Requirements"})
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<AssessmentRequirements> getAssessmentRequirementByAssessments(@RequestBody AssessmentList assessmentList) {
-        logger.debug("getAssessmentRequirementByAssessments : ");
-        return response.GET(assessmentRequirementService.getAssessmentRequirementListByAssessments(assessmentList));
     }
     
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_ALGORITHM_DATA_BY_PEN_MAPPING)

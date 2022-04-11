@@ -5,10 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 import org.junit.After;
@@ -223,6 +220,48 @@ public class AssessmentRequirementServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getAssessmentRequirementList().isEmpty()).isFalse();
         assertThat(result.getAssessmentRequirementList().size()).isEqualTo(2);
+    }
+
+    @Test
+    public void testCreateAssessmentRequirement() {
+        final UUID assessmentRequirementID = UUID.randomUUID();
+        final String assessmentCode = "TestCode";
+        final String ruleCode = "ruleCode";
+
+        AssessmentRequirementCodeEntity code = new AssessmentRequirementCodeEntity();
+        code.setAssmtRequirementCode(ruleCode);
+        code.setLabel("Rule Test Label");
+        code.setDescription("Rule Test Description");
+        code.setEffectiveDate(new java.sql.Date(System.currentTimeMillis() - 10000L));
+        code.setExpiryDate(new java.sql.Date(System.currentTimeMillis() + 100000L));
+        code.setCreatedBy("ASSESSMENT");
+        code.setUpdatedBy("ASSESSMENT");
+        code.setCreatedTimestamp(new Date());
+        code.setUpdatedTimestamp(new Date());
+
+        AssessmentRequirementEntity assmtReq = new AssessmentRequirementEntity();
+        assmtReq.setAssessmentRequirementId(assessmentRequirementID);
+        assmtReq.setAssessmentCode(assessmentCode);
+        assmtReq.setRuleCode(code);
+
+        AssessmentRequirementEntity saved = new AssessmentRequirementEntity();
+        saved.setAssessmentRequirementId(assessmentRequirementID);
+        saved.setAssessmentCode(assessmentCode);
+        saved.setRuleCode(code);
+        assmtReq.setCreatedBy("ASSESSMENT");
+        assmtReq.setUpdatedBy("ASSESSMENT");
+        assmtReq.setCreatedTimestamp(new Date());
+        assmtReq.setUpdatedTimestamp(new Date());
+
+        when(assessmentRequirementRepository.findByAssessmentCodeAndRuleCode(assessmentCode, code)).thenReturn(assmtReq);
+        when(assessmentRequirementCodeRepository.findById(ruleCode)).thenReturn(Optional.of(code));
+        when(assessmentRequirementRepository.save(assmtReq)).thenReturn(saved);
+
+        var result = assessmentRequirementService.createAssessmentRequirement(assessmentCode, ruleCode);
+        assertThat(result).isNotNull();
+        assertThat(result.getAssessmentCode()).isEqualTo(assessmentCode);
+        assertThat(result.getRuleCode().getAssmtRequirementCode()).isEqualTo(ruleCode);
+
     }
 
     private AssessmentRequirementCodeEntity createAssessmentRuleCode() {

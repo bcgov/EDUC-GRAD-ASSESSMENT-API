@@ -20,4 +20,6 @@ public interface AssessmentRequirementRepository extends JpaRepository<Assessmen
 
 	List<AssessmentRequirementEntity> findByAssessmentCodeIn(List<String> assessmentCodes);
 
+	AssessmentRequirementEntity findByAssessmentCodeAndRuleCode(String assessmentCode, AssessmentRequirementCodeEntity ruleCode);
+
 }
