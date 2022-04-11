@@ -56,7 +56,7 @@ public class AssessmentRequirementController {
     }
 
     @PostMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)
-    @PreAuthorize(PermissionsConstants.WRITE_GRAD_ASSESSMENT_REQUIREMENT)
+    @PreAuthorize(PermissionsConstants.CREATE_GRAD_ASSESSMENT_REQUIREMENT)
     @Operation(summary = "Create an Assessment Requirement", description = "Create an Assessment Requirement",
             tags = {"Assessment Requirements"})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"),
