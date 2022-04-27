@@ -15,9 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +22,6 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
-@EnableResourceServer
 @OpenAPIDefinition(info = @Info(title = "API for Assessment Requirement Management.", description = "This API is for Assessment Requirement Management.", version = "1"), security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_ASSESSMENT_REQUIREMENT_DATA"})})
 public class AssessmentRequirementController {
 
@@ -47,11 +43,9 @@ public class AssessmentRequirementController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<List<AllAssessmentRequirements>> getAllAssessmentRequirement(
             @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "150") Integer pageSize) {
+            @RequestParam(value = "pageSize", required = false, defaultValue = "150") Integer pageSize,
+            @RequestHeader(name="Authorization") String accessToken) {
         logger.debug("getAllAssessmentRequirement : ");
-        OAuth2AuthenticationDetails auth = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getDetails();
-        String accessToken = auth.getTokenValue();
         return response.GET(assessmentRequirementService.getAllAssessmentRequirementList(pageNo, pageSize, accessToken));
     }
 

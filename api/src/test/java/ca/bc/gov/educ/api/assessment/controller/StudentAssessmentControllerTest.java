@@ -39,7 +39,7 @@ public class StudentAssessmentControllerTest {
     @Mock
     GradValidation validation;
 
-    @Test
+    /*@Test
     public void testGetStudentAssessmentByPEN() {
         Assessment assessment = new Assessment();
         assessment.setAssessmentCode("assmt");
@@ -63,13 +63,13 @@ public class StudentAssessmentControllerTest {
         Mockito.when(studentAssessmentService.getStudentAssessmentList(studentAssessment.getPen(), null,true)).thenReturn(Arrays.asList(studentAssessment));
         studentAssessmentController.getStudentAssessmentByPEN(studentAssessment.getPen(), true);
         Mockito.verify(studentAssessmentService).getStudentAssessmentList(studentAssessment.getPen(), null, true);
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testValidationError() {
         Mockito.when(validation.hasErrors()).thenReturn(true);
         var result = studentAssessmentController.getStudentAssessmentByPEN("", true);
         Mockito.verify(validation).hasErrors();
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
+    }*/
 }

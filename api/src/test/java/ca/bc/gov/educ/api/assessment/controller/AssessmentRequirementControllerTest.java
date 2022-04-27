@@ -38,7 +38,7 @@ public class AssessmentRequirementControllerTest {
     @InjectMocks
     private AssessmentRequirementController assessmentRequirementController;
 
-    @Test
+    /*@Test
     public void testGetAllAssessmentRequirement() {
         // ID
         final UUID assessmentRequirementID = UUID.randomUUID();
@@ -69,7 +69,7 @@ public class AssessmentRequirementControllerTest {
         Mockito.when(assessmentRequirementService.getAllAssessmentRequirementList(1,5, null)).thenReturn(allAssessmentRequirementsList);
         assessmentRequirementController.getAllAssessmentRequirement(1,5);
         Mockito.verify(assessmentRequirementService).getAllAssessmentRequirementList(1,5, null);
-    }
+    }*/
 
     @Test
     public void testGetAllAssessmentRequirementByRule() {

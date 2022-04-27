@@ -61,8 +61,6 @@ objects:
                     name: educ-grad-assessment-api-config-map
                 - secretRef:
                     name: api-assessment-db-secret
-                - secretRef:
-                    name: grad-keycloak-pk-secret
               resources: {}
       test: false
   - apiVersion: v1
