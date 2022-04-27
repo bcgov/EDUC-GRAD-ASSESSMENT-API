@@ -14,10 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 import java.util.Arrays;
 
@@ -65,11 +61,11 @@ public class StudentAssessmentControllerTest {
         Mockito.verify(studentAssessmentService).getStudentAssessmentList(studentAssessment.getPen(), null, true);
     }*/
 
-    /*@Test
+    @Test
     public void testValidationError() {
         Mockito.when(validation.hasErrors()).thenReturn(true);
-        var result = studentAssessmentController.getStudentAssessmentByPEN("", true);
+        var result = studentAssessmentController.getStudentAssessmentByPEN("", true, "");
         Mockito.verify(validation).hasErrors();
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }*/
+    }
 }
