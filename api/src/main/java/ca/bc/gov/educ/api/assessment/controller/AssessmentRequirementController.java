@@ -46,7 +46,7 @@ public class AssessmentRequirementController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "150") Integer pageSize,
             @RequestHeader(name="Authorization") String accessToken) {
         logger.debug("getAllAssessmentRequirement : ");
-        return response.GET(assessmentRequirementService.getAllAssessmentRequirementList(pageNo, pageSize, accessToken));
+        return response.GET(assessmentRequirementService.getAllAssessmentRequirementList(pageNo, pageSize, accessToken.replaceAll("Bearer ", "")));
     }
 
     @PostMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)
