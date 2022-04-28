@@ -41,7 +41,7 @@ public class StudentAssessmentController {
 	ResponseHelper response;
 
     @GetMapping(EducAssessmentApiConstants.GET_STUDENT_ASSESSMENT_BY_PEN_MAPPING)
-    @PreAuthorize("#oauth2.hasScope('READ_GRAD_STUDENT_ASSESSMENT_DATA')")
+    @PreAuthorize("hasAuthority('SCOPE_READ_GRAD_STUDENT_ASSESSMENT_DATA')")
     @Operation(summary = "Find All Student Assessments by PEN", description = "Get All Student Assessments by PEN", tags = { "Student Assessments" })
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "204", description = "NO CONTENT")})
     public ResponseEntity<List<StudentAssessment>> getStudentAssessmentByPEN(
