@@ -7,14 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
 import ca.bc.gov.educ.api.assessment.model.dto.AssessmentAlgorithmData;
@@ -33,7 +26,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @CrossOrigin
 @RestController
 @RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
-@EnableResourceServer
 @OpenAPIDefinition(info = @Info(title = "API for Assessment Management.", description = "This API is for Assessment Management.", version = "1"), security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_ASSESSMENT_DATA"})})
 public class AssessmentController {
 
@@ -72,11 +64,8 @@ public class AssessmentController {
     @Operation(summary = "Find Assessment Algorithm Data by pen", description = "Get Assessment Algorithm Data by pen", tags = { "Courses" })
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<AssessmentAlgorithmData> getAssessmentAlgorithmData(
-            @PathVariable String pen) {
+            @PathVariable String pen, @RequestHeader(name="Authorization") String accessToken) {
         logger.debug("getAssessmentAlgorithmData : ");
-        OAuth2AuthenticationDetails auth = (OAuth2AuthenticationDetails) SecurityContextHolder.getContext()
-                .getAuthentication().getDetails();
-        String accessToken = auth.getTokenValue();
-        return response.GET(assessmentService.getAssessmentAlgorithmData(pen,accessToken, false));
+        return response.GET(assessmentService.getAssessmentAlgorithmData(pen, accessToken, false));
     }
 }
