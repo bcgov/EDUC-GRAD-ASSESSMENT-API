@@ -86,7 +86,7 @@ public class AssessmentRequirementService {
                         .block();
                 StringBuilder requirementProgram = new StringBuilder();
                 requirementProgram = processRuleList(ruleList,requirementProgram,obj);
-                obj.setTraxReqNumber(ruleList.get(0).getTraxReqNumber());
+                obj.setTraxReqNumber(!ruleList.isEmpty()?ruleList.get(0).getTraxReqNumber():null);
                 obj.setRequirementProgram(requirementProgram.toString());
                 allAssessmentRequiremntList.add(obj);
             });
