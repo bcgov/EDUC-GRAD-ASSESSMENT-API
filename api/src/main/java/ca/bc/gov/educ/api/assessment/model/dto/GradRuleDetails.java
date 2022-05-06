@@ -14,11 +14,12 @@ public class GradRuleDetails {
 	private String requirementName;
 	private String programCode;	
 	private String optionalProgramCode;
+	private String traxReqNumber;
 	
 	@Override
 	public String toString() {
 		return "GradRuleDetails [ruleCode=" + ruleCode + ", requirementName=" + requirementName + ", programCode="
-				+ programCode + "]";
+				+ programCode + ", traxReqNumber="+traxReqNumber+"]";
 	}
 	
 }

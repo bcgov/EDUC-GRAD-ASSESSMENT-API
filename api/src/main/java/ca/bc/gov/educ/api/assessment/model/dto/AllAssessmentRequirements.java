@@ -18,4 +18,5 @@ public class AllAssessmentRequirements extends BaseModel {
     private String ruleCode;
     private String requirementName;
     private String requirementProgram;
+    private String traxReqNumber;
 }
