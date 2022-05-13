@@ -76,12 +76,12 @@ public class AssessmentService {
             if (assessmentRequirement != null && !assessmentRequirement.getAssessmentRequirementList().isEmpty()) {
             	assessmentAlgorithmData.setAssessmentRequirements(assessmentRequirement.getAssessmentRequirementList());
             }
-            
-            //Assessments
-            List<Assessment> assessment = getAssessmentList();
-            if (!assessment.isEmpty()) {
-            	assessmentAlgorithmData.setAssessments(assessment);
-            }
+
+        }
+        //Assessments
+        List<Assessment> assessment = getAssessmentList();
+        if (!assessment.isEmpty()) {
+            assessmentAlgorithmData.setAssessments(assessment);
         }
         return assessmentAlgorithmData;
     }
