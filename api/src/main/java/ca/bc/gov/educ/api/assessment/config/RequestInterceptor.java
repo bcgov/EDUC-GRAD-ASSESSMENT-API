@@ -1,6 +1,7 @@
 package ca.bc.gov.educ.api.assessment.config;
 
 import ca.bc.gov.educ.api.assessment.util.GradValidation;
+import ca.bc.gov.educ.api.assessment.util.JwtUtil;
 import ca.bc.gov.educ.api.assessment.util.ThreadLocalStateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +32,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 		// username
 		JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 		Jwt jwt = (Jwt) authenticationToken.getCredentials();
-		String username = (String) jwt.getClaims().get("preferred_username");
+		String username = JwtUtil.getName(jwt);
 		if (username != null) {
 			ThreadLocalStateUtil.setCurrentUser(username);
 		}
