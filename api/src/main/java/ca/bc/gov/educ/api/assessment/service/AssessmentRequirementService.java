@@ -170,7 +170,6 @@ public class AssessmentRequirementService {
             return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(assessmentRequirementEntity));
         } else {
             // Update
-            currentEntity.setUpdatedBy(null);
             return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(currentEntity));
         }
     }
