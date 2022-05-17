@@ -234,10 +234,10 @@ public class AssessmentRequirementServiceTest {
         code.setDescription("Rule Test Description");
         code.setEffectiveDate(new java.sql.Date(System.currentTimeMillis() - 10000L));
         code.setExpiryDate(new java.sql.Date(System.currentTimeMillis() + 100000L));
-        code.setCreatedBy("ASSESSMENT");
-        code.setUpdatedBy("ASSESSMENT");
-        code.setCreatedTimestamp(new Date());
-        code.setUpdatedTimestamp(new Date());
+        code.setCreateUser("ASSESSMENT");
+        code.setUpdateUser("ASSESSMENT");
+        code.setCreateDate(new Date());
+        code.setUpdateDate(new Date());
 
         AssessmentRequirementEntity assmtReq = new AssessmentRequirementEntity();
         assmtReq.setAssessmentRequirementId(assessmentRequirementID);
@@ -248,10 +248,10 @@ public class AssessmentRequirementServiceTest {
         saved.setAssessmentRequirementId(assessmentRequirementID);
         saved.setAssessmentCode(assessmentCode);
         saved.setRuleCode(code);
-        assmtReq.setCreatedBy("ASSESSMENT");
-        assmtReq.setUpdatedBy("ASSESSMENT");
-        assmtReq.setCreatedTimestamp(new Date());
-        assmtReq.setUpdatedTimestamp(new Date());
+        assmtReq.setCreateUser("ASSESSMENT");
+        assmtReq.setUpdateUser("ASSESSMENT");
+        assmtReq.setCreateDate(new Date());
+        assmtReq.setUpdateDate(new Date());
 
         when(assessmentRequirementRepository.findByAssessmentCodeAndRuleCode(assessmentCode, code)).thenReturn(assmtReq);
         when(assessmentRequirementCodeRepository.findById(ruleCode)).thenReturn(Optional.of(code));
