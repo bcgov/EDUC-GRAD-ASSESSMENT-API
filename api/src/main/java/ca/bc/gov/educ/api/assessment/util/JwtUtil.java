@@ -45,6 +45,9 @@ public class JwtUtil {
     }
     String familyName = (String) jwt.getClaims().get("family_name");
     sb.append(familyName);
+    if (StringUtils.isBlank(sb.toString())) {
+      sb.append(getUsername(jwt));
+    }
     return sb.toString();
   }
 }
