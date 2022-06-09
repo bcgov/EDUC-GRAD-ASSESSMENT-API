@@ -86,7 +86,7 @@ public class AssessmentRequirementService {
                         .block();
                 StringBuilder requirementProgram = new StringBuilder();
                 requirementProgram = processRuleList(ruleList,requirementProgram,obj);
-                
+                obj.setTraxReqNumber(!ruleList.isEmpty()?ruleList.get(0).getTraxReqNumber():null);
                 obj.setRequirementProgram(requirementProgram.toString());
                 allAssessmentRequiremntList.add(obj);
             });
@@ -170,7 +170,6 @@ public class AssessmentRequirementService {
             return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(assessmentRequirementEntity));
         } else {
             // Update
-            currentEntity.setUpdatedBy(null);
             return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(currentEntity));
         }
     }
