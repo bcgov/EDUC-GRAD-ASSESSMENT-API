@@ -84,7 +84,7 @@ springdoc:
 endpoint:
   grad-trax-api:
     school-name-by-mincode:
-      url: ${GRAD_TRAX_API}api/v1/school/%s
+      url: ${GRAD_TRAX_API}api/v1/trax/school/%s
   grad-program-api:
     rule-detail:
       url : ${GRAD_PROGRAM_API}api/v1/program/programrules/%s
