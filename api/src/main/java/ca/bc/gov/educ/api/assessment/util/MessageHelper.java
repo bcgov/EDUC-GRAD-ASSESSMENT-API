@@ -1,8 +1,9 @@
 package ca.bc.gov.educ.api.assessment.util;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class MessageHelper {
 
 	@Value("${validation.value.missing}")
