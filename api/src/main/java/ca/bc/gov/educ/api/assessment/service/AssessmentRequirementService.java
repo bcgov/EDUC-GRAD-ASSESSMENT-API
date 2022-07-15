@@ -42,8 +42,7 @@ public class AssessmentRequirementService {
     @Autowired
     private AssessmentRequirementTransformer assessmentRequirementTransformer;
 
-    @Autowired
-    private AssessmentRequirements assessmentRequirements;
+
 
     @Autowired
     private EducAssessmentApiConstants contants;
@@ -123,13 +122,6 @@ public class AssessmentRequirementService {
         }
 
         return assessmentReqList;
-    }
-
-    public AssessmentRequirements getAssessmentRequirementListByAssessments(AssessmentList assessmentList) {
-        assessmentRequirements.setAssessmentRequirementList(
-                assessmentRequirementTransformer.transformToDTO(
-                        assessmentRequirementRepository.findByAssessmentCodeIn(assessmentList.getAssessmentCodes())));
-        return assessmentRequirements;
     }
     
     private StringBuilder processRuleList(List<GradRuleDetails> ruleList, StringBuilder requirementProgram, AllAssessmentRequirements obj) {

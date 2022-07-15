@@ -8,6 +8,8 @@ import static org.mockito.MockitoAnnotations.openMocks;
 import java.util.*;
 import java.util.function.Consumer;
 
+import ca.bc.gov.educ.api.assessment.model.entity.AssessmentEntity;
+import ca.bc.gov.educ.api.assessment.repository.AssessmentRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,12 +50,15 @@ public class AssessmentRequirementServiceTest {
     @Autowired
     private AssessmentRequirementService assessmentRequirementService;
 
-    @MockBean
+    @Autowired
     private AssessmentService assessmentService;
 
     @MockBean
     private AssessmentRequirementRepository assessmentRequirementRepository;
-    
+
+    @MockBean
+    private AssessmentRepository assessmentRepository;
+
     @MockBean
     private AssessmentRequirementCodeRepository assessmentRequirementCodeRepository;
 
@@ -112,6 +117,10 @@ public class AssessmentRequirementServiceTest {
         assmt.setAssessmentCode(assessmentCode);
         assmt.setAssessmentName(assessmentName);
 
+        final AssessmentEntity assmtent = new AssessmentEntity();
+        assmtent.setAssessmentCode(assessmentCode);
+        assmtent.setAssessmentName(assessmentName);
+
         // Rule Details
         final List<GradRuleDetails> ruleList = new ArrayList<GradRuleDetails>();
         final GradRuleDetails ruleDetail = new GradRuleDetails();
@@ -124,7 +133,7 @@ public class AssessmentRequirementServiceTest {
         };
 
         when(assessmentRequirementRepository.findAll(paging)).thenReturn(pageResult);
-        when(assessmentService.getAssessmentDetails(assessmentCode)).thenReturn(assmt);
+        when(assessmentRepository.findByAssessmentCode(assmt.getAssessmentCode())).thenReturn(Optional.of(assmtent));
 
         when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
         when(this.requestHeadersUriMock.uri(String.format(constants.getRuleDetailOfProgramManagementApiUrl(),ruleCode))).thenReturn(this.requestHeadersMock);
@@ -171,7 +180,6 @@ public class AssessmentRequirementServiceTest {
         assmt.setAssessmentName(assessmentName);
 
         when(assessmentRequirementRepository.findByRuleCode(assessmentRequirementCodeRepository.getOne(ruleCode), paging)).thenReturn(pageResult);
-        when(assessmentService.getAssessmentDetails(assessmentCode)).thenReturn(assmt);
 
         var result = assessmentRequirementService.getAllAssessmentRequirementListByRule(ruleCode, 1, 5);
 
@@ -215,7 +223,7 @@ public class AssessmentRequirementServiceTest {
 
         when(assessmentRequirementRepository.findByAssessmentCodeIn(assessmentList.getAssessmentCodes())).thenReturn(assessmentReqList);
 
-        var result = assessmentRequirementService.getAssessmentRequirementListByAssessments(assessmentList);
+        var result = assessmentService.getAssessmentRequirementListByAssessments(assessmentList);
 
         assertThat(result).isNotNull();
         assertThat(result.getAssessmentRequirementList().isEmpty()).isFalse();
