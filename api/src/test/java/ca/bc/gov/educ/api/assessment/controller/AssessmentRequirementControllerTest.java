@@ -2,6 +2,7 @@ package ca.bc.gov.educ.api.assessment.controller;
 
 import ca.bc.gov.educ.api.assessment.model.dto.*;
 import ca.bc.gov.educ.api.assessment.service.AssessmentRequirementService;
+import ca.bc.gov.educ.api.assessment.service.AssessmentService;
 import ca.bc.gov.educ.api.assessment.util.GradValidation;
 import ca.bc.gov.educ.api.assessment.util.ResponseHelper;
 import org.junit.Test;
@@ -24,6 +25,9 @@ public class AssessmentRequirementControllerTest {
 
     @Mock
     private AssessmentRequirementService assessmentRequirementService;
+
+    @Mock
+    private AssessmentService assessmentService;
 
     @Mock
     ResponseHelper responseHelper;
@@ -127,9 +131,9 @@ public class AssessmentRequirementControllerTest {
 
         assessmentRequirements.setAssessmentRequirementList(assessmentReqList);
 
-        Mockito.when(assessmentRequirementService.getAssessmentRequirementListByAssessments(assessmentList)).thenReturn(assessmentRequirements);
+        Mockito.when(assessmentService.getAssessmentRequirementListByAssessments(assessmentList)).thenReturn(assessmentRequirements);
         assessmentRequirementController.getAssessmentRequirementByAssessments(assessmentList);
-        Mockito.verify(assessmentRequirementService).getAssessmentRequirementListByAssessments(assessmentList);
+        Mockito.verify(assessmentService).getAssessmentRequirementListByAssessments(assessmentList);
     }
 
 

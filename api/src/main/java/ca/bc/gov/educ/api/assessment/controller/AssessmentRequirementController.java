@@ -2,6 +2,7 @@ package ca.bc.gov.educ.api.assessment.controller;
 
 import ca.bc.gov.educ.api.assessment.model.dto.*;
 import ca.bc.gov.educ.api.assessment.service.AssessmentRequirementService;
+import ca.bc.gov.educ.api.assessment.service.AssessmentService;
 import ca.bc.gov.educ.api.assessment.util.*;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +30,9 @@ public class AssessmentRequirementController {
 
     @Autowired
     AssessmentRequirementService assessmentRequirementService;
+
+    @Autowired
+    AssessmentService assessmentService;
 
     @Autowired
     GradValidation validation;
@@ -90,7 +94,7 @@ public class AssessmentRequirementController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<AssessmentRequirements> getAssessmentRequirementByAssessments(@RequestBody AssessmentList assessmentList) {
         logger.debug("getAssessmentRequirementByAssessments : ");
-        return response.GET(assessmentRequirementService.getAssessmentRequirementListByAssessments(assessmentList));
+        return response.GET(assessmentService.getAssessmentRequirementListByAssessments(assessmentList));
     }
 
 }
