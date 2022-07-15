@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
+import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +31,15 @@ public class AssessmentService {
     
     @Autowired
     private StudentAssessmentService studentAssessmentService;
-    
+
     @Autowired
-    private AssessmentRequirementService assessmentRequirementService;
+    private AssessmentRequirements assessmentRequirements;
+
+    @Autowired
+    private AssessmentRequirementRepository assessmentRequirementRepository;
+
+    @Autowired
+    private AssessmentRequirementTransformer assessmentRequirementTransformer;
 
     private static Logger logger = LoggerFactory.getLogger(AssessmentService.class);
 
@@ -72,7 +80,7 @@ public class AssessmentService {
             assessmentList.setAssessmentCodes(assessmentCodes);
 
             // Course Requirements
-            AssessmentRequirements assessmentRequirement = assessmentRequirementService.getAssessmentRequirementListByAssessments(assessmentList);
+            AssessmentRequirements assessmentRequirement = getAssessmentRequirementListByAssessments(assessmentList);
             if (assessmentRequirement != null && !assessmentRequirement.getAssessmentRequirementList().isEmpty()) {
             	assessmentAlgorithmData.setAssessmentRequirements(assessmentRequirement.getAssessmentRequirementList());
             }
@@ -84,5 +92,12 @@ public class AssessmentService {
             assessmentAlgorithmData.setAssessments(assessment);
         }
         return assessmentAlgorithmData;
+    }
+
+    public AssessmentRequirements getAssessmentRequirementListByAssessments(AssessmentList assessmentList) {
+        assessmentRequirements.setAssessmentRequirementList(
+                assessmentRequirementTransformer.transformToDTO(
+                        assessmentRequirementRepository.findByAssessmentCodeIn(assessmentList.getAssessmentCodes())));
+        return assessmentRequirements;
     }
 }
