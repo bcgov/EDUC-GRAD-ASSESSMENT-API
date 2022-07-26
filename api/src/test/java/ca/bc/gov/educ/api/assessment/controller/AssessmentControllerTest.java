@@ -46,6 +46,7 @@ public class AssessmentControllerTest {
         Mockito.when(assessmentService.getAssessmentList()).thenReturn(assessmentList);
         assessmentController.getAllAssessments();
         Mockito.verify(assessmentService).getAssessmentList();
+
     }
 
     @Test
