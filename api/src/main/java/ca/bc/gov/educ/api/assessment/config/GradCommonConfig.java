@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @PropertySource(value = "classpath:messages.yaml", factory = YamlPropertySourceFactory.class)
-public class GradAssessmentConfig implements WebMvcConfigurer {
+public class GradCommonConfig implements WebMvcConfigurer {
 
 	@Autowired
 	RequestInterceptor requestInterceptor;
