@@ -21,9 +21,9 @@ env:
   APP_DOMAIN: ${{ secrets.APP_DOMAIN }}
   TAG: "latest"
   MIN_CPU: "20m"
-  MAX_CPU: "100m"
+  MAX_CPU: "250m"
   MIN_MEM: "250Mi"
-  MAX_MEM: "1024Mi"
+  MAX_MEM: "4096Mi"
   MIN_REPLICAS: "1"
   MAX_REPLICAS: "3"
 
