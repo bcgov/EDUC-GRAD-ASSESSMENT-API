@@ -40,9 +40,8 @@ public class StudentAssessmentId implements Serializable {
      * Constructor method used by JPA to create a composite primary key.
      *
      * @param studNo
-     * @param crseCode
-     * @param crseLevel
-     * @param crseSession
+     * @param assessmentCode
+     * @param assmSession
      */
     public StudentAssessmentId(String studNo, String assessmentCode, String assmSession) {
         this.pen = studNo;
