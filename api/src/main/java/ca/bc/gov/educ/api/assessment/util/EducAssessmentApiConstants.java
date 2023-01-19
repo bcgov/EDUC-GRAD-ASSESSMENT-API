@@ -39,6 +39,7 @@ public class EducAssessmentApiConstants {
     public static final String DEFAULT_DATE_FORMAT = "dd-MMM-yyyy";
     
     public static final String TRAX_DATE_FORMAT = "yyyyMM";
+    public static final String CORRELATION_ID = "correlationID";
 
     //Endpoints
     @Value("${endpoint.grad-program-api.rule-detail.url}")
@@ -47,4 +48,7 @@ public class EducAssessmentApiConstants {
     @Value("${endpoint.grad-trax-api.school-name-by-mincode.url}")
     private String schoolNameByMincodeUrl;
 
+    // Splunk LogHelper Enabled
+    @Value("${splunk.log-helper.enabled}")
+    private boolean splunkLogHelperEnabled;
 }

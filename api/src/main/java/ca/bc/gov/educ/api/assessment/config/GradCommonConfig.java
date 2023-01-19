@@ -10,11 +10,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @PropertySource(value = "classpath:messages.yaml", factory = YamlPropertySourceFactory.class)
 public class GradCommonConfig implements WebMvcConfigurer {
 
-	@Autowired
 	RequestInterceptor requestInterceptor;
+
+	@Autowired
+	public GradCommonConfig(RequestInterceptor requestInterceptor) {
+		this.requestInterceptor = requestInterceptor;
+	}
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(requestInterceptor);
+		registry.addInterceptor(requestInterceptor).addPathPatterns("/**");
 	}
 
 }
