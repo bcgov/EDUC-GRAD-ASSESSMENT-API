@@ -7,6 +7,7 @@ env:
   OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
   OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
   OPENSHIFT_NAMESPACE: ${{ secrets.GRAD_NAMESPACE }}-dev
+  NAMESPACE: ${{ secrets.GRAD_NAMESPACE }}
 
   # 🖊️ EDIT to change the image registry settings.
   # Registries such as GHCR, Quay.io, and Docker Hub are supported.
@@ -26,6 +27,7 @@ env:
   MAX_MEM: "1024Mi"
   MIN_REPLICAS: "3"
   MAX_REPLICAS: "5"
+  BRANCH: "grad-release"
 
 on:
   # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
@@ -43,10 +45,6 @@ jobs:
     # ubuntu-20.04 can also be used.
     runs-on: ubuntu-20.04
     environment: dev
-
-    #outputs:
-      #ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
-      #SELECTOR: ${{ steps.deploy-and-expose.outputs.selector }}
 
     steps:
       - name: Check out repository
@@ -113,6 +111,9 @@ jobs:
           # Process and apply deployment template
           oc process -f tools/openshift/api.dc.yaml -p IS_NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p REPO_NAME=${{ env.REPO_NAME }} -p TAG_NAME=${{ env.TAG }} -p HOST_ROUTE=${{ env.REPO_NAME }}-${{ env.OPENSHIFT_NAMESPACE }}.${{ env.APP_DOMAIN }} -p MIN_REPLICAS=${{ env.MIN_REPLICAS }} -p MAX_REPLICAS=${{ env.MAX_REPLICAS }} -p MIN_CPU=${{ env.MIN_CPU }} -p MAX_CPU=${{ env.MAX_CPU }} -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }}  \
           | oc apply -f -
+
+          # UPDATE Configmaps
+          curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/${{ env.BRANCH }}/tools/update-configmap.sh | bash /dev/stdin dev ${{ env.REPO_NAME }} ${{ env.NAMESPACE }} ${{ secrets.SPLUNK_TOKEN }}
 
           # Start rollout (if necessary) and follow it
           oc rollout latest dc/${{ env.SPRING_BOOT_IMAGE_NAME }} 2> /dev/null \
