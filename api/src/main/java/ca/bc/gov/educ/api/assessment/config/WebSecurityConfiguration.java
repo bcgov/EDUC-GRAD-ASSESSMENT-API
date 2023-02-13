@@ -19,7 +19,7 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers(
+                .requestMatchers(
                         "/api/v1/api-docs-ui.html",
                         "/api/v1/swagger-ui/**",
                         "/api/v1/api-docs/**",
