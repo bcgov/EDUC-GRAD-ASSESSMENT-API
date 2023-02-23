@@ -4,10 +4,15 @@ public class ThreadLocalStateUtil {
     private static ThreadLocal<String> transaction = new ThreadLocal<>();
     private static ThreadLocal<String> user = new ThreadLocal<>();
 
+    //GRAD2-1929 - Refactoring/Linting
+    private ThreadLocalStateUtil() {
+
+    }
+
     /**
      * Set the current correlationID for this thread
      *
-     * @param correlationID
+     * @param correlationID - correlation id
      */
     public static void setCorrelationID(String correlationID){
         transaction.set(correlationID);
@@ -25,7 +30,7 @@ public class ThreadLocalStateUtil {
     /**
      * Set the current user for this thread
      *
-     * @param currentUser
+     * @param currentUser - current user
      */
     public static void setCurrentUser(String currentUser){
         user.set(currentUser);

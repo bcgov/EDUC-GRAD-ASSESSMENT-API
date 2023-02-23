@@ -1,10 +1,7 @@
 package ca.bc.gov.educ.api.assessment.service;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementCodeEntity;
 import org.slf4j.Logger;
@@ -20,9 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import ca.bc.gov.educ.api.assessment.model.dto.AllAssessmentRequirements;
 import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
-import ca.bc.gov.educ.api.assessment.model.dto.AssessmentList;
 import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirement;
-import ca.bc.gov.educ.api.assessment.model.dto.AssessmentRequirements;
 import ca.bc.gov.educ.api.assessment.model.dto.GradRuleDetails;
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementEntity;
 import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
@@ -58,10 +53,9 @@ public class AssessmentRequirementService {
     /**
      * Get all course requirements in Course Requirement DTO
      *
-     * @param pageSize
-     * @param pageNo
-     * @return Course
-     * @throws java.lang.Exception
+     * @param pageSize - number of pages to list out assessment requirements //GRAD2-1929 Refactoring/Linting
+     * @param pageNo - page number of assessment list
+     * @return list - course's assessement requirements list
      */
     public List<AllAssessmentRequirements> getAllAssessmentRequirementList(Integer pageNo, Integer pageSize, String accessToken) {
         List<AssessmentRequirement> assessmentReqList = new ArrayList<>();
@@ -99,10 +93,9 @@ public class AssessmentRequirementService {
     /**
      * Get all course requirements in Course Requirement DTO by Rule
      *
-     * @param pageSize
-     * @param pageNo
-     * @return Course
-     * @throws java.lang.Exception
+     * @param pageSize - number of pages to list out assessment requirements //GRAD2-1929 Refactoring/Linting
+     * @param pageNo - page number of assessment list
+     * @return list - assessement requirements list
      */
     public List<AssessmentRequirement> getAllAssessmentRequirementListByRule(String rule, Integer pageNo, Integer pageSize) {
         List<AssessmentRequirement> assessmentReqList = new ArrayList<>();
@@ -147,9 +140,9 @@ public class AssessmentRequirementService {
 
     /**
      *
-     * @param assessmentCode
-     * @param ruleCode
-     * @return
+     * @param assessmentCode - assessment code // GRAD2-1929 Refactoring/Linting
+     * @param ruleCode - rule code
+     * @return object - assessment requirement
      */
     public AssessmentRequirement createAssessmentRequirement(final String assessmentCode, final String ruleCode) {
         AssessmentRequirementEntity assessmentRequirementEntity = populate(assessmentCode, ruleCode);
@@ -157,13 +150,13 @@ public class AssessmentRequirementService {
         AssessmentRequirementEntity currentEntity = assessmentRequirementRepository.findByAssessmentCodeAndRuleCode(
                 assessmentRequirementEntity.getAssessmentCode(), assessmentRequirementEntity.getRuleCode());
         logger.info("Create AssessmentRequirement: assessment [{}], rule [{}]", assessmentCode, ruleCode);
-        if (currentEntity == null) {
-            // Add
-            return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(assessmentRequirementEntity));
-        } else {
-            // Update
-            return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(currentEntity));
-        }
+        /*
+        Add and Update
+        GRAD2 -1929 Refactoring/Linting reducing the lines by using requireNonNullElse
+        */
+        return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(Objects.requireNonNullElse(currentEntity, assessmentRequirementEntity)));
+
+
     }
 
     private AssessmentRequirementEntity populate(String assessmentCode, String assessmentRequirementCode) {
@@ -171,9 +164,7 @@ public class AssessmentRequirementService {
         assessmentRequirement.setAssessmentCode(assessmentCode);
 
         Optional<AssessmentRequirementCodeEntity> assessmentCodeRequirementCodeOptional = assessmentRequirementCodeRepository.findById(assessmentRequirementCode);
-        if (assessmentCodeRequirementCodeOptional.isPresent()) {
-            assessmentRequirement.setRuleCode(assessmentCodeRequirementCodeOptional.get());
-        }
+        assessmentCodeRequirementCodeOptional.ifPresent(assessmentRequirement::setRuleCode); //Grad2-1929 Refactoring/Linting
         assessmentRequirement.setAssessmentRequirementId(UUID.randomUUID());
         return assessmentRequirement;
     }

@@ -47,7 +47,6 @@ public class AssessmentService {
      * Get all courses in Course DTO
      *
      * @return Course 
-     * @throws java.lang.Exception
      */
     public List<Assessment> getAssessmentList() {
         List<Assessment> assessment  = new ArrayList<>();

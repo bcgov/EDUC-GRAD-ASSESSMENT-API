@@ -65,8 +65,10 @@ public class AssessmentRequirementServiceTest {
     @MockBean
     private WebClient webClient;
 
+    @SuppressWarnings("rawtypes")
     @Mock
     private WebClient.RequestHeadersSpec requestHeadersMock;
+    @SuppressWarnings("rawtypes")
     @Mock
     private WebClient.RequestHeadersUriSpec requestHeadersUriMock;
     @Mock
@@ -110,7 +112,7 @@ public class AssessmentRequirementServiceTest {
         assessmentReqEntityList.add(assmtReqEntity);
 
         Pageable paging = PageRequest.of(1, 5);
-        Page<AssessmentRequirementEntity> pageResult = new PageImpl<AssessmentRequirementEntity>(assessmentReqEntityList);
+        Page<AssessmentRequirementEntity> pageResult = new PageImpl<>(assessmentReqEntityList);
 
         // Assessment
         final Assessment assmt = new Assessment();
@@ -122,14 +124,14 @@ public class AssessmentRequirementServiceTest {
         assmtent.setAssessmentName(assessmentName);
 
         // Rule Details
-        final List<GradRuleDetails> ruleList = new ArrayList<GradRuleDetails>();
+        final List<GradRuleDetails> ruleList = new ArrayList<>();
         final GradRuleDetails ruleDetail = new GradRuleDetails();
         ruleDetail.setRuleCode(ruleCode);
         ruleDetail.setRequirementName(requirementName);
         ruleDetail.setProgramCode(requirementProgram);
         ruleList.add(ruleDetail);
 
-        final ParameterizedTypeReference<List<GradRuleDetails>> ruleDetailsResponseType = new ParameterizedTypeReference<List<GradRuleDetails>>() {
+        final ParameterizedTypeReference<List<GradRuleDetails>> ruleDetailsResponseType = new ParameterizedTypeReference<>() {
         };
 
         when(assessmentRequirementRepository.findAll(paging)).thenReturn(pageResult);
@@ -172,7 +174,7 @@ public class AssessmentRequirementServiceTest {
         assessmentReqEntityList.add(assmtReqEntity);
 
         Pageable paging = PageRequest.of(1, 5);
-        Page<AssessmentRequirementEntity> pageResult = new PageImpl<AssessmentRequirementEntity>(assessmentReqEntityList);
+        Page<AssessmentRequirementEntity> pageResult = new PageImpl<>(assessmentReqEntityList);
 
         // Assessment
         final Assessment assmt = new Assessment();

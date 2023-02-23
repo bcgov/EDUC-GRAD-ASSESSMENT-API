@@ -30,21 +30,20 @@ public class ResponseHelper {
 	}
 
 	public <T> ResponseEntity<T> NOT_FOUND() {
-		return new ResponseEntity<T>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	public <T> ResponseEntity<T> NO_CONTENT() {
-		return new ResponseEntity<T>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	//************   GET methods
 
 	/**
 	 * Get Response Entity using JPA Entity Source
-	 * @param <T>
 	 * @param optional - the JPA entity Source
 	 * @param type - The API model type to map to.
-	 * @return
+	 * @return responseEntity - response entity object //Grad2-1929 Refactoring/Linting
 	 */
 	protected <T> ResponseEntity<T> GET(Optional<?> optional, Class<T> type) {
 		if (optional.isPresent()) {
@@ -63,17 +62,15 @@ public class ResponseHelper {
 
 	/**
 	 * Get Response Entity using a LIST of JPA Entity Sources
-	 * @param <T>
-	 * @param optional - the JPA entity Source LIST
-	 * @param type - The API model type to map to.
-	 * @return
+	 * @param entitySet - the collection entity set. // GRAD2-1929 Refactoring/Linting
+	 * @param T - The API model type to map to. // GRAD2-1929 Refactoring/Linting
 	 */
 	public <T> ResponseEntity<List<T>> GET(Collection<?> entitySet, Type T) {
 		if (entitySet == null || entitySet.isEmpty()) {
-			return new ResponseEntity<List<T>>(new LinkedList<T>(), HttpStatus.OK);
+			return new ResponseEntity<>(new LinkedList<>(), HttpStatus.OK);
 		} else {
 			List<T> list = modelMapper.map(Arrays.asList(entitySet.toArray()), T);
-			return new ResponseEntity<List<T>>(list, HttpStatus.OK);
+			return new ResponseEntity<>(list, HttpStatus.OK);
 		}
 	}
 	
@@ -81,19 +78,16 @@ public class ResponseHelper {
 	 * Get Response Entity using a LIST of REST Model objects. This
 	 * should only be used when you need fine-grained control over the model
 	 * mapping and the mapping gets performed within the API.
-	 * @param <T>
-	 * @param optional - the JPA entity Source LIST
-	 * @return
+	 * @param list - the JPA entity Source LIST //GRAD2-1929 Refactoring/Linting
 	 */
 	public <T> ResponseEntity<List<T>> GET(List<T> list) {
-		return new ResponseEntity<List<T>>(list, HttpStatus.OK);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 	/**
 	 * Get Response entity directly from API model value
-	 * @param <T>
-	 * @param value
-	 * @return
+	 * @param value - value //GRAD2-1929 Refactoring/Linting
+	 * @return responseEntity - response json object
 	 */
 	public <T> ResponseEntity<T> GET(T value) {
 		if (value == null) {
@@ -165,12 +159,12 @@ public class ResponseHelper {
 	
 	/**
 	 * Add converters to be used in model mapping.
-	 * @param converters
+	 * @param converters - coverter
 	 */
 	protected void addConverters(Converter<?, ?>... converters) {
-		Stream.of(converters).forEach((converter) -> {
-			modelMapper.addConverter(converter);
-		});
+		Stream.of(converters).forEach(converter ->
+			modelMapper.addConverter(converter)
+		);
 	}
 
 }

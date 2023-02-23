@@ -8,8 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)  //GRAD2-1929 Refactoring/Linting
 @Entity
 @Table(name = "ASSESSMENT_CODE")
 public class AssessmentEntity extends BaseEntity {

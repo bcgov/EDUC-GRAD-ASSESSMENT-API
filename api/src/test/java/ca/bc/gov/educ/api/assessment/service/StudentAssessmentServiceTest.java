@@ -1,6 +1,5 @@
 package ca.bc.gov.educ.api.assessment.service;
 
-import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
 import ca.bc.gov.educ.api.assessment.model.dto.School;
 import ca.bc.gov.educ.api.assessment.model.dto.StudentAssessment;
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentEntity;
@@ -21,7 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -55,8 +54,10 @@ public class StudentAssessmentServiceTest {
     @MockBean
     WebClient webClient;
 
+    @SuppressWarnings("rawtypes")
     @Mock
     private WebClient.RequestHeadersSpec requestHeadersMock;
+    @SuppressWarnings("rawtypes")
     @Mock
     private WebClient.RequestHeadersUriSpec requestHeadersUriMock;
     @Mock
@@ -87,7 +88,7 @@ public class StudentAssessmentServiceTest {
         school.setMinCode("12345678");
         school.setSchoolName("Test School");
 
-        when(studentAssessmentRepo.findByPen(studentAssessmentId.getPen())).thenReturn(Arrays.asList(studentAssessmentEntity));
+        when(studentAssessmentRepo.findByPen(studentAssessmentId.getPen())).thenReturn(List.of(studentAssessmentEntity));
         when(assessmentRepo.findByAssessmentCode("LTE10")).thenReturn(Optional.of(assessment));
 
         when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
@@ -97,8 +98,8 @@ public class StudentAssessmentServiceTest {
         when(this.responseMock.bodyToMono(School.class)).thenReturn(Mono.just(school));
 
         var result = studentAssessmentService.getStudentAssessmentList(studentAssessmentId.getPen(), "accessToken", true);
-        assertThat(result).isNotNull();
-        assertThat(result.isEmpty()).isFalse();
+        //GRAD2 - 1929 - Refactoring/Linting - Used isNotEmpty() instead of isEmpty().isFalse(), and chained isNotNull() and isNotEmpty()
+        assertThat(result).isNotNull().isNotEmpty();
         StudentAssessment responseStudentAssessment = result.get(0);
         assertThat(responseStudentAssessment.getAssessmentCode()).isEqualTo(assessment.getAssessmentCode());
         assertThat(responseStudentAssessment.getSpecialCase()).isEqualTo(studentAssessmentEntity.getSpecialCase());
