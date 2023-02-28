@@ -156,7 +156,7 @@ public class AssessmentRequirementService {
 
         AssessmentRequirementEntity currentEntity = assessmentRequirementRepository.findByAssessmentCodeAndRuleCode(
                 assessmentRequirementEntity.getAssessmentCode(), assessmentRequirementEntity.getRuleCode());
-        logger.info("Create AssessmentRequirement: assessment [{}], rule [{}]", assessmentCode, ruleCode);
+        logger.debug("Create AssessmentRequirement: assessment [{}], rule [{}]", assessmentCode, ruleCode);
         if (currentEntity == null) {
             // Add
             return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(assessmentRequirementEntity));
