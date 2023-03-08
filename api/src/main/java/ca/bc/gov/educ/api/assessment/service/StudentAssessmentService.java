@@ -18,7 +18,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -78,8 +77,9 @@ public class StudentAssessmentService {
         } catch (Exception e) {
             logger.debug(MessageFormat.format("Exception: {0}",e));
         }
+        //Grad2-1929 Refactoring/Linting - replaced Collections with studentAssessment List to sort
         if (sortForUI) {
-            Collections.sort(studentAssessment, Comparator.comparing(StudentAssessment::getPen)
+            studentAssessment.sort(Comparator.comparing(StudentAssessment::getPen)
                     .thenComparing(StudentAssessment::getAssessmentCode)
                     .thenComparing(StudentAssessment::getSessionDate));
         }

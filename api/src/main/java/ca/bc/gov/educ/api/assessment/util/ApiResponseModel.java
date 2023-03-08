@@ -21,7 +21,7 @@ public class ApiResponseModel<T> {
 	}
 
 	public static <T> ApiResponseModel<T> SUCCESS(T value) {
-		return new ApiResponseModel<T>(CodeEnum.SUCCESS, value);
+		return new ApiResponseModel<>(CodeEnum.SUCCESS, value);
 	}
 
 	public static <T> ApiResponseModel<T> ERROR(T value) {
@@ -103,12 +103,13 @@ public class ApiResponseModel<T> {
 			return null;
 		}
 	}
-
+	//GRAD2-1929 Refactoring/Linting removed code initializer
 	@JsonProperty("code")
-	private CodeEnum code = null;
+	private CodeEnum code;
 
+	//GRAD2-1929 Refactoring/Linting removed message initializer
 	@JsonProperty("value")
-	private T value = null;
+	private T value;
 
 	@JsonProperty("messages")
 	@Valid

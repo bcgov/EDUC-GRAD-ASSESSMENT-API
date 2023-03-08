@@ -40,8 +40,8 @@ public class GradAssessmentApiUtils {
 
         return date;
     }
-
-    public static Date parseDate (String dateString, String dateFormat) throws ParseException {
+    //Grad2-1929 Refactoring/Linting - removed never thrown parseException declaration
+    public static Date parseDate (String dateString, String dateFormat){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
         Date date = new Date();
 

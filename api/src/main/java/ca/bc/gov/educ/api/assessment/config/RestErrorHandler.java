@@ -65,20 +65,11 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
         validation.clear();
         return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
-
+    //GRAD2-1929 - Refactoring/Linting. Removing duplicate code by adding a new method.
     @ExceptionHandler(value = {OptimisticEntityLockException.class})
     protected ResponseEntity<Object> handleOptimisticEntityLockException(OptimisticEntityLockException ex, WebRequest request) {
 
-        log.error("EXCEPTION IS: " + ex.getClass().getName(), ex);
-        log.error(ERROR_MESSAGE + ex.getClass().getName(), ex);
-        ApiResponseModel<?> response = ApiResponseModel.ERROR(null);
-        validation.ifErrors(response::addErrorMessages);
-        validation.ifWarnings(response::addWarningMessages);
-        if (!validation.hasErrors()) {
-            response.addMessageItem(ex.getLocalizedMessage(), MessageTypeEnum.ERROR);
-        }
-        validation.clear();
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return getObjectResponseEntity(ex, request);
     }
 
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
@@ -87,12 +78,9 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
         String msg = ex.getLocalizedMessage();
 
         Throwable cause = ex.getCause();
-        if (cause instanceof ConstraintViolationException) {
-            ConstraintViolationException contraintViolation = (ConstraintViolationException) cause;
-            if ("23000".equals(contraintViolation.getSQLState()) && ex.getRootCause() != null) {
-                    msg = ex.getRootCause().getMessage();
-            }
-        }
+        //GRAD2-1929 efactoring/Linting - assigned variable pattern.
+        if (cause instanceof ConstraintViolationException constraintViolation && "23000".equals(constraintViolation.getSQLState()) && ex.getRootCause() != null)
+            msg = ex.getRootCause().getMessage();
 
         ApiResponseModel<?> response = ApiResponseModel.ERROR(null, msg);
         validation.ifErrors(response::addErrorMessages);
@@ -104,6 +92,11 @@ public class RestErrorHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {Exception.class})
     protected ResponseEntity<Object> handleUncaughtException(Exception ex, WebRequest request) {
 
+        return getObjectResponseEntity(ex, request);
+    }
+
+    //GRAD2-1929 - Refactoring/Linting. Removing duplicate code by adding a new method.
+    private ResponseEntity<Object> getObjectResponseEntity(Exception ex, WebRequest request) {
         log.error("EXCEPTION IS: " + ex.getClass().getName(), ex);
         log.error(ERROR_MESSAGE + ex.getClass().getName(), ex);
         ApiResponseModel<?> response = ApiResponseModel.ERROR(null);
