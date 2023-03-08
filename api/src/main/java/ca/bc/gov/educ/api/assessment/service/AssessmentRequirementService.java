@@ -149,14 +149,12 @@ public class AssessmentRequirementService {
 
         AssessmentRequirementEntity currentEntity = assessmentRequirementRepository.findByAssessmentCodeAndRuleCode(
                 assessmentRequirementEntity.getAssessmentCode(), assessmentRequirementEntity.getRuleCode());
-        logger.info("Create AssessmentRequirement: assessment [{}], rule [{}]", assessmentCode, ruleCode);
+        logger.debug("Create AssessmentRequirement: assessment [{}], rule [{}]", assessmentCode, ruleCode);
         /*
         Add and Update
         GRAD2 -1929 Refactoring/Linting reducing the lines by using requireNonNullElse
         */
         return assessmentRequirementTransformer.transformToDTO(assessmentRequirementRepository.save(Objects.requireNonNullElse(currentEntity, assessmentRequirementEntity)));
-
-
     }
 
     private AssessmentRequirementEntity populate(String assessmentCode, String assessmentRequirementCode) {
