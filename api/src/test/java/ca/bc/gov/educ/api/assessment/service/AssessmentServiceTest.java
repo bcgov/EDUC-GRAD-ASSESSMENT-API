@@ -2,14 +2,12 @@ package ca.bc.gov.educ.api.assessment.service;
 
 import ca.bc.gov.educ.api.assessment.model.dto.*;
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentEntity;
-import ca.bc.gov.educ.api.assessment.model.entity.StudentAssessmentEntity;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRepository;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

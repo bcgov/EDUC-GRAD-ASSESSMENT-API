@@ -1,7 +1,5 @@
 package ca.bc.gov.educ.api.assessment.controller;
 
-import ca.bc.gov.educ.api.assessment.model.dto.Assessment;
-import ca.bc.gov.educ.api.assessment.model.dto.StudentAssessment;
 import ca.bc.gov.educ.api.assessment.service.StudentAssessmentService;
 import ca.bc.gov.educ.api.assessment.util.GradValidation;
 import ca.bc.gov.educ.api.assessment.util.ResponseHelper;
@@ -15,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

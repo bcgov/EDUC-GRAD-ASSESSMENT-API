@@ -53,10 +53,10 @@ public final class LogHelper {
     /**
      * WebClient to call other REST APIs
      *
-     * @param method
-     * @param url
-     * @param responseCode
-     * @param correlationID
+     * @param method - http method //Grad2-1929 Refactoring/Linting
+     * @param url - url
+     * @param responseCode - response code
+     * @param correlationID - correlationID
      */
     public static void logClientHttpReqResponseDetails(@NonNull final HttpMethod method, final String url, final int responseCode, final List<String> correlationID, final boolean logging) {
         if (!logging) return;

@@ -53,7 +53,8 @@ public class StudentAssessmentController {
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }else {
             logger.debug("#Get All Student Assessments by PEN: {}",pen);
-	    	List<StudentAssessment> studentAssessmentList = studentAssessmentService.getStudentAssessmentList(pen,accessToken.replaceAll("Bearer ", ""),sortForUI);
+            //GRAD2-1929 Refactoring/Linting replaceAll --> replace
+	    	List<StudentAssessment> studentAssessmentList = studentAssessmentService.getStudentAssessmentList(pen,accessToken.replace("Bearer ", ""),sortForUI);
 	    	if(studentAssessmentList.isEmpty()) {
 	        	return response.NO_CONTENT();
 	        }

@@ -29,8 +29,9 @@ public class RequestResponseInterceptor implements AsyncHandlerInterceptor {
         this.validation = validation;
     }
 
+    //Grad2-1929 Refactoring/Linting - removed never thrown Exception declaration
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // for async this is called twice so need a check to avoid setting twice.
         if (request.getAttribute("startTime") == null) {
             final long startTime = Instant.now().toEpochMilli();
@@ -41,8 +42,7 @@ public class RequestResponseInterceptor implements AsyncHandlerInterceptor {
 
         // username
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth instanceof JwtAuthenticationToken) {
-            JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) auth;
+        if (auth instanceof JwtAuthenticationToken authenticationToken) {
             Jwt jwt = (Jwt) authenticationToken.getCredentials();
             String username = JwtUtil.getName(jwt);
             if (username != null) {
@@ -63,9 +63,9 @@ public class RequestResponseInterceptor implements AsyncHandlerInterceptor {
     @Override
     public void afterCompletion(@NonNull final HttpServletRequest request, final HttpServletResponse response, @NonNull final Object handler, final Exception ex) {
         LogHelper.logServerHttpReqResponseDetails(request, response, constants.isSplunkLogHelperEnabled());
-        val correlationID = request.getHeader(constants.CORRELATION_ID);
+        val correlationID = request.getHeader(EducAssessmentApiConstants.CORRELATION_ID);
         if (correlationID != null) {
-            response.setHeader(constants.CORRELATION_ID, request.getHeader(constants.CORRELATION_ID));
+            response.setHeader(EducAssessmentApiConstants.CORRELATION_ID, request.getHeader(EducAssessmentApiConstants.CORRELATION_ID));
         }
     }
 

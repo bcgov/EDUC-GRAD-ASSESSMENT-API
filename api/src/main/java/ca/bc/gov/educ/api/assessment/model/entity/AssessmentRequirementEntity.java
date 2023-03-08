@@ -10,11 +10,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Immutable;
 
 import lombok.Data;
 
 @Data
+@EqualsAndHashCode(callSuper = true) //GRAD2-1929 Refactoring/Linting
 @Immutable
 @Entity
 @Table(name = "ASSESSMENT_REQUIREMENT")
