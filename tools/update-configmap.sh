@@ -26,7 +26,8 @@ FLB_CONFIG="[SERVICE]
    Record hostname \${HOSTNAME}
 [OUTPUT]
    Name   stdout
-   Match  *
+   Match  absolutely_nothing_bud
+   Log_Level    off
 [OUTPUT]
    Name  splunk
    Match *
