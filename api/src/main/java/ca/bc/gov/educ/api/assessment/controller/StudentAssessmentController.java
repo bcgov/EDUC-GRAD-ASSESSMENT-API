@@ -43,7 +43,9 @@ public class StudentAssessmentController {
     @GetMapping(EducAssessmentApiConstants.GET_STUDENT_ASSESSMENT_BY_PEN_MAPPING)
     @PreAuthorize("hasAuthority('SCOPE_READ_GRAD_STUDENT_ASSESSMENT_DATA')")
     @Operation(summary = "Find All Student Assessments by PEN", description = "Get All Student Assessments by PEN", tags = { "Student Assessments" })
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "204", description = "NO CONTENT")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"),
+                            @ApiResponse(responseCode = "204", description = "NO CONTENT"),
+                            @ApiResponse(responseCode = "400", description = "BAD REQUEST")})
     public ResponseEntity<List<StudentAssessment>> getStudentAssessmentByPEN(
             @PathVariable String pen, @RequestParam(value = "sortForUI",required = false,defaultValue = "false") boolean sortForUI,
             @RequestHeader(name="Authorization") String accessToken) {
@@ -65,7 +67,7 @@ public class StudentAssessmentController {
     @GetMapping(EducAssessmentApiConstants.GET_STUDENT_ASSESSMENT_BY_PEN_AND_CODE_MAPPING)
     @PreAuthorize("hasAuthority('SCOPE_READ_GRAD_STUDENT_ASSESSMENT_DATA')")
     @Operation(summary = "Find Student Assessments by Assessment Code and PEN", description = "Get Student Assessments by Assessment Code and PEN", tags = { "Student Assessments" })
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "204", description = "NO CONTENT")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "400", description = "BAD REQUEST")})
     public ResponseEntity<List<StudentAssessment>> getStudentAssessmentByAssessmentCodeAndPEN(
             @PathVariable String assmtCode, @PathVariable String pen,
             @RequestParam(value = "sortForUI",required = false,defaultValue = "false") boolean sortForUI,
