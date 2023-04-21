@@ -105,4 +105,43 @@ public class StudentAssessmentServiceTest {
         assertThat(responseStudentAssessment.getSpecialCase()).isEqualTo(studentAssessmentEntity.getSpecialCase());
         assertThat(responseStudentAssessment.getMincodeAssessmentName()).isEqualTo(school.getSchoolName());
     }
+
+    @Test
+    public void testGetStudentAssessment() {
+        // ID
+        StudentAssessmentId studentAssessmentId = new StudentAssessmentId();
+        studentAssessmentId.setPen("123456789");
+        studentAssessmentId.setAssessmentCode("LTE10");
+        studentAssessmentId.setSessionDate("2020-05");
+
+        StudentAssessmentEntity studentAssessmentEntity = new StudentAssessmentEntity();
+        studentAssessmentEntity.setAssessmentKey(studentAssessmentId);
+        studentAssessmentEntity.setSpecialCase("special");
+        studentAssessmentEntity.setMincodeAssessment("12345678");
+
+        AssessmentEntity assessment = new AssessmentEntity();
+        assessment.setAssessmentCode("LTE10");
+        assessment.setAssessmentName("asdas");
+
+        School school = new School();
+        school.setMinCode("12345678");
+        school.setSchoolName("Test School");
+
+        when(studentAssessmentRepo.findByAssessmentKeyPenAndAssessmentKeyAssessmentCode(studentAssessmentId.getPen(), studentAssessmentId.getAssessmentCode())).thenReturn(List.of(studentAssessmentEntity));
+        when(assessmentRepo.findByAssessmentCode("LTE10")).thenReturn(Optional.of(assessment));
+
+        when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
+        when(this.requestHeadersUriMock.uri(String.format(constants.getSchoolNameByMincodeUrl(), studentAssessmentEntity.getMincodeAssessment()))).thenReturn(this.requestHeadersMock);
+        when(this.requestHeadersMock.headers(any(Consumer.class))).thenReturn(this.requestHeadersMock);
+        when(this.requestHeadersMock.retrieve()).thenReturn(this.responseMock);
+        when(this.responseMock.bodyToMono(School.class)).thenReturn(Mono.just(school));
+
+        var result = studentAssessmentService.getStudentAssessment(studentAssessmentId.getPen(), studentAssessmentId.getAssessmentCode(), "accessToken", true);
+        //GRAD2 - 1929 - Refactoring/Linting - Used isNotEmpty() instead of isEmpty().isFalse(), and chained isNotNull() and isNotEmpty()
+        assertThat(result).isNotNull().isNotEmpty();
+        StudentAssessment responseStudentAssessment = result.get(0);
+        assertThat(responseStudentAssessment.getAssessmentCode()).isEqualTo(assessment.getAssessmentCode());
+        assertThat(responseStudentAssessment.getSpecialCase()).isEqualTo(studentAssessmentEntity.getSpecialCase());
+        assertThat(responseStudentAssessment.getMincodeAssessmentName()).isEqualTo(school.getSchoolName());
+    }
 }

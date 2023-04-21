@@ -55,25 +55,7 @@ public class StudentAssessmentService {
         List<StudentAssessment> studentAssessment = new ArrayList<>();
         try {
             studentAssessment = studentAssessmentTransformer.transformToDTO(studentAssessmentRepo.findByPen(pen));
-            studentAssessment.forEach(sA -> {
-                Assessment assessment = assessmentTransformer.transformToDTO(assessmentRepo.findByAssessmentCode(sA.getAssessmentCode()));
-                if (assessment != null) {
-                    sA.setAssessmentName(assessment.getAssessmentName());
-                    sA.setAssessmentDetails(assessment);
-                }
-
-                if (StringUtils.isNotBlank(sA.getMincodeAssessment())) {
-                    School schObj = webClient.get()
-                            .uri(String.format(constants.getSchoolNameByMincodeUrl(), sA.getMincodeAssessment()))
-                            .headers(h -> h.setBearerAuth(accessToken))
-                            .retrieve()
-                            .bodyToMono(School.class)
-                            .block();
-                    if (schObj != null)
-                        sA.setMincodeAssessmentName(schObj.getSchoolName());
-                    sA.setHasMoreInfo(true);
-                }
-            });
+            populateFields(studentAssessment, accessToken);
         } catch (Exception e) {
             logger.debug(MessageFormat.format("Exception: {0}",e));
         }
@@ -84,5 +66,39 @@ public class StudentAssessmentService {
                     .thenComparing(StudentAssessment::getSessionDate));
         }
         return studentAssessment;
+    }
+
+    public List<StudentAssessment> getStudentAssessment(String pen, String assessmentCode, String accessToken, boolean sortForUI) {
+        List<StudentAssessment> studentAssessment = studentAssessmentTransformer.transformToDTO(
+            studentAssessmentRepo.findByAssessmentKeyPenAndAssessmentKeyAssessmentCode(pen, assessmentCode));
+        populateFields(studentAssessment, accessToken);
+        if (sortForUI) {
+            studentAssessment.sort(Comparator.comparing(StudentAssessment::getPen)
+                    .thenComparing(StudentAssessment::getAssessmentCode)
+                    .thenComparing(StudentAssessment::getSessionDate));
+        }
+        return studentAssessment;
+    }
+
+    private void populateFields(List<StudentAssessment> studentAssessmentList, String accessToken) {
+        studentAssessmentList.forEach(sA -> {
+            Assessment assessment = assessmentTransformer.transformToDTO(assessmentRepo.findByAssessmentCode(sA.getAssessmentCode()));
+            if (assessment != null) {
+                sA.setAssessmentName(assessment.getAssessmentName());
+                sA.setAssessmentDetails(assessment);
+            }
+
+            if (StringUtils.isNotBlank(sA.getMincodeAssessment())) {
+                School schObj = webClient.get()
+                        .uri(String.format(constants.getSchoolNameByMincodeUrl(), sA.getMincodeAssessment()))
+                        .headers(h -> h.setBearerAuth(accessToken))
+                        .retrieve()
+                        .bodyToMono(School.class)
+                        .block();
+                if (schObj != null)
+                    sA.setMincodeAssessmentName(schObj.getSchoolName());
+                sA.setHasMoreInfo(true);
+            }
+        });
     }
 }
