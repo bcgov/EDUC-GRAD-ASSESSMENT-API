@@ -69,9 +69,13 @@ public class StudentAssessmentService {
     }
 
     public List<StudentAssessment> getStudentAssessment(String pen, String assessmentCode, String accessToken, boolean sortForUI) {
-        List<StudentAssessment> studentAssessment = studentAssessmentTransformer.transformToDTO(
-            studentAssessmentRepo.findByAssessmentKeyPenAndAssessmentKeyAssessmentCode(pen, assessmentCode));
-        populateFields(studentAssessment, accessToken);
+        List<StudentAssessment> studentAssessment = new ArrayList<>();
+        try {
+            studentAssessment = studentAssessmentTransformer.transformToDTO(studentAssessmentRepo.findByAssessmentKeyPenAndAssessmentKeyAssessmentCode(pen, assessmentCode));
+            populateFields(studentAssessment, accessToken);
+        } catch (Exception e) {
+            logger.debug(MessageFormat.format("Exception: {0}",e));
+        }
         if (sortForUI) {
             studentAssessment.sort(Comparator.comparing(StudentAssessment::getPen)
                     .thenComparing(StudentAssessment::getAssessmentCode)
