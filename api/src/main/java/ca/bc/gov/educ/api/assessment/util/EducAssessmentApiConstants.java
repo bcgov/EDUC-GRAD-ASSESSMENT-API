@@ -23,6 +23,7 @@ public class EducAssessmentApiConstants {
     public static final String GET_STUDENT_ASSESSMENT_BY_ID_MAPPING = "/{studentAssessmentId}";
     public static final String GET_STUDENT_ASSESSMENT_BY_PEN_MAPPING = "/pen/{pen}";
     public static final String GET_ASSESSMENT_ALGORITHM_DATA_BY_PEN_MAPPING = "/assessment-algorithm/pen/{pen}";
+    public static final String GET_STUDENT_ASSESSMENT_BY_PEN_AND_CODE_MAPPING = "/{assmtCode}/pen/{pen}";
 
 
     //Attribute Constants
