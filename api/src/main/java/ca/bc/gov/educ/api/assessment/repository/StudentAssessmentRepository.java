@@ -13,4 +13,6 @@ public interface StudentAssessmentRepository extends JpaRepository<StudentAssess
 	@Query("select c from StudentAssessmentEntity c where c.assessmentKey.pen=:pen")
     Iterable<StudentAssessmentEntity> findByPen(String pen);
 
+    Iterable<StudentAssessmentEntity> findByAssessmentKeyPenAndAssessmentKeyAssessmentCode(String pen, String assessmentCode);
+
 }
