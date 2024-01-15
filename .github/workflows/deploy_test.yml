@@ -70,7 +70,7 @@ jobs:
           | oc apply -f -
           
           # UPDATE Configmaps
-          curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/main/tools/update-configmap.sh | bash /dev/stdin test ${{ env.REPO_NAME }} ${{ env.NAMESPACE }} ${{ secrets.SPLUNK_TOKEN }}          
+          curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/main/tools/config/update-configmap.sh | bash /dev/stdin test ${{ env.REPO_NAME }} ${{ env.NAMESPACE }} ${{ secrets.SPLUNK_TOKEN }}          
           
           # Start rollout (if necessary) and follow it
           oc rollout latest dc/${{ env.SPRING_BOOT_IMAGE_NAME }} 2> /dev/null \
