@@ -5,6 +5,7 @@ envValue=$1
 APP_NAME=$2
 OPENSHIFT_NAMESPACE=$3
 SPLUNK_TOKEN=$4
+APP_LOG_LEVEL=$5
 
 SPLUNK_URL="gww.splunk.educ.gov.bc.ca"
 FLB_CONFIG="[SERVICE]
@@ -48,7 +49,7 @@ PARSER_CONFIG="
 ###########################################################
 echo Creating config map "$APP_NAME"-config-map
 oc create -n "$OPENSHIFT_NAMESPACE"-"$envValue" configmap "$APP_NAME"-config-map \
- --from-literal=APP_LOG_LEVEL="INFO" \
+ --from-literal=APP_LOG_LEVEL="$APP_LOG_LEVEL" \
  --from-literal=ENABLE_FLYWAY="true" \
  --from-literal=GRAD_PROGRAM_API="http://educ-grad-program-api.$OPENSHIFT_NAMESPACE-$envValue.svc.cluster.local:8080/" \
  --from-literal=GRAD_TRAX_API="http://educ-grad-trax-api.$OPENSHIFT_NAMESPACE-$envValue.svc.cluster.local:8080/" \
