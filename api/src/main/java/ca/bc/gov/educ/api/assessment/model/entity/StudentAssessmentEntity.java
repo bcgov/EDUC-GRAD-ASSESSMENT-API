@@ -22,6 +22,9 @@ public class StudentAssessmentEntity {
     
     @Column(name = "ASSM_PROFICIENCY_SCORE", nullable = true)
     private Double proficiencyScore;
+
+    @Column(name = "WROTE_FLAG", nullable = true)
+    private String wroteFlag;
     
     @Column(name = "MINCODE_ASSMT", nullable = true)
     private String mincodeAssessment;

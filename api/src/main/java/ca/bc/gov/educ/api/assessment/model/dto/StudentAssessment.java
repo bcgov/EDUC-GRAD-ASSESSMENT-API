@@ -16,6 +16,7 @@ public class StudentAssessment {
     private String exceededWriteFlag;    
     private Double proficiencyScore;
     private Assessment assessmentDetails;
+    private String wroteFlag;
     private String mincodeAssessment;
     private String mincodeAssessmentName;
     private boolean hasMoreInfo;
@@ -41,6 +42,6 @@ public class StudentAssessment {
 		return "StudentAssessment [pen=" + pen + ", assessmentCode=" + assessmentCode + ", assessmentName="
 				+ assessmentName + ", sessionDate=" + sessionDate + ", gradReqMet=" + gradReqMet + ", specialCase="
 				+ specialCase + ", exceededWriteFlag=" + exceededWriteFlag + ", proficiencyScore=" + proficiencyScore
-				+ ", assessmentDetails=" + assessmentDetails + ", mincodeAssessment=" + mincodeAssessment + "]";
+				+ ", assessmentDetails=" + assessmentDetails + ", mincodeAssessment=" + mincodeAssessment + ", wroteFlag=" + wroteFlag + "]";
 	}		 
 }
