@@ -4,24 +4,25 @@ env:
   # 🖊️ EDIT your repository secrets to log into your OpenShift cluster and set up the context.
   # See https://github.com/redhat-actions/oc-login#readme for how to retrieve these values.
   # To get a permanent token, refer to https://github.com/redhat-actions/oc-login/wiki/Using-a-Service-Account-for-GitHub-Actions
-  OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
+  OPENSHIFT_SERVER: ${{ vars.OPENSHIFT_SERVER }}
   OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
-  OPENSHIFT_NAMESPACE: ${{ secrets.GRAD_NAMESPACE }}-test
+  OPENSHIFT_NAMESPACE: ${{ vars.GRAD_NAMESPACE }}-test
+  COMMON_NAMESPACE: ${{ vars.COMMON_NAMESPACE }}
+  BUSINESS_NAMESPACE: ${{ vars.GRAD_BUSINESS_NAMESPACE }}
 
-  SPRING_BOOT_IMAGE_NAME: educ-grad-assessment-api-dc
+  SPRING_BOOT_IMAGE_NAME: educ-grad-student-api-dc
 
   REPO_NAME: "educ-grad-assessment-api"
-  APP_DOMAIN: ${{ secrets.APP_DOMAIN }}
-  NAMESPACE: ${{ secrets.GRAD_NAMESPACE }}
+  APP_DOMAIN: ${{ vars.APP_DOMAIN }}
+  GRAD_NAMESPACE: ${{ vars.GRAD_NAMESPACE }}
   TAG: "latest"
-
+  BRANCH: "main"
   MIN_CPU: "20m"
   MAX_CPU: "100m"
   MIN_MEM: "250Mi"
   MAX_MEM: "1024Mi"
   MIN_REPLICAS: "3"
   MAX_REPLICAS: "5"
-
 
 on:
   # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
@@ -30,7 +31,6 @@ on:
 jobs:
   deploy-to-openshift-test:
     name: Deploy to OpenShift TEST
-    # ubuntu-20.04 can also be used.
     runs-on: ubuntu-20.04
     environment: test
 
@@ -63,8 +63,8 @@ jobs:
           oc rollout cancel dc/${{ env.SPRING_BOOT_IMAGE_NAME }} 2> /dev/null \
           || true && echo "No rollout in progress"
           
-          oc tag ${{ env.NAMESPACE }}-dev/${{ env.REPO_NAME }}:${{ steps.get-latest-tag.outputs.tag }} \
-          ${{ env.NAMESPACE }}-test/${{ env.REPO_NAME }}:${{ steps.get-latest-tag.outputs.tag }}
+          oc tag ${{ env.GRAD_NAMESPACE }}-dev/${{ env.REPO_NAME }}:${{ steps.get-latest-tag.outputs.tag }} \
+          ${{ env.GRAD_NAMESPACE }}-test/${{ env.REPO_NAME }}:${{ steps.get-latest-tag.outputs.tag }}
           
           # Process and apply deployment template
           oc process -f tools/openshift/api.dc.yaml -p IS_NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p REPO_NAME=${{ env.REPO_NAME }} \
@@ -73,11 +73,13 @@ jobs:
           -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }} | oc apply -f -
           
           # UPDATE Configmaps
-          curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/main/tools/config/update-configmap.sh \
+          curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/${{ env.BRANCH }}/tools/config/update-configmap.sh \
           | bash /dev/stdin \
           test \
           ${{ env.REPO_NAME }} \
-          ${{ env.NAMESPACE }} \
+          ${{ env.GRAD_NAMESPACE }} \
+          ${{ env.COMMON_NAMESPACE }} \
+          ${{ env.BUSINESS_NAMESPACE }} \
           ${{ secrets.SPLUNK_TOKEN }} \
           ${{ vars.APP_LOG_LEVEL }}
           
