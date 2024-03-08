@@ -53,8 +53,8 @@ echo Creating config map "$APP_NAME"-config-map
 oc create -n "$GRAD_NAMESPACE"-"$envValue" configmap "$APP_NAME"-config-map \
   --from-literal=APP_LOG_LEVEL="$APP_LOG_LEVEL" \
   --from-literal=ENABLE_FLYWAY="true" \
- --from-literal=GRAD_PROGRAM_API="http://educ-grad-program-api.$GRAD_NAMESPACE-$envValue.svc.cluster.local:8080/" \
- --from-literal=GRAD_TRAX_API="http://educ-grad-trax-api.$GRAD_NAMESPACE-$envValue.svc.cluster.local:8080/" \
+ --from-literal=GRAD_PROGRAM_API="http://educ-grad-program-api.$GRAD_NAMESPACE.svc.cluster.local:8080/" \
+ --from-literal=GRAD_TRAX_API="http://educ-grad-trax-api.$GRAD_NAMESPACE.svc.cluster.local:8080/" \
   --dry-run=client -o yaml | oc apply -f -
 echo
 
