@@ -53,3 +53,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### local dev ###
+/src/main/resources/application-local.yaml
