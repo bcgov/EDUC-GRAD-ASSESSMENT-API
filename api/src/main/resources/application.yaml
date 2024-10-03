@@ -67,6 +67,9 @@ logging:
         boot:
           autoconfigure:
             logging: ${SPRING_BOOT_AUTOCONFIG_LOG_LEVEL}
+    com:
+      zaxxer:
+        hikari: ERROR
 
 #Local properties
 server:
@@ -75,6 +78,7 @@ server:
       worker: 128
       io: 16
   #port: ${HTTP_PORT}
+  max-http-request-header-size: 20000
 
 #API Documentation
 springdoc:
