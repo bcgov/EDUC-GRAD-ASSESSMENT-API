@@ -6,7 +6,7 @@ env:
   # To get a permanent token, refer to https://github.com/redhat-actions/oc-login/wiki/Using-a-Service-Account-for-GitHub-Actions
   OPENSHIFT_SERVER: ${{ vars.OPENSHIFT_SERVER }}
   OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
-  OPENSHIFT_NAMESPACE: ${{ vars.GRAD_NAMESPACE }}-test
+  OPENSHIFT_NAMESPACE: ${{ vars.GRAD_NAMESPACE }}-prod
   COMMON_NAMESPACE: ${{ vars.COMMON_NAMESPACE }}
   BUSINESS_NAMESPACE: ${{ vars.GRAD_BUSINESS_NAMESPACE }}
 
