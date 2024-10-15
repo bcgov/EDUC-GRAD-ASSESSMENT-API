@@ -63,8 +63,8 @@ jobs:
           oc rollout cancel dc/${{ env.SPRING_BOOT_IMAGE_NAME }} 2> /dev/null \
           || true && echo "No rollout in progress"
           
-          oc tag ${{ env.NAMESPACE }}-test/${{ env.REPO_NAME }}:${{ steps.get-latest-tag.outputs.tag }} \
-          ${{ env.NAMESPACE }}-prod/${{ env.REPO_NAME }}:${{ steps.get-latest-tag.outputs.tag }}
+          oc tag ${{ env.GRAD_NAMESPACE }}-test/${{ env.REPO_NAME }}:${{ steps.get-latest-tag.outputs.tag }} \
+          ${{ env.GRAD_NAMESPACE }}-prod/${{ env.REPO_NAME }}:${{ steps.get-latest-tag.outputs.tag }}
           
           # Process and apply deployment template
           oc process -f tools/openshift/api.dc.yaml -p IS_NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p REPO_NAME=${{ env.REPO_NAME }} \
