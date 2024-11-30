@@ -100,7 +100,7 @@ public class StudentAssessmentService {
                         .bodyToMono(School.class)
                         .block();
                 if (schObj != null)
-                    sA.setMincodeAssessmentName(schObj.getSchoolName());
+                    sA.setMincodeAssessmentName(schObj.getDisplayName());
                 sA.setHasMoreInfo(true);
             }
         });
