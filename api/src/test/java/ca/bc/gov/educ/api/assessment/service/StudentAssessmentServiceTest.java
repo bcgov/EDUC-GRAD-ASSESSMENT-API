@@ -85,8 +85,8 @@ public class StudentAssessmentServiceTest {
         assessment.setAssessmentName("asdas");
 
         School school = new School();
-        school.setMinCode("12345678");
-        school.setSchoolName("Test School");
+        school.setMincode("12345678");
+        school.setDisplayName("Test School");
 
         when(studentAssessmentRepo.findByPen(studentAssessmentId.getPen())).thenReturn(List.of(studentAssessmentEntity));
         when(assessmentRepo.findByAssessmentCode("LTE10")).thenReturn(Optional.of(assessment));
@@ -103,7 +103,7 @@ public class StudentAssessmentServiceTest {
         StudentAssessment responseStudentAssessment = result.get(0);
         assertThat(responseStudentAssessment.getAssessmentCode()).isEqualTo(assessment.getAssessmentCode());
         assertThat(responseStudentAssessment.getSpecialCase()).isEqualTo(studentAssessmentEntity.getSpecialCase());
-        assertThat(responseStudentAssessment.getMincodeAssessmentName()).isEqualTo(school.getSchoolName());
+        assertThat(responseStudentAssessment.getMincodeAssessmentName()).isEqualTo(school.getDisplayName());
     }
 
     @Test
@@ -124,8 +124,8 @@ public class StudentAssessmentServiceTest {
         assessment.setAssessmentName("asdas");
 
         School school = new School();
-        school.setMinCode("12345678");
-        school.setSchoolName("Test School");
+        school.setMincode("12345678");
+        school.setDisplayName("Test School");
 
         when(studentAssessmentRepo.findByAssessmentKeyPenAndAssessmentKeyAssessmentCode(studentAssessmentId.getPen(), studentAssessmentId.getAssessmentCode())).thenReturn(List.of(studentAssessmentEntity));
         when(assessmentRepo.findByAssessmentCode("LTE10")).thenReturn(Optional.of(assessment));
@@ -142,6 +142,6 @@ public class StudentAssessmentServiceTest {
         StudentAssessment responseStudentAssessment = result.get(0);
         assertThat(responseStudentAssessment.getAssessmentCode()).isEqualTo(assessment.getAssessmentCode());
         assertThat(responseStudentAssessment.getSpecialCase()).isEqualTo(studentAssessmentEntity.getSpecialCase());
-        assertThat(responseStudentAssessment.getMincodeAssessmentName()).isEqualTo(school.getSchoolName());
+        assertThat(responseStudentAssessment.getMincodeAssessmentName()).isEqualTo(school.getDisplayName());
     }
 }

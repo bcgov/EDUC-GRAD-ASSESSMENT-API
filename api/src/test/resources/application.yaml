@@ -70,7 +70,7 @@ springdoc:
 endpoint:
   grad-trax-api:
     school-name-by-mincode:
-      url: https://educ-grad-trax-api-77c02f-dev.apps.silver.devops.gov.bc.ca/api/v1/trax/school/%s
+      url: https://educ-grad-trax-api-77c02f-dev.apps.silver.devops.gov.bc.ca/api/v1/trax/school/search?mincode=%s
   grad-program-api: 
     rule-detail: 
       url : https://educ-grad-program-api-77c02f-dev.apps.silver.devops.gov.bc.ca/api/v1/program/programrules/%s
