@@ -10,7 +10,7 @@ env:
   COMMON_NAMESPACE: ${{ vars.COMMON_NAMESPACE }}
   BUSINESS_NAMESPACE: ${{ vars.GRAD_BUSINESS_NAMESPACE }}
 
-  SPRING_BOOT_IMAGE_NAME: educ-grad-student-api-dc
+  SPRING_BOOT_IMAGE_NAME: educ-grad-assessment-api-dc
 
   REPO_NAME: "educ-grad-assessment-api"
   APP_DOMAIN: ${{ vars.APP_DOMAIN }}
