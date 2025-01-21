@@ -88,7 +88,7 @@
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc11</artifactId>
-            <version>21.3.0.0</version>
+            <version>23.6.0.24.10</version>
         </dependency>
         <!--grad-releaseGRAD2-1852 Upgarding API to Spring Boot 3.0.2-->
         <dependency>
@@ -184,7 +184,7 @@
         <plugin>
           <groupId>org.hibernate.orm.tooling</groupId>
           <artifactId>hibernate-enhance-maven-plugin</artifactId>
-          <version>6.6.4.Final</version>
+          <version>6.6.5.Final</version>
         </plugin>
         <plugin>
           <groupId>org.springframework.boot</groupId>
