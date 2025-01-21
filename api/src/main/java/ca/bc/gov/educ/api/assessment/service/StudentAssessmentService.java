@@ -9,10 +9,10 @@ import ca.bc.gov.educ.api.assessment.model.transformer.StudentAssessmentTransfor
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRepository;
 import ca.bc.gov.educ.api.assessment.repository.StudentAssessmentRepository;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -22,26 +22,21 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class StudentAssessmentService {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentAssessmentService.class);
 
-    @Autowired
     StudentAssessmentRepository studentAssessmentRepo;
 
-    @Autowired
     AssessmentRepository assessmentRepo;
 
-    @Autowired
     StudentAssessmentTransformer studentAssessmentTransformer;
 
-    @Autowired
     AssessmentTransformer assessmentTransformer;
 
-    @Autowired
     WebClient webClient;
 
-    @Autowired
     EducAssessmentApiConstants constants;
 
     /**

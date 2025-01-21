@@ -11,9 +11,9 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,17 +27,15 @@ import java.util.List;
 @OpenAPIDefinition(info = @Info(
         title = "API for Student Assessments.", description = "This API is for Reading Student Assessments data.", version = "1"),
         security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_STUDENT_ASSESSMENT_DATA"})})
+@AllArgsConstructor
 public class StudentAssessmentController {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentAssessmentController.class);
 
-    @Autowired
     StudentAssessmentService studentAssessmentService;
    
-    @Autowired
 	GradValidation validation;
    
-    @Autowired
 	ResponseHelper response;
 
     @GetMapping(EducAssessmentApiConstants.GET_STUDENT_ASSESSMENT_BY_PEN_MAPPING)
