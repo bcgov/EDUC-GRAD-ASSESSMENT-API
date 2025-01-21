@@ -10,9 +10,9 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,20 +24,17 @@ import java.util.List;
 @RestController
 @RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
 @OpenAPIDefinition(info = @Info(title = "API for Assessment Requirement Management.", description = "This API is for Assessment Requirement Management.", version = "1"), security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_ASSESSMENT_REQUIREMENT_DATA"})})
+@AllArgsConstructor
 public class AssessmentRequirementController {
 
     private static Logger logger = LoggerFactory.getLogger(AssessmentRequirementController.class);
 
-    @Autowired
     AssessmentRequirementService assessmentRequirementService;
 
-    @Autowired
     AssessmentService assessmentService;
 
-    @Autowired
     GradValidation validation;
 
-    @Autowired
     ResponseHelper response;
 
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)
@@ -50,7 +47,7 @@ public class AssessmentRequirementController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "150") Integer pageSize,
             @RequestHeader(name="Authorization") String accessToken) {
         logger.debug("getAllAssessmentRequirement : ");
-        return response.GET(assessmentRequirementService.getAllAssessmentRequirementList(pageNo, pageSize, accessToken.replaceAll("Bearer ", "")));
+        return response.GET(assessmentRequirementService.getAllAssessmentRequirementList(pageNo, pageSize, accessToken.replace("Bearer ", "")));
     }
 
     @PostMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)

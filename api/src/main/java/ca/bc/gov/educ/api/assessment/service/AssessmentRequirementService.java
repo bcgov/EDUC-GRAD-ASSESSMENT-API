@@ -3,11 +3,12 @@ package ca.bc.gov.educ.api.assessment.service;
 
 import java.util.*;
 
+import ca.bc.gov.educ.api.assessment.exception.EntityNotFoundException;
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementCodeEntity;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,26 +27,19 @@ import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 
 @Service
+@AllArgsConstructor
 public class AssessmentRequirementService {
 
-    @Autowired
     private AssessmentRequirementRepository assessmentRequirementRepository;
     
-    @Autowired
     private AssessmentRequirementCodeRepository assessmentRequirementCodeRepository;
 
-    @Autowired
     private AssessmentRequirementTransformer assessmentRequirementTransformer;
 
-
-
-    @Autowired
     private EducAssessmentApiConstants contants;
 
-    @Autowired
     WebClient webClient;
 
-    @Autowired
     private AssessmentService assessmentService;
 
     private static Logger logger = LoggerFactory.getLogger(AssessmentRequirementService.class);
@@ -102,7 +96,10 @@ public class AssessmentRequirementService {
 
         try {
             Pageable paging = PageRequest.of(pageNo, pageSize);
-            Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(assessmentRequirementCodeRepository.getOne(rule), paging);
+            AssessmentRequirementCodeEntity assessmentRequirementCodeEntity =
+                    assessmentRequirementCodeRepository.findById(rule)
+                            .orElseThrow(() -> new EntityNotFoundException(AssessmentRequirementCodeEntity.class, "AssessmentRequirementCodeEntity not found for rule: " + rule));
+            Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(assessmentRequirementCodeEntity, paging);
             assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
             assessmentReqList.forEach(cR -> {
                 Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());

@@ -2,9 +2,9 @@ package ca.bc.gov.educ.api.assessment.controller;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +27,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RestController
 @RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
 @OpenAPIDefinition(info = @Info(title = "API for Assessment Management.", description = "This API is for Assessment Management.", version = "1"), security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_ASSESSMENT_DATA"})})
+@AllArgsConstructor
 public class AssessmentController {
 
     private static Logger logger = LoggerFactory.getLogger(AssessmentController.class);
 
-    @Autowired
     AssessmentService assessmentService;
 
-    @Autowired
     GradValidation validation;
 
-    @Autowired
     ResponseHelper response;
 
     @GetMapping
@@ -66,6 +64,6 @@ public class AssessmentController {
     public ResponseEntity<AssessmentAlgorithmData> getAssessmentAlgorithmData(
             @PathVariable String pen, @RequestHeader(name="Authorization") String accessToken) {
         logger.debug("getAssessmentAlgorithmData : ");
-        return response.GET(assessmentService.getAssessmentAlgorithmData(pen, accessToken.replaceAll("Bearer ", ""), false));
+        return response.GET(assessmentService.getAssessmentAlgorithmData(pen, accessToken.replace("Bearer ", ""), false));
     }
 }

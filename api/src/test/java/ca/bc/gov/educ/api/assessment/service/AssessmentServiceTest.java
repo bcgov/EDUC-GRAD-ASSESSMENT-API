@@ -51,7 +51,9 @@ public class AssessmentServiceTest {
 
     @After
     public void tearDown() {
-
+    /**
+     * Default implementation
+     */
     }
 
     @Test
@@ -67,8 +69,7 @@ public class AssessmentServiceTest {
 
         when(assessmentRepository.findAll()).thenReturn(assessmentList);
         var result = assessmentService.getAssessmentList();
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).isNotNull().hasSize(1);
     }
 
     @Test
@@ -129,6 +130,6 @@ public class AssessmentServiceTest {
         when(assessmentRepository.findAll()).thenReturn(assessmentLists);
         var result = assessmentService.getAssessmentAlgorithmData(pen,accessToken,true);
         assertThat(result).isNotNull();
-        assertThat(result.getAssessments().size()).isEqualTo(1);
+        assertThat(result.getAssessments()).hasSize(1);
     }
 }
