@@ -1,0 +1,34 @@
+meta {
+  name: Create an Assessment Requirement
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/assessment/requirement
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "createUser": "",
+    "createDate": "",
+    "updateUser": "",
+    "updateDate": "",
+    "assessmentRequirementId": "",
+    "assessmentCode": "",
+    "ruleCode": {
+      "createUser": "",
+      "createDate": "",
+      "updateUser": "",
+      "updateDate": "",
+      "assmtRequirementCode": "",
+      "label": "",
+      "description": "",
+      "effectiveDate": "",
+      "expiryDate": ""
+    },
+    "assessmentName": ""
+  }
+}
