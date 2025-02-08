@@ -43,7 +43,6 @@ public class StudentAssessmentTransformerTest {
         studentAssessment.setAssessmentCode("assmt");
         studentAssessment.setAssessmentName("assessment name");
         studentAssessment.setMincodeAssessment("12345678");
-        studentAssessment.setMincodeAssessmentName("Test school");
         studentAssessment.setAssessmentDetails(assessment);
 
         StudentAssessmentId studentAssessmentId = new StudentAssessmentId();
@@ -76,7 +75,6 @@ public class StudentAssessmentTransformerTest {
         studentAssessment.setAssessmentCode("assmt");
         studentAssessment.setAssessmentName("assessment name");
         studentAssessment.setMincodeAssessment("12345678");
-        studentAssessment.setMincodeAssessmentName("Test school");
         studentAssessment.setAssessmentDetails(assessment);
 
         StudentAssessmentId studentAssessmentId = new StudentAssessmentId();
@@ -109,7 +107,6 @@ public class StudentAssessmentTransformerTest {
         studentAssessment.setAssessmentCode("assmt");
         studentAssessment.setAssessmentName("assessment name");
         studentAssessment.setMincodeAssessment("12345678");
-        studentAssessment.setMincodeAssessmentName("Test school");
         studentAssessment.setAssessmentDetails(assessment);
 
         StudentAssessmentId studentAssessmentId = new StudentAssessmentId();

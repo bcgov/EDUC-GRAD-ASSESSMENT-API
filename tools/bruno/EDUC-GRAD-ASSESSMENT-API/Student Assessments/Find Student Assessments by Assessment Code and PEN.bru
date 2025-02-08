@@ -1,0 +1,22 @@
+meta {
+  name: Find Student Assessments by Assessment Code and PEN
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/assessment/:assmtCode/pen/:pen
+  body: none
+  auth: none
+}
+
+params:query {
+  ~sortForUI: 
+}
+
+params:path {
+  assmtCode: 
+  pen: 
+}
+
+

@@ -1,0 +1,17 @@
+meta {
+  name: Find All Assessment Requirements by Rule
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/v1/assessment/requirement/rule
+  body: none
+  auth: none
+}
+
+params:query {
+  rule: 
+  ~pageNo: 
+  ~pageSize: 
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Find an Assessment Detail by Code
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/assessment/:assmtCode
+  body: none
+  auth: none
+}
+
+params:path {
+  assmtCode: 
+}

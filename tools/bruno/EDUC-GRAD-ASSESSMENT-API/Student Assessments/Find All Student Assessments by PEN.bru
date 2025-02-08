@@ -1,0 +1,21 @@
+meta {
+  name: Find All Student Assessments by PEN
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/assessment/pen/:pen
+  body: none
+  auth: none
+}
+
+params:query {
+  ~sortForUI: 
+}
+
+params:path {
+  pen: 
+}
+
+
