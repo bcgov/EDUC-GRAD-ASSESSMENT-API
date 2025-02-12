@@ -16,7 +16,7 @@ env:
   APP_DOMAIN: ${{ vars.APP_DOMAIN }}
   GRAD_NAMESPACE: ${{ vars.GRAD_NAMESPACE }}
   TAG: "latest"
-  BRANCH: "main"
+  BRANCH: "grad-release"
   MIN_CPU: "20m"
   MAX_CPU: "100m"
   MIN_MEM: "250Mi"
