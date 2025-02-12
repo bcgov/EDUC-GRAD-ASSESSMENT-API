@@ -46,9 +46,6 @@ public class EducAssessmentApiConstants {
     @Value("${endpoint.grad-program-api.rule-detail.url}")
     private String ruleDetailOfProgramManagementApiUrl;
 
-    @Value("${endpoint.grad-trax-api.school-name-by-mincode.url}")
-    private String schoolNameByMincodeUrl;
-
     // Splunk LogHelper Enabled
     @Value("${splunk.log-helper.enabled}")
     private boolean splunkLogHelperEnabled;
