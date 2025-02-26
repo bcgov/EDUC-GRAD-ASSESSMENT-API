@@ -119,11 +119,11 @@ class APIMetadataController {
                                 .toUpperCase(),
                         getApiPath(attributes.getStringArray("value")),
                         ofNullable(AnnotationUtils.findAnnotation(method, PreAuthorize.class))
-                                .map(p -> p.value().replace("hasAuthority\\('", "")
-                                            .replace("'\\) and", "")
-                                            .replace("'\\)", "")
+                                .map(p -> p.value().replace("hasAuthority('", "")
+                                            .replace("') and", "")
+                                            .replace("')", "")
                                             .replace("SCOPE_", "")
-                                )
+                                    )
                                 .orElse(""),
                         method.getName()
                 ));
@@ -143,7 +143,7 @@ class APIMetadataController {
     }
 
     private static String getEndpointDetailsHTML(List<ControllerInfo> controllers) {
-        HashSet<String> scopes = new HashSet<>();
+        HashSet<String> scopes = new HashSet<String>();
         StringBuilder endpointDetailsHTML = new StringBuilder();
         endpointDetailsHTML.append("<div class=\"container\">");
         for (ControllerInfo controller : controllers) {
