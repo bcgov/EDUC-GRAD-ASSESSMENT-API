@@ -143,7 +143,7 @@ class APIMetadataController {
     }
 
     private static String getEndpointDetailsHTML(List<ControllerInfo> controllers) {
-        HashSet<String> scopes = new HashSet<String>();
+        HashSet<String> scopes = new HashSet<>();
         StringBuilder endpointDetailsHTML = new StringBuilder();
         endpointDetailsHTML.append("<div class=\"container\">");
         for (ControllerInfo controller : controllers) {
