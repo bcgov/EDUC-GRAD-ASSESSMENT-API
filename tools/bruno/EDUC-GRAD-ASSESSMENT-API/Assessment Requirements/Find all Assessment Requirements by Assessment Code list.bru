@@ -1,0 +1,17 @@
+meta {
+  name: Find all Assessment Requirements by Assessment Code list
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/assessment/requirement/assessment-list
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "assessmentCodes": []
+  }
+}

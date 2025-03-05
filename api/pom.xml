@@ -6,7 +6,7 @@
 
     <groupId>ca.bc.gov.educ</groupId>
 	<artifactId>educ-grad-assessment-api</artifactId>
-	<version>1.8.41</version>
+	<version>1.8.42</version>
 	<name>educ-grad-assessment-api</name>
 	<description>Ministry of Education GRAD Assessment API</description>
    
@@ -18,7 +18,8 @@
             src/main/java/ca/bc/gov/educ/api/assessment/exception/**,
             src/main/java/ca/bc/gov/educ/api/assessment/model/**,
             src/main/java/ca/bc/gov/educ/api/assessment/config/**,
-            src/main/java/ca/bc/gov/educ/api/assessment/util/**
+            src/main/java/ca/bc/gov/educ/api/assessment/util/**,
+            src/main/java/ca/bc/gov/educ/api/assessment/controller/APIMetadataController.java
         </sonar.exclusions>
         <!--<java.version>11</java.version>-->
         <!--grad-releaseGRAD2-1852 Upgarding API to Spring Boot 3.0.2-->
