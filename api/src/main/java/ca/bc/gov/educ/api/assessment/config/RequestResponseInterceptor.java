@@ -15,7 +15,6 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.Instant;
-import java.util.UUID;
 
 @Component
 @Slf4j
@@ -40,29 +39,14 @@ public class RequestResponseInterceptor implements AsyncHandlerInterceptor {
         }
 
         validation.clear();
-        val correlationID = request.getHeader(EducAssessmentApiConstants.CORRELATION_ID);
-        ThreadLocalStateUtil.setCorrelationID(correlationID != null ? correlationID : UUID.randomUUID().toString());
 
-        //Request Source
-        val requestSource = request.getHeader(EducAssessmentApiConstants.REQUEST_SOURCE);
-        if(requestSource != null) {
-            ThreadLocalStateUtil.setRequestSource(requestSource);
-        }
-
-        // Header userName
-        val userName = request.getHeader(EducAssessmentApiConstants.USER_NAME);
-        if (userName != null) {
-            ThreadLocalStateUtil.setCurrentUser(userName);
-        }
-        else {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if (auth instanceof JwtAuthenticationToken) {
-                JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) auth;
-                Jwt jwt = (Jwt) authenticationToken.getCredentials();
-                String username = JwtUtil.getName(jwt);
-                if (username != null) {
-                    ThreadLocalStateUtil.setCurrentUser(username);
-                }
+        // username
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof JwtAuthenticationToken authenticationToken) {
+            Jwt jwt = (Jwt) authenticationToken.getCredentials();
+            String username = JwtUtil.getName(jwt);
+            if (username != null) {
+                ThreadLocalStateUtil.setCurrentUser(username);
             }
         }
         return true;
@@ -79,7 +63,10 @@ public class RequestResponseInterceptor implements AsyncHandlerInterceptor {
     @Override
     public void afterCompletion(@NonNull final HttpServletRequest request, final HttpServletResponse response, @NonNull final Object handler, final Exception ex) {
         LogHelper.logServerHttpReqResponseDetails(request, response, constants.isSplunkLogHelperEnabled());
-        ThreadLocalStateUtil.clear();
+        val correlationID = request.getHeader(EducAssessmentApiConstants.CORRELATION_ID);
+        if (correlationID != null) {
+            response.setHeader(EducAssessmentApiConstants.CORRELATION_ID, request.getHeader(EducAssessmentApiConstants.CORRELATION_ID));
+        }
     }
 
 }
