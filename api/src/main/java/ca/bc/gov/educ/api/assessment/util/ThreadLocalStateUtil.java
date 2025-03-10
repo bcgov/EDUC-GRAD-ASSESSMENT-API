@@ -1,8 +1,9 @@
 package ca.bc.gov.educ.api.assessment.util;
 
 public class ThreadLocalStateUtil {
-    private static ThreadLocal<String> transaction = new ThreadLocal<>();
-    private static ThreadLocal<String> user = new ThreadLocal<>();
+    private static InheritableThreadLocal<String> transaction = new InheritableThreadLocal<>();
+    private static InheritableThreadLocal<String> user = new InheritableThreadLocal<>();
+    private static final InheritableThreadLocal<String> requestSource = new InheritableThreadLocal<String>();
 
     //GRAD2-1929 - Refactoring/Linting
     private ThreadLocalStateUtil() {
@@ -45,8 +46,26 @@ public class ThreadLocalStateUtil {
         return user.get();
     }
 
+    /**
+     * Set the requestSource for this thread
+     *
+     * @param reqSource
+     */
+    public static void setRequestSource(String reqSource){
+        requestSource.set(reqSource);
+    }
+    /**
+     * Get the requestSource for this thread
+     *
+     * @return the requestSource, or null if it is unknown.
+     */
+    public static String getRequestSource() {
+        return requestSource.get();
+    }
+
     public static void clear() {
         transaction.remove();
         user.remove();
+        requestSource.remove();
     }
 }
