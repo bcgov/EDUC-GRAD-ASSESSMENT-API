@@ -6,6 +6,7 @@ import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 import ca.bc.gov.educ.api.assessment.util.LogHelper;
 import ca.bc.gov.educ.api.assessment.util.ThreadLocalStateUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +19,12 @@ import reactor.netty.http.client.HttpClient;
 @Configuration
 public class EducGradAssessmentApiConfig {
 
-    LogHelper logHelper;
     EducAssessmentApiConstants constants;
+
+    @Autowired
+    public EducGradAssessmentApiConfig(EducAssessmentApiConstants constants) {
+        this.constants = constants;
+    }
 
     @Bean
     public ModelMapper modelMapper() {
@@ -58,7 +63,7 @@ public class EducGradAssessmentApiConfig {
     private ExchangeFilterFunction log() {
         return (clientRequest, next) -> next
                 .exchange(clientRequest)
-                .doOnNext((clientResponse -> logHelper.logClientHttpReqResponseDetails(
+                .doOnNext((clientResponse -> LogHelper.logClientHttpReqResponseDetails(
                         clientRequest.method(),
                         clientRequest.url().toString(),
                         clientResponse.statusCode().value(),
