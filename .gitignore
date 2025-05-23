@@ -56,3 +56,4 @@ build/
 
 ### local dev ###
 **/application-local.yaml
+**/generate-local-env.sh

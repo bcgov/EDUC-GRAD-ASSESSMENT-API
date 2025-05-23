@@ -52,4 +52,7 @@ public class EducAssessmentApiConstants {
     // Splunk LogHelper Enabled
     @Value("${splunk.log-helper.enabled}")
     private boolean splunkLogHelperEnabled;
+
+    @Value("${endpoint.keycloak.token-uri}")
+    private String tokenUrl;
 }

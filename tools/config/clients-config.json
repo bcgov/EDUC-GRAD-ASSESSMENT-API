@@ -1,0 +1,18 @@
+[
+  {
+    "clientId": "grad-assessment-api-client",
+    "scopes": ["CREATE_GRAD_ASSESSMENT_REQUIREMENT_DATA",
+      "READ_GRAD_ASSESSMENT_DATA",
+      "READ_GRAD_ASSESSMENT_REQUIREMENT_DATA",
+      "READ_GRAD_STUDENT_ASSESSMENT_DATA",
+      "READ_GRAD_PROGRAM_RULES_DATA"],
+    "settings": {
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false
+    }
+  }
+]
