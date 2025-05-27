@@ -4,10 +4,10 @@ package ca.bc.gov.educ.api.assessment.service;
 import java.util.*;
 
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementCodeEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,30 +25,33 @@ import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementCodeReposit
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 
+@Slf4j
 @Service
 public class AssessmentRequirementService {
 
-    @Autowired
-    private AssessmentRequirementRepository assessmentRequirementRepository;
-    
-    @Autowired
-    private AssessmentRequirementCodeRepository assessmentRequirementCodeRepository;
+    private final AssessmentRequirementRepository assessmentRequirementRepository;
+    private final AssessmentRequirementCodeRepository assessmentRequirementCodeRepository;
+    private final AssessmentRequirementTransformer assessmentRequirementTransformer;
+    private final EducAssessmentApiConstants constants;
+    private final WebClient assessmentApiClient;
+    private final AssessmentService assessmentService;
+    private final RESTService restService;
 
     @Autowired
-    private AssessmentRequirementTransformer assessmentRequirementTransformer;
-
-
-
-    @Autowired
-    private EducAssessmentApiConstants contants;
-
-    @Autowired
-    WebClient webClient;
-
-    @Autowired
-    private AssessmentService assessmentService;
-
-    private static Logger logger = LoggerFactory.getLogger(AssessmentRequirementService.class);
+    public AssessmentRequirementService(AssessmentRequirementRepository assessmentRequirementRepository,
+                                        AssessmentRequirementCodeRepository assessmentRequirementCodeRepository,
+                                        AssessmentRequirementTransformer assessmentRequirementTransformer,
+                                        AssessmentService assessmentService,
+                                        EducAssessmentApiConstants constants,
+                                        @Qualifier("assessmentApiClient") WebClient assessmentApiClient, RESTService restService) {
+        this.assessmentRequirementRepository = assessmentRequirementRepository;
+        this.assessmentRequirementCodeRepository = assessmentRequirementCodeRepository;
+        this.assessmentRequirementTransformer = assessmentRequirementTransformer;
+        this.assessmentService = assessmentService;
+        this.constants = constants;
+        this.assessmentApiClient = assessmentApiClient;
+        this.restService = restService;
+    }
 
     /**
      * Get all course requirements in Course Requirement DTO
@@ -57,34 +60,32 @@ public class AssessmentRequirementService {
      * @param pageNo - page number of assessment list
      * @return list - course's assessement requirements list
      */
-    public List<AllAssessmentRequirements> getAllAssessmentRequirementList(Integer pageNo, Integer pageSize, String accessToken) {
+    public List<AllAssessmentRequirements> getAllAssessmentRequirementList(Integer pageNo, Integer pageSize) {
         List<AssessmentRequirement> assessmentReqList = new ArrayList<>();
         List<AllAssessmentRequirements> allAssessmentRequiremntList = new ArrayList<>();
         try {
             Pageable paging = PageRequest.of(pageNo, pageSize);
             Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findAll(paging);
             assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
-            assessmentReqList.forEach(cR -> {
+            for (AssessmentRequirement cR : assessmentReqList) {
                 AllAssessmentRequirements obj = new AllAssessmentRequirements();
                 BeanUtils.copyProperties(cR, obj);
                 Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
                 obj.setAssessmentName(assmt.getAssessmentName());
                 obj.setRuleCode(cR.getRuleCode().getAssmtRequirementCode());
-                List<GradRuleDetails> ruleList = webClient.get()
-                        .uri(String.format(contants.getRuleDetailOfProgramManagementApiUrl(), cR.getRuleCode().getAssmtRequirementCode()))
-                        .headers(h -> h.setBearerAuth(accessToken))
-                        .retrieve()
-                        .bodyToMono(new ParameterizedTypeReference<List<GradRuleDetails>>() {
-                        })
-                        .block();
+                List<GradRuleDetails> ruleList = restService.get(
+                        String.format(constants.getRuleDetailOfProgramManagementApiUrl(), cR.getRuleCode().getAssmtRequirementCode()),
+                        new ParameterizedTypeReference<List<GradRuleDetails>>() {
+                        }, assessmentApiClient);
+
                 StringBuilder requirementProgram = new StringBuilder();
-                requirementProgram = processRuleList(ruleList,requirementProgram,obj);
-                obj.setTraxReqNumber(!ruleList.isEmpty()?ruleList.get(0).getTraxReqNumber():null);
+                requirementProgram = processRuleList(ruleList, requirementProgram, obj);
+                obj.setTraxReqNumber(!ruleList.isEmpty() ? ruleList.get(0).getTraxReqNumber() : null);
                 obj.setRequirementProgram(requirementProgram.toString());
                 allAssessmentRequiremntList.add(obj);
-            });
+            }
         } catch (Exception e) {
-            logger.debug(String.format("Exception: %s",e));
+            log.debug(String.format("Exception: %s",e));
         }
 
         return allAssessmentRequiremntList;
@@ -111,7 +112,7 @@ public class AssessmentRequirementService {
                 }
             });
         } catch (Exception e) {
-            logger.debug(String.format("Exception: %s",e));
+            log.debug(String.format("Exception: %s",e));
         }
 
         return assessmentReqList;
@@ -149,7 +150,7 @@ public class AssessmentRequirementService {
 
         AssessmentRequirementEntity currentEntity = assessmentRequirementRepository.findByAssessmentCodeAndRuleCode(
                 assessmentRequirementEntity.getAssessmentCode(), assessmentRequirementEntity.getRuleCode());
-        logger.debug("Create AssessmentRequirement: assessment [{}], rule [{}]", assessmentCode, ruleCode);
+        log.debug("Create AssessmentRequirement: assessment [{}], rule [{}]", assessmentCode, ruleCode);
         /*
         Add and Update
         GRAD2 -1929 Refactoring/Linting reducing the lines by using requireNonNullElse

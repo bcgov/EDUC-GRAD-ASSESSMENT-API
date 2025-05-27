@@ -38,8 +38,8 @@ public class RestWebClient {
     }
 
     @Primary
-    @Bean("assesmentApiClient")
-    public WebClient getCourseApiClientWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
+    @Bean("assessmentApiClient")
+    public WebClient getAssessmentApiClientWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction filter = new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
         filter.setDefaultClientRegistrationId("assessment-api-client");
         DefaultUriBuilderFactory defaultUriBuilderFactory = new DefaultUriBuilderFactory();

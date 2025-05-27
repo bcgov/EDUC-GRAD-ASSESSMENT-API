@@ -1,15 +1,13 @@
 package ca.bc.gov.educ.api.assessment.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class FlywayMigrationStrategyImpl implements FlywayMigrationStrategy {
-
-    private static Logger logger = LoggerFactory.getLogger(FlywayMigrationStrategyImpl.class);
 
     @Override
     public void migrate(Flyway flyway) {
@@ -17,9 +15,9 @@ public class FlywayMigrationStrategyImpl implements FlywayMigrationStrategy {
             flyway.repair();
         }
 
-        logger.info("\n");
-        logger.info("************FLYWAY-MIGRATE**********");
+        log.info("\n");
+        log.info("************FLYWAY-MIGRATE**********");
         flyway.migrate();
-        logger.info("************FLYWAY-MIGRATE-END**********\n\n");
+        log.info("************FLYWAY-MIGRATE-END**********\n\n");
     }
 }

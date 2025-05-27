@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
@@ -29,16 +31,18 @@ import java.util.List;
         security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_STUDENT_ASSESSMENT_DATA"})})
 public class StudentAssessmentController {
 
-    private static final Logger logger = LoggerFactory.getLogger(StudentAssessmentController.class);
+    StudentAssessmentService studentAssessmentService;
+	GradValidation validation;
+	ResponseHelper response;
 
     @Autowired
-    StudentAssessmentService studentAssessmentService;
-   
-    @Autowired
-	GradValidation validation;
-   
-    @Autowired
-	ResponseHelper response;
+    public StudentAssessmentController(StudentAssessmentService studentAssessmentService,
+                                       GradValidation validation,
+                                       ResponseHelper response) {
+        this.studentAssessmentService = studentAssessmentService;
+        this.validation = validation;
+        this.response = response;
+    }
 
     @GetMapping(EducAssessmentApiConstants.GET_STUDENT_ASSESSMENT_BY_PEN_MAPPING)
     @PreAuthorize("hasAuthority('SCOPE_READ_GRAD_STUDENT_ASSESSMENT_DATA')")
@@ -54,7 +58,7 @@ public class StudentAssessmentController {
         	validation.stopOnErrors();
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }else {
-            logger.debug("#Get All Student Assessments by PEN: {}",pen);
+            log.debug("#Get All Student Assessments by PEN: {}",pen);
             //GRAD2-1929 Refactoring/Linting replaceAll --> replace
 	    	List<StudentAssessment> studentAssessmentList = studentAssessmentService.getStudentAssessmentList(pen,accessToken.replace("Bearer ", ""),sortForUI);
 	    	if(studentAssessmentList.isEmpty()) {
@@ -78,7 +82,7 @@ public class StudentAssessmentController {
             validation.stopOnErrors();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }else {
-            logger.debug("#Get Student Assessments by AssessmentCode and PEN: {} / {}",assmtCode, pen);
+            log.debug("#Get Student Assessments by AssessmentCode and PEN: {} / {}",assmtCode, pen);
             List<StudentAssessment> studentAssessmentList = studentAssessmentService.getStudentAssessment(pen, assmtCode, accessToken.replace("Bearer ", ""), sortForUI);
             return response.GET(studentAssessmentList);
         }
