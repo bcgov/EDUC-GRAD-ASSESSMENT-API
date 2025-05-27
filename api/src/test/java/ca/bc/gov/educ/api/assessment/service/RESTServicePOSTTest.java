@@ -64,7 +64,6 @@ public class RESTServicePOSTTest {
 
     private static final byte[] TEST_BYTES = "The rain in Spain stays mainly on the plain.".getBytes();
     private static final String TEST_BODY = "{test:test}";
-    private static final String ACCESS_TOKEN = "123";
     private static final String TEST_URL = "https://fake.url.com";
 
     @Before
@@ -90,15 +89,6 @@ public class RESTServicePOSTTest {
     }
 
     @Test
-    public void testPostOverride_GivenProperData_Expect200Response(){
-        ThreadLocalStateUtil.setCorrelationID("test-correlation-id");
-        ThreadLocalStateUtil.setCurrentUser("test-user");
-        when(this.responseMock.onStatus(any(), any())).thenReturn(this.responseMock);
-        byte[] response = this.restService.post(TEST_URL, TEST_BODY, byte[].class, assessmentApiWebClient);
-        Assert.assertArrayEquals(TEST_BYTES, response);
-    }
-
-    @Test
     public void testPostOverride_GivenNullWebClient_Expect200Response(){
         ThreadLocalStateUtil.setCorrelationID("test-correlation-id");
         ThreadLocalStateUtil.setCurrentUser("test-user");
@@ -109,14 +99,6 @@ public class RESTServicePOSTTest {
 
     @Test(expected = ServiceException.class)
     public void testPost_Given4xxErrorFromService_ExpectServiceError() {
-        ThreadLocalStateUtil.setCorrelationID("test-correlation-id");
-        ThreadLocalStateUtil.setCurrentUser("test-user");
-        when(this.responseMock.onStatus(any(), any())).thenThrow(new ServiceException());
-        this.restService.post(TEST_URL, TEST_BODY, byte[].class, assessmentApiWebClient);
-    }
-
-    @Test(expected = ServiceException.class)
-    public void testPostOverride_Given4xxErrorFromService_ExpectServiceError() {
         ThreadLocalStateUtil.setCorrelationID("test-correlation-id");
         ThreadLocalStateUtil.setCurrentUser("test-user");
         when(this.responseMock.onStatus(any(), any())).thenThrow(new ServiceException());

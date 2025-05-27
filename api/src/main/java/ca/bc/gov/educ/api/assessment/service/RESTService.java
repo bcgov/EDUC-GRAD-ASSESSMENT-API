@@ -24,7 +24,7 @@ import java.time.Duration;
 @Service
 public class RESTService {
 
-    private WebClient webClient;
+    private final WebClient webClient;
 
     private static final String SERVER_ERROR = "5xx error.";
     private static final String SERVICE_FAILED_ERROR = "Service failed to process after max retries.";
@@ -60,7 +60,7 @@ public class RESTService {
             // catches IOExceptions and the like
             throw new ServiceException(
                     getErrorMessage(url, e.getLocalizedMessage()),
-                    (e instanceof WebClientResponseException) ? ((WebClientResponseException) e).getStatusCode().value()
+                    (e instanceof WebClientResponseException ex) ? ex.getStatusCode().value()
                             : HttpStatus.SERVICE_UNAVAILABLE.value(), e);
         }
         return obj;
@@ -92,7 +92,7 @@ public class RESTService {
             // catches IOExceptions and the like
             throw new ServiceException(
                     getErrorMessage(url, e.getLocalizedMessage()),
-                    (e instanceof WebClientResponseException) ? ((WebClientResponseException) e).getStatusCode().value()
+                    (e instanceof WebClientResponseException ex) ? ex.getStatusCode().value()
                             : HttpStatus.SERVICE_UNAVAILABLE.value(), e);
         }
         return obj;
@@ -121,7 +121,7 @@ public class RESTService {
             throw new ServiceException(getErrorMessage(
                     url,
                     e.getLocalizedMessage()),
-                    (e instanceof WebClientResponseException) ? ((WebClientResponseException) e).getStatusCode().value()
+                    (e instanceof WebClientResponseException ex) ? ex.getStatusCode().value()
                             : HttpStatus.SERVICE_UNAVAILABLE.value(), e);
         }
         return obj;

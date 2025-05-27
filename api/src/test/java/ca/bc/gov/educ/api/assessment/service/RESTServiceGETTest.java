@@ -65,8 +65,6 @@ public class RESTServiceGETTest {
     private static final String TEST_URL_200 = "https://httpstat.us/200";
     private static final String TEST_URL_403 = "https://httpstat.us/403";
     private static final String TEST_URL_503 = "https://httpstat.us/503";
-
-    private static final String ACCESS_TOKEN = "123";
     private static final String OK_RESPONSE = "200 OK";
     private static final ParameterizedTypeReference<List<GradRuleDetails>> refType = new ParameterizedTypeReference<List<GradRuleDetails>>() {
     };
@@ -108,13 +106,6 @@ public class RESTServiceGETTest {
         Assert.assertEquals(new ArrayList<String>(), response);
     }
 
-    @Test
-    public void testGetOverride_GivenProperData_Expect200Response(){
-        when(this.responseMock.bodyToMono(String.class)).thenReturn(Mono.just(OK_RESPONSE));
-        String response = this.restService.get(TEST_URL_200, String.class, assessmentApiWebClient);
-        Assert.assertEquals(OK_RESPONSE, response);
-    }
-
     @Test(expected = ServiceException.class)
     public void testGet_Given5xxErrorFromService_ExpectServiceError(){
         when(this.responseMock.bodyToMono(ServiceException.class)).thenReturn(Mono.just(new ServiceException()));
@@ -125,12 +116,6 @@ public class RESTServiceGETTest {
     public void testGetTypeRef_Given5xxErrorFromService_ExpectServiceError(){
         when(this.responseMock.bodyToMono(refType)).thenThrow(new ServiceException());
         this.restService.get(TEST_URL_503, refType, assessmentApiWebClient);
-    }
-
-    @Test(expected = ServiceException.class)
-    public void testGetOverride_Given5xxErrorFromService_ExpectServiceError(){
-        when(this.responseMock.bodyToMono(ServiceException.class)).thenReturn(Mono.just(new ServiceException()));
-        this.restService.get(TEST_URL_503, String.class, assessmentApiWebClient);
     }
 
     @Test(expected = ServiceException.class)
@@ -146,17 +131,10 @@ public class RESTServiceGETTest {
     }
 
     @Test(expected = ServiceException.class)
-    public void testGetOverride_Given4xxErrorFromService_ExpectServiceError(){
-        when(this.responseMock.bodyToMono(ServiceException.class)).thenReturn(Mono.just(new ServiceException()));
-        this.restService.get(TEST_URL_403, String.class, assessmentApiWebClient);
-    }
-
-    @Test(expected = ServiceException.class)
     public void testGet_Given5xxErrorFromService_ExpectConnectionError(){
         when(requestBodyUriMock.uri(TEST_URL_503)).thenReturn(requestBodyMock);
         when(requestBodyMock.retrieve()).thenReturn(responseMock);
 
-        Throwable cause = new RuntimeException("Simulated cause");
         when(responseMock.bodyToMono(String.class)).thenReturn(Mono.error(new ConnectTimeoutException("Connection closed")));
         restService.get(TEST_URL_503, String.class, assessmentApiWebClient);
     }
