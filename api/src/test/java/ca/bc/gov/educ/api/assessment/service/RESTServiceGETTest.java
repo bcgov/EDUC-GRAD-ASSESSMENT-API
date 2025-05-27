@@ -88,9 +88,23 @@ public class RESTServiceGETTest {
     }
 
     @Test
+    public void testGet_GivenNullWebClient_Expect200Response(){
+        when(this.responseMock.bodyToMono(String.class)).thenReturn(Mono.just(OK_RESPONSE));
+        String response = this.restService.get(TEST_URL_200, String.class, null);
+        Assert.assertEquals(OK_RESPONSE, response);
+    }
+
+    @Test
     public void testGetTypeRef_GivenProperData_Expect200Response(){
         when(this.responseMock.bodyToMono(refType)).thenReturn(Mono.just(new ArrayList<GradRuleDetails>()));
         List<GradRuleDetails> response = this.restService.get(TEST_URL_200, refType, assessmentApiWebClient);
+        Assert.assertEquals(new ArrayList<String>(), response);
+    }
+
+    @Test
+    public void testGetTypeRef_GivenNullWebClient_Expect200Response(){
+        when(this.responseMock.bodyToMono(refType)).thenReturn(Mono.just(new ArrayList<GradRuleDetails>()));
+        List<GradRuleDetails> response = this.restService.get(TEST_URL_200, refType, null);
         Assert.assertEquals(new ArrayList<String>(), response);
     }
 

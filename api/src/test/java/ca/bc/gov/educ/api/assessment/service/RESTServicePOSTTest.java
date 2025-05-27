@@ -98,6 +98,15 @@ public class RESTServicePOSTTest {
         Assert.assertArrayEquals(TEST_BYTES, response);
     }
 
+    @Test
+    public void testPostOverride_GivenNullWebClient_Expect200Response(){
+        ThreadLocalStateUtil.setCorrelationID("test-correlation-id");
+        ThreadLocalStateUtil.setCurrentUser("test-user");
+        when(this.responseMock.onStatus(any(), any())).thenReturn(this.responseMock);
+        byte[] response = this.restService.post(TEST_URL, TEST_BODY, byte[].class, null);
+        Assert.assertArrayEquals(TEST_BYTES, response);
+    }
+
     @Test(expected = ServiceException.class)
     public void testPost_Given4xxErrorFromService_ExpectServiceError() {
         ThreadLocalStateUtil.setCorrelationID("test-correlation-id");
