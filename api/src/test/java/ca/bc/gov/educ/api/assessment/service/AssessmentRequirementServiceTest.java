@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
@@ -63,6 +64,10 @@ public class AssessmentRequirementServiceTest {
     private AssessmentRequirementCodeRepository assessmentRequirementCodeRepository;
 
     @MockBean
+    RESTService restService;
+
+    @MockBean
+    @Qualifier("assessmentApiClient")
     private WebClient webClient;
 
     @SuppressWarnings("rawtypes")
@@ -131,22 +136,16 @@ public class AssessmentRequirementServiceTest {
         ruleDetail.setProgramCode(requirementProgram);
         ruleList.add(ruleDetail);
 
-        final ParameterizedTypeReference<List<GradRuleDetails>> ruleDetailsResponseType = new ParameterizedTypeReference<>() {
-        };
-
         when(assessmentRequirementRepository.findAll(paging)).thenReturn(pageResult);
         when(assessmentRepository.findByAssessmentCode(assmt.getAssessmentCode())).thenReturn(Optional.of(assmtent));
+        when(restService.get(
+                String.format(constants.getRuleDetailOfProgramManagementApiUrl(), ruleCode),
+                new ParameterizedTypeReference<List<GradRuleDetails>>() {
+                }, webClient)).thenReturn(ruleList);
 
-        when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
-        when(this.requestHeadersUriMock.uri(String.format(constants.getRuleDetailOfProgramManagementApiUrl(),ruleCode))).thenReturn(this.requestHeadersMock);
-        when(this.requestHeadersMock.headers(any(Consumer.class))).thenReturn(this.requestHeadersMock);
-        when(this.requestHeadersMock.retrieve()).thenReturn(this.responseMock);
-        when(this.responseMock.bodyToMono(ruleDetailsResponseType)).thenReturn(Mono.just(ruleList));
+        var result = assessmentRequirementService.getAllAssessmentRequirementList(1, 5);
 
-        var result = assessmentRequirementService.getAllAssessmentRequirementList(1, 5, "accessToken");
-
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).isNotNull().hasSize(1);
         AllAssessmentRequirements aar = result.get(0);
         assertThat(aar.getAssessmentRequirementId()).isEqualTo(assessmentRequirementID);
         assertThat(aar.getAssessmentCode()).isEqualTo(assessmentCode);
@@ -185,8 +184,7 @@ public class AssessmentRequirementServiceTest {
 
         var result = assessmentRequirementService.getAllAssessmentRequirementListByRule(ruleCode, 1, 5);
 
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).isNotNull().hasSize(1);
         AssessmentRequirement ar = result.get(0);
         assertThat(ar.getAssessmentCode()).isEqualTo(assessmentCode);
     }
@@ -196,10 +194,8 @@ public class AssessmentRequirementServiceTest {
         // IDs
         final UUID assessmentRequirementID1 = UUID.randomUUID();
         final String assessmentCode1 = "Test1";
-        final String ruleCode1 = "ruleCode1";
         final UUID assessmentRequirementID2 = UUID.randomUUID();
         final String assessmentCode2 = "Test2";
-        final String ruleCode2 = "ruleCode2";
 
         // Input
         final AssessmentList assessmentList = new AssessmentList();
@@ -228,8 +224,8 @@ public class AssessmentRequirementServiceTest {
         var result = assessmentService.getAssessmentRequirementListByAssessments(assessmentList);
 
         assertThat(result).isNotNull();
-        assertThat(result.getAssessmentRequirementList().isEmpty()).isFalse();
-        assertThat(result.getAssessmentRequirementList().size()).isEqualTo(2);
+        assertThat(result.getAssessmentRequirementList()).isNotEmpty();
+        assertThat(result.getAssessmentRequirementList()).hasSize(2);
     }
 
     @Test

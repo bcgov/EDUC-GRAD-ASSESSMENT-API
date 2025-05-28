@@ -10,8 +10,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,25 +19,28 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
 @OpenAPIDefinition(info = @Info(title = "API for Assessment Requirement Management.", description = "This API is for Assessment Requirement Management.", version = "1"), security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_ASSESSMENT_REQUIREMENT_DATA"})})
 public class AssessmentRequirementController {
 
-    private static Logger logger = LoggerFactory.getLogger(AssessmentRequirementController.class);
-
-    @Autowired
     AssessmentRequirementService assessmentRequirementService;
-
-    @Autowired
     AssessmentService assessmentService;
-
-    @Autowired
     GradValidation validation;
+    ResponseHelper response;
 
     @Autowired
-    ResponseHelper response;
+    public AssessmentRequirementController(AssessmentRequirementService assessmentRequirementService,
+                                           AssessmentService assessmentService,
+                                           GradValidation validation,
+                                           ResponseHelper response) {
+        this.assessmentRequirementService = assessmentRequirementService;
+        this.assessmentService = assessmentService;
+        this.validation = validation;
+        this.response = response;
+    }
 
     @GetMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)
     @PreAuthorize(PermissionsConstants.READ_GRAD_ASSESSMENT_REQUIREMENT)
@@ -47,10 +49,9 @@ public class AssessmentRequirementController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<List<AllAssessmentRequirements>> getAllAssessmentRequirement(
             @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "150") Integer pageSize,
-            @RequestHeader(name="Authorization") String accessToken) {
-        logger.debug("getAllAssessmentRequirement : ");
-        return response.GET(assessmentRequirementService.getAllAssessmentRequirementList(pageNo, pageSize, accessToken.replaceAll("Bearer ", "")));
+            @RequestParam(value = "pageSize", required = false, defaultValue = "150") Integer pageSize) {
+        log.debug("getAllAssessmentRequirement : ");
+        return response.GET(assessmentRequirementService.getAllAssessmentRequirementList(pageNo, pageSize));
     }
 
     @PostMapping(EducAssessmentApiConstants.GET_ASSESSMENT_REQUIREMENT_MAPPING)
@@ -60,7 +61,7 @@ public class AssessmentRequirementController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST")})
     public ResponseEntity<ApiResponseModel<AssessmentRequirement>> createAssessmentRequirement(@RequestBody AssessmentRequirement assessmentRequirement) {
-        logger.debug("createAssessmentRequirement : ");
+        log.debug("createAssessmentRequirement : ");
         validation.requiredField(assessmentRequirement.getAssessmentCode(), "Assessment Code");
         if (assessmentRequirement.getRuleCode() == null) {
             validation.addError("Rule Code Entity is required.");
@@ -83,7 +84,7 @@ public class AssessmentRequirementController {
             @RequestParam(value = "rule", required = true) String rule,
             @RequestParam(value = "pageNo", required = false, defaultValue = "0") Integer pageNo,
             @RequestParam(value = "pageSize", required = false, defaultValue = "150") Integer pageSize) {
-        logger.debug("getAllAssessmentRequirementByRule : ");
+        log.debug("getAllAssessmentRequirementByRule : ");
         return response.GET(assessmentRequirementService.getAllAssessmentRequirementListByRule(rule, pageNo, pageSize));
     }
 
@@ -93,7 +94,7 @@ public class AssessmentRequirementController {
             description = "Get all Assessment Requirements by Assessment Code list", tags = {"Assessment Requirements"})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<AssessmentRequirements> getAssessmentRequirementByAssessments(@RequestBody AssessmentList assessmentList) {
-        logger.debug("getAssessmentRequirementByAssessments : ");
+        log.debug("getAssessmentRequirementByAssessments : ");
         return response.GET(assessmentService.getAssessmentRequirementListByAssessments(assessmentList));
     }
 

@@ -40,6 +40,16 @@ spring:
         jwt:
           issuer-uri: ${TOKEN_ISSUER_URL}
           jwk-set-uri: ${TOKEN_ISSUER_URL}/protocol/openid-connect/certs
+      client:
+        registration:
+          assessment-api-client:
+            client-id: ${GRAD_ASSESSMENT_API_CLIENT_NAME}
+            client-secret: ${GRAD_ASSESSMENT_API_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+        provider:
+          assessment-api-client:
+            issuer-uri: ${TOKEN_ISSUER_URL}
+            token-uri: ${TOKEN_ISSUER_URL}/protocol/openid-connect/token
 
 #Logging properties
 logging:
@@ -79,6 +89,11 @@ server:
       io: 16
   #port: ${HTTP_PORT}
   max-http-request-header-size: 20000
+  compression:
+    enabled: ${ENABLE_COMPRESSION}
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,text/css,text/javascript,application/javascript
+    min-response-size: 2048
+    excluded-user-agents: MSIE 6.0,UCBrowser
 
 #API Documentation
 springdoc:
@@ -90,6 +105,8 @@ springdoc:
 
 #Endpoints
 endpoint:
+  keycloak:
+    token-uri: ${TOKEN_ISSUER_URL}/protocol/openid-connect/token
   grad-program-api:
     rule-detail:
       url : ${GRAD_PROGRAM_API}api/v1/program/programrules/%s

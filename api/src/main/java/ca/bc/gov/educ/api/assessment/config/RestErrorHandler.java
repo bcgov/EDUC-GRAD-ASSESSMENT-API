@@ -4,9 +4,9 @@ import ca.bc.gov.educ.api.assessment.util.ApiResponseMessage.MessageTypeEnum;
 import ca.bc.gov.educ.api.assessment.util.ApiResponseModel;
 import ca.bc.gov.educ.api.assessment.util.GradBusinessRuleException;
 import ca.bc.gov.educ.api.assessment.util.GradValidation;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.hibernate.exception.ConstraintViolationException;
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DataRetrievalFailureException;
@@ -19,14 +19,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Slf4j
 @ControllerAdvice
 public class RestErrorHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger log = Logger.getLogger(RestErrorHandler.class);
     private static final String ERROR_MESSAGE = "Illegal argument ERROR IS: ";
 
-    @Autowired
     GradValidation validation;
+
+    @Autowired
+    public RestErrorHandler(GradValidation validation) {
+        this.validation = validation;
+    }
 
     @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {

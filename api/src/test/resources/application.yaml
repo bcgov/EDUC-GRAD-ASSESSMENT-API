@@ -68,6 +68,8 @@ springdoc:
   
 #Ebdpoints
 endpoint:
+  keycloak:
+    token-uri: https://my-keycloak.com
   grad-program-api:
     rule-detail: 
       url : https://educ-grad-program-api-77c02f-dev.apps.silver.devops.gov.bc.ca/api/v1/program/programrules/%s

@@ -7,8 +7,7 @@ import java.util.stream.Collectors;
 
 import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,28 +19,31 @@ import ca.bc.gov.educ.api.assessment.model.dto.StudentAssessment;
 import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentTransformer;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRepository;
 
+@Slf4j
 @Service
 public class AssessmentService {
 
-    @Autowired
-    private AssessmentRepository assessmentRepo;  
+    private final AssessmentRepository assessmentRepo;
+    private final AssessmentTransformer assessmentTransformer;
+    private final StudentAssessmentService studentAssessmentService;
+    private final AssessmentRequirements assessmentRequirements;
+    private final AssessmentRequirementRepository assessmentRequirementRepository;
+    private final AssessmentRequirementTransformer assessmentRequirementTransformer;
 
     @Autowired
-    private AssessmentTransformer assessmentTransformer;
-    
-    @Autowired
-    private StudentAssessmentService studentAssessmentService;
-
-    @Autowired
-    private AssessmentRequirements assessmentRequirements;
-
-    @Autowired
-    private AssessmentRequirementRepository assessmentRequirementRepository;
-
-    @Autowired
-    private AssessmentRequirementTransformer assessmentRequirementTransformer;
-
-    private static Logger logger = LoggerFactory.getLogger(AssessmentService.class);
+    public AssessmentService(AssessmentRepository assessmentRepo,
+                             AssessmentTransformer assessmentTransformer,
+                             StudentAssessmentService studentAssessmentService,
+                             AssessmentRequirements assessmentRequirements,
+                             AssessmentRequirementRepository assessmentRequirementRepository,
+                             AssessmentRequirementTransformer assessmentRequirementTransformer) {
+        this.assessmentRepo = assessmentRepo;
+        this.assessmentTransformer = assessmentTransformer;
+        this.studentAssessmentService = studentAssessmentService;
+        this.assessmentRequirements = assessmentRequirements;
+        this.assessmentRequirementRepository = assessmentRequirementRepository;
+        this.assessmentRequirementTransformer = assessmentRequirementTransformer;
+    }
 
      /**
      * Get all courses in Course DTO
@@ -54,7 +56,7 @@ public class AssessmentService {
         try {
         	assessment = assessmentTransformer.transformToDTO(assessmentRepo.findAll());            
         } catch (Exception e) {
-            logger.debug(String.format("Exception: %s",e));
+            log.debug(String.format("Exception: %s",e));
         }
 
         return assessment;

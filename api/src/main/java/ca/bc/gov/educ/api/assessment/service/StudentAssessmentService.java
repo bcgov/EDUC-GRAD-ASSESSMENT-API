@@ -6,6 +6,7 @@ import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentTransformer;
 import ca.bc.gov.educ.api.assessment.model.transformer.StudentAssessmentTransformer;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRepository;
 import ca.bc.gov.educ.api.assessment.repository.StudentAssessmentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +17,27 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Slf4j
 @Service
 public class StudentAssessmentService {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentAssessmentService.class);
 
-    @Autowired
     StudentAssessmentRepository studentAssessmentRepo;
-
-    @Autowired
     AssessmentRepository assessmentRepo;
-
-    @Autowired
     StudentAssessmentTransformer studentAssessmentTransformer;
+    AssessmentTransformer assessmentTransformer;
 
     @Autowired
-    AssessmentTransformer assessmentTransformer;
+    public StudentAssessmentService(StudentAssessmentRepository studentAssessmentRepo,
+                                    AssessmentRepository assessmentRepo,
+                                    StudentAssessmentTransformer studentAssessmentTransformer,
+                                    AssessmentTransformer assessmentTransformer) {
+        this.studentAssessmentRepo = studentAssessmentRepo;
+        this.assessmentRepo = assessmentRepo;
+        this.studentAssessmentTransformer = studentAssessmentTransformer;
+        this.assessmentTransformer = assessmentTransformer;
+    }
 
     /**
      * Get all student assessments by PEN populated in Student Assessment DTO
