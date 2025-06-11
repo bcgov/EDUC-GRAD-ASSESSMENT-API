@@ -13,12 +13,6 @@ env:
   REPO_NAME: "educ-grad-assessment-api"
   APP_DOMAIN: ${{ vars.APP_DOMAIN }}
   TAG: "latest"
-  MIN_CPU: "20m"
-  MAX_CPU: "100m"
-  MIN_MEM: "250Mi"
-  MAX_MEM: "1024Mi"
-  MIN_REPLICAS: "3"
-  MAX_REPLICAS: "5"
 
 on:
   # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
@@ -42,6 +36,12 @@ jobs:
       TARGET_ENV: dev
       KEYCLOAK_URL: ${{ secrets.KEYCLOAK_URL }}
       KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+      MIN_CPU: "20m"
+      MAX_CPU: "100m"
+      MIN_MEM: "250Mi"
+      MAX_MEM: "1024Mi"
+      MIN_REPLICAS: "3"
+      MAX_REPLICAS: "5"
 
     steps:
       - name: Check out repository
@@ -166,6 +166,12 @@ jobs:
       TARGET_ENV: test
       KEYCLOAK_URL: ${{ secrets.KEYCLOAK_URL }}
       KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+      MIN_CPU: "20m"
+      MAX_CPU: "100m"
+      MIN_MEM: "250Mi"
+      MAX_MEM: "1024Mi"
+      MIN_REPLICAS: "3"
+      MAX_REPLICAS: "5"
 
     steps:
       - name: Check out repository
