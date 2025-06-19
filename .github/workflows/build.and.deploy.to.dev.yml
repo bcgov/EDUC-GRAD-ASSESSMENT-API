@@ -1,4 +1,4 @@
-name: Build & Deploy to DEV from main branch
+name: Build & Deploy to DEV
 
 env:
   # 🖊️ EDIT your repository secrets to log into your OpenShift cluster and set up the context.
@@ -24,7 +24,7 @@ env:
 
   REPO_NAME: "educ-grad-assessment-api"
   APP_DOMAIN: ${{ vars.APP_DOMAIN }}
-  BRANCH: "main"
+  BRANCH: ${{ github.ref }}
   TAG: "latest"
   MIN_CPU: "20m"
   MAX_CPU: "100m"
@@ -39,13 +39,15 @@ on:
 
 jobs:
   openshift-ci-cd:
-    name: Build and deploy to OpenShift DEV
+    name: Build and deploy to OpenShift DEV from release branch
     runs-on: ubuntu-22.04
     environment: dev
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
 
       - name: Determine image tags
         if: env.TAG == ''
