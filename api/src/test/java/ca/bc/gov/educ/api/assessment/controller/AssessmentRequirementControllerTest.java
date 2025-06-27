@@ -38,45 +38,11 @@ public class AssessmentRequirementControllerTest {
     @InjectMocks
     private AssessmentRequirementController assessmentRequirementController;
 
-    /*@Test
-    public void testGetAllAssessmentRequirement() {
-        // ID
-        final UUID assessmentRequirementID = UUID.randomUUID();
-        final String assessmentCode = "TEST";
-        final String assessmentName = "TEST Name description";
-        final String ruleCode = "RULE";
-        final String requirementName = "ReqName";
-        final String requirementProgram = "ReqProg";
-
-        final List<AllAssessmentRequirements> allAssessmentRequirementsList = new ArrayList<>();
-        AllAssessmentRequirements aar = new AllAssessmentRequirements();
-        aar.setAssessmentRequirementId(assessmentRequirementID);
-        aar.setAssessmentCode(assessmentCode);
-        aar.setAssessmentName(assessmentName);
-        aar.setRequirementName(requirementName);
-        aar.setRequirementProgram(requirementProgram);
-        aar.setRuleCode(ruleCode);
-        allAssessmentRequirementsList.add(aar);
-
-        Authentication authentication = Mockito.mock(Authentication.class);
-        OAuth2AuthenticationDetails details = Mockito.mock(OAuth2AuthenticationDetails.class);
-        // Mockito.whens() for your authorization object
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        Mockito.when(authentication.getDetails()).thenReturn(details);
-        SecurityContextHolder.setContext(securityContext);
-
-        Mockito.when(assessmentRequirementService.getAllAssessmentRequirementList(1,5, null)).thenReturn(allAssessmentRequirementsList);
-        assessmentRequirementController.getAllAssessmentRequirement(1,5);
-        Mockito.verify(assessmentRequirementService).getAllAssessmentRequirementList(1,5, null);
-    }*/
-
     @Test
     public void testGetAllAssessmentRequirementByRule() {
         // ID
         final UUID assessmentRequirementID = UUID.randomUUID();
         final String assessmentCode = "TEST";
-        final String assessmentName = "TEST Name description";
         final String ruleCode = "RULE";
 
         // Assessment Requirements
@@ -99,12 +65,8 @@ public class AssessmentRequirementControllerTest {
         // IDs
         final UUID assessmentRequirementID1 = UUID.randomUUID();
         final String assessmentCode1 = "Test1";
-        final String assessmentName1 = "Test1 Name description";
-        final String ruleCode1 = "ruleCode1";
         final UUID assessmentRequirementID2 = UUID.randomUUID();
         final String assessmentCode2 = "Test2";
-        final String assessmentName2 = "Test2 Name description";
-        final String ruleCode2 = "ruleCode2";
 
         // Input
         final AssessmentList assessmentList = new AssessmentList();
@@ -142,7 +104,6 @@ public class AssessmentRequirementControllerTest {
         // IDs
         final UUID assessmentRequirementID1 = UUID.randomUUID();
         final String assessmentCode = "Test1";
-        final String assessmentName = "Test1 Name description";
         final String ruleCode = "ruleCode1";
 
         // Input

@@ -4,7 +4,6 @@ import ca.bc.gov.educ.api.assessment.model.dto.*;
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentEntity;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRepository;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,11 +54,6 @@ public class AssessmentServiceTest {
         openMocks(this);
     }
 
-    @After
-    public void tearDown() {
-
-    }
-
     @Test
     public void testGetAssessmentList() {
         final List<AssessmentEntity> assessmentList = new ArrayList<>();
@@ -73,8 +67,7 @@ public class AssessmentServiceTest {
 
         when(assessmentRepository.findAll()).thenReturn(assessmentList);
         var result = assessmentService.getAssessmentList();
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).isNotNull().hasSize(1);
     }
 
     @Test
@@ -135,6 +128,6 @@ public class AssessmentServiceTest {
         when(assessmentRepository.findAll()).thenReturn(assessmentLists);
         var result = assessmentService.getAssessmentAlgorithmData(pen,accessToken,true);
         assertThat(result).isNotNull();
-        assertThat(result.getAssessments().size()).isEqualTo(1);
+        assertThat(result.getAssessments()).isNotNull().hasSize(1);
     }
 }
