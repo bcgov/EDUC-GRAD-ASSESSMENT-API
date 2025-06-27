@@ -3,7 +3,6 @@ package ca.bc.gov.educ.api.assessment.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ca.bc.gov.educ.api.assessment.model.transformer.AssessmentRequirementTransformer;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
@@ -75,8 +74,7 @@ public class AssessmentService {
         if (!studentAssessment.isEmpty()) {
             List<String> assessmentCodes = studentAssessment.stream()
                     .map(StudentAssessment::getAssessmentCode)
-                    .distinct()
-                    .collect(Collectors.toList());
+                    .distinct().toList();
             AssessmentList assessmentList = new AssessmentList();
             assessmentList.setAssessmentCodes(assessmentCodes);
 
