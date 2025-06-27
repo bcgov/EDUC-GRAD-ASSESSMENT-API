@@ -41,15 +41,18 @@ public class EducAssessmentApiConstants {
     
     public static final String TRAX_DATE_FORMAT = "yyyyMM";
     public static final String CORRELATION_ID = "correlationID";
+    public static final String USER_NAME = "User-Name";
+    public static final String REQUEST_SOURCE = "Request-Source";
+    public static final String API_NAME = "EDUC-GRAD-ASSESSMENT-API";
 
     //Endpoints
     @Value("${endpoint.grad-program-api.rule-detail.url}")
     private String ruleDetailOfProgramManagementApiUrl;
 
-    @Value("${endpoint.grad-trax-api.school-name-by-mincode.url}")
-    private String schoolNameByMincodeUrl;
-
     // Splunk LogHelper Enabled
     @Value("${splunk.log-helper.enabled}")
     private boolean splunkLogHelperEnabled;
+
+    @Value("${endpoint.keycloak.token-uri}")
+    private String tokenUrl;
 }

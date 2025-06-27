@@ -11,21 +11,18 @@ import ca.bc.gov.educ.api.assessment.repository.StudentAssessmentRepository;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -52,20 +49,8 @@ public class StudentAssessmentServiceTest {
     AssessmentTransformer assessmentTransformer;
 
     @MockBean
-    WebClient webClient;
-
-    @SuppressWarnings("rawtypes")
-    @Mock
-    private WebClient.RequestHeadersSpec requestHeadersMock;
-    @SuppressWarnings("rawtypes")
-    @Mock
-    private WebClient.RequestHeadersUriSpec requestHeadersUriMock;
-    @Mock
-    private WebClient.RequestBodySpec requestBodyMock;
-    @Mock
-    private WebClient.RequestBodyUriSpec requestBodyUriMock;
-    @Mock
-    private WebClient.ResponseSpec responseMock;
+    @Qualifier("assessmentApiClient")
+    private WebClient webClient;
 
     @Test
     public void testGetStudentAssessmentList() {
@@ -91,19 +76,12 @@ public class StudentAssessmentServiceTest {
         when(studentAssessmentRepo.findByPen(studentAssessmentId.getPen())).thenReturn(List.of(studentAssessmentEntity));
         when(assessmentRepo.findByAssessmentCode("LTE10")).thenReturn(Optional.of(assessment));
 
-        when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
-        when(this.requestHeadersUriMock.uri(String.format(constants.getSchoolNameByMincodeUrl(), studentAssessmentEntity.getMincodeAssessment()))).thenReturn(this.requestHeadersMock);
-        when(this.requestHeadersMock.headers(any(Consumer.class))).thenReturn(this.requestHeadersMock);
-        when(this.requestHeadersMock.retrieve()).thenReturn(this.responseMock);
-        when(this.responseMock.bodyToMono(School.class)).thenReturn(Mono.just(school));
-
         var result = studentAssessmentService.getStudentAssessmentList(studentAssessmentId.getPen(), "accessToken", true);
         //GRAD2 - 1929 - Refactoring/Linting - Used isNotEmpty() instead of isEmpty().isFalse(), and chained isNotNull() and isNotEmpty()
         assertThat(result).isNotNull().isNotEmpty();
         StudentAssessment responseStudentAssessment = result.get(0);
         assertThat(responseStudentAssessment.getAssessmentCode()).isEqualTo(assessment.getAssessmentCode());
         assertThat(responseStudentAssessment.getSpecialCase()).isEqualTo(studentAssessmentEntity.getSpecialCase());
-        assertThat(responseStudentAssessment.getMincodeAssessmentName()).isEqualTo(school.getDisplayName());
     }
 
     @Test
@@ -130,18 +108,11 @@ public class StudentAssessmentServiceTest {
         when(studentAssessmentRepo.findByAssessmentKeyPenAndAssessmentKeyAssessmentCode(studentAssessmentId.getPen(), studentAssessmentId.getAssessmentCode())).thenReturn(List.of(studentAssessmentEntity));
         when(assessmentRepo.findByAssessmentCode("LTE10")).thenReturn(Optional.of(assessment));
 
-        when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
-        when(this.requestHeadersUriMock.uri(String.format(constants.getSchoolNameByMincodeUrl(), studentAssessmentEntity.getMincodeAssessment()))).thenReturn(this.requestHeadersMock);
-        when(this.requestHeadersMock.headers(any(Consumer.class))).thenReturn(this.requestHeadersMock);
-        when(this.requestHeadersMock.retrieve()).thenReturn(this.responseMock);
-        when(this.responseMock.bodyToMono(School.class)).thenReturn(Mono.just(school));
-
         var result = studentAssessmentService.getStudentAssessment(studentAssessmentId.getPen(), studentAssessmentId.getAssessmentCode(), "accessToken", true);
         //GRAD2 - 1929 - Refactoring/Linting - Used isNotEmpty() instead of isEmpty().isFalse(), and chained isNotNull() and isNotEmpty()
         assertThat(result).isNotNull().isNotEmpty();
         StudentAssessment responseStudentAssessment = result.get(0);
         assertThat(responseStudentAssessment.getAssessmentCode()).isEqualTo(assessment.getAssessmentCode());
         assertThat(responseStudentAssessment.getSpecialCase()).isEqualTo(studentAssessmentEntity.getSpecialCase());
-        assertThat(responseStudentAssessment.getMincodeAssessmentName()).isEqualTo(school.getDisplayName());
     }
 }

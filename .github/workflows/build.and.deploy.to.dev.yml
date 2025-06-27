@@ -1,4 +1,4 @@
-name: Build & Deploy to DEV from Release branch
+name: Build & Deploy to DEV
 
 env:
   # 🖊️ EDIT your repository secrets to log into your OpenShift cluster and set up the context.
@@ -10,6 +10,9 @@ env:
   COMMON_NAMESPACE: ${{ vars.COMMON_NAMESPACE }}
   GRAD_NAMESPACE: ${{ vars.GRAD_NAMESPACE }}
   BUSINESS_NAMESPACE: ${{ vars.GRAD_BUSINESS_NAMESPACE }}
+  KEYCLOAK_URL: ${{ secrets.KEYCLOAK_URL }}
+  KEYCLOAK_REALM: ${{ secrets.KEYCLOAK_REALM }}
+  TARGET_ENV: dev
 
   # 🖊️ EDIT to change the image registry settings.
   # Registries such as GHCR, Quay.io, and Docker Hub are supported.
@@ -21,7 +24,7 @@ env:
 
   REPO_NAME: "educ-grad-assessment-api"
   APP_DOMAIN: ${{ vars.APP_DOMAIN }}
-  BRANCH: "grad-release"
+  BRANCH: ${{ github.ref }}
   TAG: "latest"
   MIN_CPU: "20m"
   MAX_CPU: "100m"
@@ -33,12 +36,6 @@ env:
 on:
   # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
   workflow_dispatch:
-  push:
-    branches:
-      - grad-release
-    paths:
-      - 'api/**'
-      - 'tools/**'
 
 jobs:
   openshift-ci-cd:
@@ -50,7 +47,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          ref: grad-release
+          ref: ${{ env.BRANCH }}
 
       - name: Determine image tags
         if: env.TAG == ''
@@ -88,6 +85,20 @@ jobs:
           registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ env.IMAGE_REGISTRY_USER }}
           password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install axios
+
+      - name: Create/Update clients
+        run: node ./tools/config/clients-and-scopes.js
+
+      - name: Create/Update secrets
+        run: node ./tools/openshift/fetch-and-create-secrets.js
 
       # The path the image was pushed to is now stored in ${{ steps.push-image.outputs.registry-path }}
       - name: Install oc
