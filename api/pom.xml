@@ -25,7 +25,7 @@
         <maven.compiler.version>3.10.1</maven.compiler.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <resilience4j.version>1.7.1</resilience4j.version>
+        <resilience4j.version>2.3.0</resilience4j.version>
         <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
         <springdoc.version>1.6.9</springdoc.version>
         <log4j.version>2.18.0</log4j.version>
