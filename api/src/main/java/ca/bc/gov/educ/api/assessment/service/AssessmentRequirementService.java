@@ -103,14 +103,17 @@ public class AssessmentRequirementService {
 
         try {
             Pageable paging = PageRequest.of(pageNo, pageSize);
-            Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(assessmentRequirementCodeRepository.getOne(rule), paging);
-            assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
-            assessmentReqList.forEach(cR -> {
-                Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
-                if (assmt != null) {
-                    cR.setAssessmentName(assmt.getAssessmentName());
-                }
-            });
+            Optional<AssessmentRequirementCodeEntity> assessmentRequirementCodeEntity = assessmentRequirementCodeRepository.findById(rule);
+            if(assessmentRequirementCodeEntity.isPresent()) {
+                Page<AssessmentRequirementEntity> pagedResult = assessmentRequirementRepository.findByRuleCode(assessmentRequirementCodeEntity.get(), paging);
+                assessmentReqList = assessmentRequirementTransformer.transformToDTO(pagedResult.getContent());
+                assessmentReqList.forEach(cR -> {
+                    Assessment assmt = assessmentService.getAssessmentDetails(cR.getAssessmentCode());
+                    if (assmt != null) {
+                        cR.setAssessmentName(assmt.getAssessmentName());
+                    }
+                });
+            }
         } catch (Exception e) {
             log.debug(String.format("Exception: %s",e));
         }

@@ -82,7 +82,7 @@ public class StudentAssessmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }else {
             log.debug("#Get Student Assessments by AssessmentCode and PEN: {} / {}",assmtCode, pen);
-            List<StudentAssessment> studentAssessmentList = studentAssessmentService.getStudentAssessment(pen, assmtCode, accessToken.replace("Bearer ", ""), sortForUI);
+            List<StudentAssessment> studentAssessmentList = studentAssessmentService.getStudentAssessment(pen, assmtCode, sortForUI);
             return response.GET(studentAssessmentList);
         }
     }

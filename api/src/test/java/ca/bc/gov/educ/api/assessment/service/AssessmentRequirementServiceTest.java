@@ -170,7 +170,8 @@ public class AssessmentRequirementServiceTest {
         assmt.setAssessmentCode(assessmentCode);
         assmt.setAssessmentName(assessmentName);
 
-        when(assessmentRequirementRepository.findByRuleCode(assessmentRequirementCodeRepository.getReferenceById(ruleCode), paging)).thenReturn(pageResult);
+        when(assessmentRequirementCodeRepository.findById(ruleCode)).thenReturn(Optional.of(code));
+        when(assessmentRequirementRepository.findByRuleCode(code, paging)).thenReturn(pageResult);
 
         var result = assessmentRequirementService.getAllAssessmentRequirementListByRule(ruleCode, 1, 5);
 

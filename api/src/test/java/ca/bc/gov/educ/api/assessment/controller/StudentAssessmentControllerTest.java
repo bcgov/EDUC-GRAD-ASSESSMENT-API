@@ -67,9 +67,9 @@ public class StudentAssessmentControllerTest {
         studentAssessment.setAssessmentName("assmt test");
         studentAssessment.setAssessmentDetails(assessment);
 
-        Mockito.when(studentAssessmentService.getStudentAssessment(studentAssessment.getPen(), studentAssessment.getAssessmentCode(), "123",true)).thenReturn(Arrays.asList(studentAssessment));
+        Mockito.when(studentAssessmentService.getStudentAssessment(studentAssessment.getPen(), studentAssessment.getAssessmentCode(), true)).thenReturn(Arrays.asList(studentAssessment));
         studentAssessmentController.getStudentAssessmentByAssessmentCodeAndPEN(studentAssessment.getAssessmentCode(), studentAssessment.getPen(), true, "123");
-        Mockito.verify(studentAssessmentService).getStudentAssessment(studentAssessment.getPen(), studentAssessment.getAssessmentCode(), "123", true);
+        Mockito.verify(studentAssessmentService).getStudentAssessment(studentAssessment.getPen(), studentAssessment.getAssessmentCode(), true);
     }
 
     @Test

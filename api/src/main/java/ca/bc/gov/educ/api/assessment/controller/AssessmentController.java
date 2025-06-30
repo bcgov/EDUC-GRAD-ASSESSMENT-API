@@ -67,6 +67,6 @@ public class AssessmentController {
     public ResponseEntity<AssessmentAlgorithmData> getAssessmentAlgorithmData(
             @PathVariable String pen, @RequestHeader(name="Authorization") String accessToken) {
         log.debug("getAssessmentAlgorithmData : ");
-        return response.GET(assessmentService.getAssessmentAlgorithmData(pen, accessToken.replaceAll("Bearer ", ""), false));
+        return response.GET(assessmentService.getAssessmentAlgorithmData(pen, accessToken.replace("Bearer ", ""), false));
     }
 }
