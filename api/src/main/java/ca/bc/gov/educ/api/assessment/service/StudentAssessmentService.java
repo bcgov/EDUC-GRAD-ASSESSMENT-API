@@ -50,7 +50,7 @@ public class StudentAssessmentService {
         List<StudentAssessment> studentAssessment = new ArrayList<>();
         try {
             studentAssessment = studentAssessmentTransformer.transformToDTO(studentAssessmentRepo.findByPen(pen));
-            populateFields(studentAssessment, accessToken);
+            populateFields(studentAssessment);
         } catch (Exception e) {
             logger.debug(MessageFormat.format("Exception: {0}",e));
         }
@@ -63,11 +63,11 @@ public class StudentAssessmentService {
         return studentAssessment;
     }
 
-    public List<StudentAssessment> getStudentAssessment(String pen, String assessmentCode, String accessToken, boolean sortForUI) {
+    public List<StudentAssessment> getStudentAssessment(String pen, String assessmentCode, boolean sortForUI) {
         List<StudentAssessment> studentAssessment = new ArrayList<>();
         try {
             studentAssessment = studentAssessmentTransformer.transformToDTO(studentAssessmentRepo.findByAssessmentKeyPenAndAssessmentKeyAssessmentCode(pen, assessmentCode));
-            populateFields(studentAssessment, accessToken);
+            populateFields(studentAssessment);
         } catch (Exception e) {
             logger.debug(MessageFormat.format("Exception: {0}",e));
         }
@@ -79,7 +79,7 @@ public class StudentAssessmentService {
         return studentAssessment;
     }
 
-    private void populateFields(List<StudentAssessment> studentAssessmentList, String accessToken) {
+    private void populateFields(List<StudentAssessment> studentAssessmentList) {
         studentAssessmentList.forEach(sA -> {
             Assessment assessment = assessmentTransformer.transformToDTO(assessmentRepo.findByAssessmentCode(sA.getAssessmentCode()));
             if (assessment != null) {

@@ -108,7 +108,7 @@ public class StudentAssessmentServiceTest {
         when(studentAssessmentRepo.findByAssessmentKeyPenAndAssessmentKeyAssessmentCode(studentAssessmentId.getPen(), studentAssessmentId.getAssessmentCode())).thenReturn(List.of(studentAssessmentEntity));
         when(assessmentRepo.findByAssessmentCode("LTE10")).thenReturn(Optional.of(assessment));
 
-        var result = studentAssessmentService.getStudentAssessment(studentAssessmentId.getPen(), studentAssessmentId.getAssessmentCode(), "accessToken", true);
+        var result = studentAssessmentService.getStudentAssessment(studentAssessmentId.getPen(), studentAssessmentId.getAssessmentCode(), true);
         //GRAD2 - 1929 - Refactoring/Linting - Used isNotEmpty() instead of isEmpty().isFalse(), and chained isNotNull() and isNotEmpty()
         assertThat(result).isNotNull().isNotEmpty();
         StudentAssessment responseStudentAssessment = result.get(0);

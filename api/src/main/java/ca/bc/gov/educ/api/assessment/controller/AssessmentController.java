@@ -23,7 +23,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @Slf4j
-@CrossOrigin
 @RestController
 @RequestMapping(EducAssessmentApiConstants.GRAD_ASSESSMENT_API_ROOT_MAPPING)
 @OpenAPIDefinition(info = @Info(title = "API for Assessment Management.", description = "This API is for Assessment Management.", version = "1"), security = {@SecurityRequirement(name = "OAUTH2", scopes = {"READ_GRAD_ASSESSMENT_DATA"})})
@@ -68,6 +67,6 @@ public class AssessmentController {
     public ResponseEntity<AssessmentAlgorithmData> getAssessmentAlgorithmData(
             @PathVariable String pen, @RequestHeader(name="Authorization") String accessToken) {
         log.debug("getAssessmentAlgorithmData : ");
-        return response.GET(assessmentService.getAssessmentAlgorithmData(pen, accessToken.replaceAll("Bearer ", ""), false));
+        return response.GET(assessmentService.getAssessmentAlgorithmData(pen, accessToken.replace("Bearer ", ""), false));
     }
 }

@@ -7,6 +7,9 @@ class EducGradAssessmentApiApplicationTests {
 
 	//@Test
 	void contextLoads() {
+		/**
+		 * Dummy Method
+		 */
 	}
 
 }

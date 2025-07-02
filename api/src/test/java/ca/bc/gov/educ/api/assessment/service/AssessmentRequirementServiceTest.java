@@ -1,16 +1,13 @@
 package ca.bc.gov.educ.api.assessment.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import ca.bc.gov.educ.api.assessment.model.entity.AssessmentEntity;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRepository;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +35,6 @@ import ca.bc.gov.educ.api.assessment.model.entity.AssessmentRequirementEntity;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementCodeRepository;
 import ca.bc.gov.educ.api.assessment.repository.AssessmentRequirementRepository;
 import ca.bc.gov.educ.api.assessment.util.EducAssessmentApiConstants;
-import reactor.core.publisher.Mono;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -89,12 +85,6 @@ public class AssessmentRequirementServiceTest {
         assessmentRequirementCodeRepository.save(createAssessmentRuleCode());
     }
 
-    
-
-	@After
-    public void tearDown() {
-
-    }
 
     @Test
     public void testGetAllAssessmentRequirementList() {
@@ -180,7 +170,8 @@ public class AssessmentRequirementServiceTest {
         assmt.setAssessmentCode(assessmentCode);
         assmt.setAssessmentName(assessmentName);
 
-        when(assessmentRequirementRepository.findByRuleCode(assessmentRequirementCodeRepository.getOne(ruleCode), paging)).thenReturn(pageResult);
+        when(assessmentRequirementCodeRepository.findById(ruleCode)).thenReturn(Optional.of(code));
+        when(assessmentRequirementRepository.findByRuleCode(code, paging)).thenReturn(pageResult);
 
         var result = assessmentRequirementService.getAllAssessmentRequirementListByRule(ruleCode, 1, 5);
 
