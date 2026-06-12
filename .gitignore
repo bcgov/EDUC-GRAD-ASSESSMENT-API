@@ -55,5 +55,5 @@ build/
 .vscode/
 
 ### local dev ###
-**/application-local.yaml
+**/application-local*.yaml
 **/generate-local-env.sh
